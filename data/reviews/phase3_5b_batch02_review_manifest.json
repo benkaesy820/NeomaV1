@@ -520,7 +520,7 @@
     "python_ast_parse": "passed for 13 accepted Python answers",
     "javascript_node_check": "passed for 7 accepted JavaScript answers with node --check, including revised b02_js_canonical_flat_json",
     "powershell_parser": "passed for 5 accepted PowerShell answers using Windows PowerShell Parser.ParseInput",
-    "typescript_check": "not rerun locally because tsc is unavailable; Ted reported strict tsc pass for candidate answers before handoff",
+    "typescript_check": "passed locally for 8 accepted TypeScript answers with tsc 6.0.3 --strict --noEmit",
     "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
     "exact_instruction_overlap_with_existing_or_eval": [],
     "max_instruction_trigram_jaccard_with_existing_or_eval": {
