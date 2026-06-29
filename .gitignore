@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.review/
+*.zip
 
 data/*tokenizer.json
 data/*processed/

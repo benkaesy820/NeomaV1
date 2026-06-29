@@ -23,7 +23,10 @@ def main() -> None:
     parser.add_argument("--top-k", type=int, default=50)
     args = parser.parse_args()
 
-    checkpoint = torch.load(args.checkpoint, map_location="cpu")
+    try:
+        checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
+    except TypeError:
+        checkpoint = torch.load(args.checkpoint, map_location="cpu")
     cfg = checkpoint["config"]
     model_cfg = TinyConfig.from_dict(cfg)
     model = TinyLanguageModel(model_cfg)
@@ -36,11 +39,13 @@ def main() -> None:
         prompt_ids = [bos_id if bos_id is not None else 0]
 
     input_ids = torch.tensor([prompt_ids], dtype=torch.long)
+    eos_id = tokenizer.token_to_id("<eos>")
     output_ids = model.generate(
         input_ids,
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
         top_k=args.top_k,
+        eos_id=eos_id,
     )[0].tolist()
     print(tokenizer.decode(output_ids))
 

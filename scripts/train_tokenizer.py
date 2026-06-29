@@ -74,7 +74,7 @@ def main() -> None:
     parser.add_argument("--vocab-size", type=int, default=8000)
     parser.add_argument("--min-frequency", type=int, default=2)
     parser.add_argument("--max-token-length", type=int, default=32)
-    parser.add_argument("--preset", choices=["base", "code"], default="code")
+    parser.add_argument("--preset", choices=["base", "code"], default="base")
     args = parser.parse_args()
 
     files = text_files(args.input)

@@ -15,7 +15,7 @@
   "eval_iters": 10,
   "save_interval": 200,
   "learning_rate": 0.00045,
-  "min_learning_rate": 0.00005,
+  "min_learning_rate": 5e-05,
   "warmup_steps": 50,
   "weight_decay": 0.1,
   "grad_clip": 1.0,
@@ -25,5 +25,7 @@
   "n_kv_heads": 2,
   "d_ff": 576,
   "dropout": 0.0,
-  "rope_base": 10000.0
+  "rope_base": 10000.0,
+  "train_loss_mask": "data/code_processed/train_mask.bin",
+  "val_loss_mask": "data/code_processed/val_mask.bin"
 }

@@ -1,24 +1,21 @@
-# Tiny From-Scratch Language Model
+# NeomaV1 — Tiny From-Scratch Language Model
 
-This project trains a small GPT-style language model from random weights on a CPU.
-It is designed for a normal Windows laptop: small codebase, small dependencies,
-and a model size that can actually finish experiments.
+NeomaV1 trains a small GPT-style language model from random weights on a CPU.
+It is designed for a normal Windows laptop: a small codebase, few dependencies,
+and model sizes that can complete real experiments.
 
-## What You Need To Do Now
+The project does **not** load a pretrained model. The tokenizer, model weights,
+training data, checkpoints, and inference path are controlled by this project.
 
-1. Install Python 3.12 or newer.
-2. Put plain text training files in `data/raw/`.
-3. Run the setup and training commands below.
+## Hardware target
 
-Good first datasets are focused and clean:
+The default configurations are aimed at a 6-core CPU and 8–16 GB RAM. The main
+`tiny_cpu` model uses 6 layers, width 256, grouped-query attention, RoPE,
+RMSNorm, SwiGLU, and tied embeddings.
 
-- Your own notes or chats exported as `.txt`
-- A narrow FAQ or knowledge base
-- Public-domain books
-- A folder of clean articles around one subject
-
-Avoid starting with huge internet dumps. A small clean corpus is better for this
-machine than a large noisy one.
+The bundled sample corpus is only for checking the pipeline. Do not run the
+20,000-step configuration until you have collected substantially more clean
+training data.
 
 ## Setup
 
@@ -30,134 +27,138 @@ pip install -r requirements.txt
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
-After setup, you can use the short project Python command:
+Use the short project Python command after setup:
 
 ```powershell
 .\p --version
 ```
 
-That is the same as running:
+That is equivalent to:
 
 ```powershell
 .\.venv\Scripts\python.exe
 ```
 
-## Train The Tokenizer
+## Run the tests
 
 ```powershell
-.\p scripts/train_tokenizer.py --input data/raw --out data/tokenizer.json --vocab-size 8000
+.\p -m unittest discover -s tests -v
 ```
 
-## Prepare Token Data
+## General-text model
+
+Put clean `.txt` or `.md` files in `data/raw/`, then run:
 
 ```powershell
+.\p scripts/train_tokenizer.py --input data/raw --out data/tokenizer.json --vocab-size 8000 --preset base
 .\p scripts/prepare_dataset.py --input data/raw --tokenizer data/tokenizer.json --out data/processed
-```
-
-## Quick Smoke Train
-
-Use this first to verify that everything works.
-
-```powershell
 .\p scripts/train.py --config configs/smoke_cpu.json
 ```
 
-## Train The First Real Model
-
-This is the CPU-friendly ~7M parameter model.
+After the smoke run succeeds:
 
 ```powershell
 .\p scripts/train.py --config configs/tiny_cpu.json
 ```
 
-## Generate Text
+Generate text:
 
 ```powershell
 .\p scripts/generate.py --checkpoint runs/tiny_cpu/latest.pt --tokenizer data/tokenizer.json --prompt "Once upon a time"
 ```
 
-## Project Layout
+## Code and instruction model
 
-- `src/tinyllm/model.py` contains the Transformer model.
-- `scripts/train_tokenizer.py` trains an 8K byte-level BPE tokenizer.
-- `scripts/prepare_dataset.py` converts text to token IDs.
-- `scripts/train.py` trains from random weights.
-- `scripts/generate.py` runs inference from a checkpoint.
-- `configs/smoke_cpu.json` is for fast testing.
-- `configs/tiny_cpu.json` is the first real training target.
-
-The model is not fine-tuned from an existing checkpoint. Training starts from
-random weights.
-
-## Code Model Path
-
-For a code-specialized model, collect clean source files into one corpus first.
-Point this at folders containing your own projects or public code you are
-allowed to use:
+Collect code you own or are allowed to use:
 
 ```powershell
-.\p scripts/collect_code_dataset.py C:\path\to\your\repo --out data/raw/code_corpus.txt
+.\p scripts/collect_code_dataset.py C:\path\to\repo --out data/raw/code_corpus.txt
 ```
 
-You can pass more than one folder:
+Multiple folders are supported:
 
 ```powershell
 .\p scripts/collect_code_dataset.py C:\repo1 C:\repo2 C:\repo3 --out data/raw/code_corpus.txt
 ```
 
-Then train a code tokenizer and prepare code tokens:
+Train the code tokenizer and build a record-level split. The loss-mask option
+keeps plain code/text records fully supervised while instruction records train
+mainly on their `<answer>` targets.
 
 ```powershell
 .\p scripts/train_tokenizer.py --input data/raw --out data/code_tokenizer.json --vocab-size 4000 --min-frequency 2 --max-token-length 16 --preset code
-.\p scripts/prepare_dataset.py --input data/raw --tokenizer data/code_tokenizer.json --out data/code_processed
+.\p scripts/prepare_dataset.py --input data/raw --tokenizer data/code_tokenizer.json --out data/code_processed --instruction-loss-mask
 ```
 
-Benchmark tokenizer candidates before serious training:
+The dataset builder writes a `manifest.json` showing which complete records went
+into training and validation. It does not split an instruction example in half.
 
-```powershell
-.\p scripts/benchmark_tokenizers.py --tokenizer data/code_tokenizer.json --input data/raw --eval data/eval/code_prompts.jsonl --out runs/tokenizer_benchmark.json
-```
-
-Check data quality:
+Check the data and tokenizer:
 
 ```powershell
 .\p scripts/check_training_data.py --raw data/raw --eval data/eval/code_prompts.jsonl
+.\p scripts/benchmark_tokenizers.py --tokenizer data/code_tokenizer.json --input data/raw --eval data/eval/code_prompts.jsonl --out runs/tokenizer_benchmark.json
 ```
 
 Synthetic instruction data from other models should go through `data/incoming`
-and the importer:
+and the importer. Do not paste outside-model output directly into `data/raw`.
 
 ```powershell
 .\p scripts/import_instruction_jsonl.py data/incoming/examples.jsonl --out data/raw/imported_examples.txt
 .\p scripts/check_training_data.py --raw data/raw --eval data/eval/code_prompts.jsonl
 ```
 
-Smoke test:
+Run progressively larger experiments:
 
 ```powershell
 .\p scripts/train.py --config configs/code_smoke_cpu.json
-```
-
-Phase 3 validation train:
-
-```powershell
+.\p scripts/train.py --config configs/code_probe_cpu.json
 .\p scripts/train.py --config configs/code_phase3_cpu.json
 ```
 
-First real code model:
+Only after the dataset is much larger and the smaller evaluations improve:
 
 ```powershell
 .\p scripts/train.py --config configs/code_tiny_cpu.json
 ```
 
-Generate code:
+## Resume an interrupted run
+
+Training saves a resumable `latest.pt` checkpoint. Pressing `Ctrl+C` saves the
+latest completed optimizer step before exiting.
+
+Resume automatically from the run folder:
 
 ```powershell
-.\p scripts/generate.py --checkpoint runs/code_tiny_cpu/latest.pt --tokenizer data/code_tokenizer.json --prompt "def "
+.\p scripts/train.py --config configs/code_phase3_cpu.json --auto-resume
 ```
 
-Run the fixed coding eval prompts:
+Or resume from an explicit checkpoint:
 
 ```powershell
-.\p scripts/evaluate_prompts.py --checkpoint runs/code_tiny_cpu/latest.pt --tokenizer data/code_tokenizer.json --out runs/code_tiny_cpu/eval_outputs.jsonl
+.\p scripts/train.py --config configs/code_phase3_cpu.json --resume runs/code_phase3_cpu/latest.pt
 ```
+
+## Evaluate code prompts
+
+```powershell
+.\p scripts/evaluate_prompts.py --checkpoint runs/code_phase3_cpu/best.pt --tokenizer data/code_tokenizer.json --out runs/code_phase3_cpu/eval_outputs.jsonl
+```
+
+## Project layout
+
+- `src/tinyllm/model.py` — decoder-only Transformer and generation
+- `scripts/train_tokenizer.py` — byte-level BPE tokenizer training
+- `scripts/prepare_dataset.py` — record-safe splitting, token files, optional loss masks
+- `scripts/train.py` — CPU training, validation, checkpoints, and resume
+- `scripts/generate.py` — text generation from a checkpoint
+- `scripts/evaluate_prompts.py` — fixed-prompt code evaluation
+- `tests/` — causal masking, masked loss, generation, and dataset tests
+- `configs/` — smoke, probe, Phase 3, and larger CPU configurations
+
+## Important limitation
+
+A 2M–7M parameter model trained on a laptop can learn syntax, style, local
+patterns, and narrow tasks. It will not become a general ChatGPT replacement.
+Capability will depend more on clean, diverse data and repeated evaluation than
+on increasing the step count over a tiny corpus.
