@@ -1,0 +1,532 @@
+{
+  "packet": "Phase 3.5B Work Packet 09",
+  "batch": "07 - Engineering Judgment and Task Decision Fundamentals",
+  "packet_baseline_commit": "7eadf9c",
+  "admission_baseline_commit": "c1b10a7",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-09-Overlay.zip",
+  "source_overlay_sha256": "BC86CA12A929AB842A7D9213B7E2DA718C2E9B89977B67E3E3D14974D2FAA260",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 5,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch07_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch07_accepted.txt",
+  "language_counts": {
+    "javascript": 5,
+    "powershell": 9,
+    "python": 5,
+    "sql": 7,
+    "text": 10,
+    "typescript": 4
+  },
+  "category_counts": {
+    "database": 5,
+    "debugging": 10,
+    "efficiency": 2,
+    "explanation": 5,
+    "files": 3,
+    "security": 10,
+    "tests": 2,
+    "validation": 3
+  },
+  "difficulty_counts": {
+    "basic": 23,
+    "intermediate": 17
+  },
+  "decisions": [
+    {
+      "id": "b07_text_clarify_cleanup_scope",
+      "language": "text",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_clarify_cleanup_scope"
+    },
+    {
+      "id": "b07_text_proceed_local_typo_fix",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_proceed_local_typo_fix"
+    },
+    {
+      "id": "b07_text_assume_unspecified_order",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but redundant with existing deterministic-order and exact-output examples; stronger judgment rows were admitted.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_text_plan_cross_service_change",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_plan_cross_service_change"
+    },
+    {
+      "id": "b07_text_review_severity_style_vs_bug",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_review_severity_style_vs_bug"
+    },
+    {
+      "id": "b07_text_debug_from_symptom",
+      "language": "text",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_debug_from_symptom"
+    },
+    {
+      "id": "b07_text_choose_test_scope",
+      "language": "text",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_choose_test_scope"
+    },
+    {
+      "id": "b07_text_when_not_to_optimize",
+      "language": "text",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_when_not_to_optimize"
+    },
+    {
+      "id": "b07_text_conflicting_constraints",
+      "language": "text",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_conflicting_constraints"
+    },
+    {
+      "id": "b07_text_uncertain_library_version",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because it is more about external documentation freshness than local engineering judgment, and it would require browsing policy context outside the dataset.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_text_decline_impossible_guarantee",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as redundant with admitted performance-guarantee and measurement trade-off examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_text_preserve_work_before_reformat",
+      "language": "text",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_preserve_work_before_reformat"
+    },
+    {
+      "id": "b07_text_plan_data_migration",
+      "language": "text",
+      "category": "database",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_text_plan_data_migration"
+    },
+    {
+      "id": "b07_text_leave_clear_code_alone",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as redundant with accepted style-vs-bug and no-premature-optimization judgment examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_ps_confirm_recursive_delete",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_confirm_recursive_delete"
+    },
+    {
+      "id": "b07_ps_clarify_pipeline_contract",
+      "language": "powershell",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but too PowerShell-specific and potentially confusing for a general judgment batch after stronger PowerShell safety examples were admitted.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_ps_smallest_fix_missing_pipeline_output",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_smallest_fix_missing_pipeline_output"
+    },
+    {
+      "id": "b07_ps_debug_empty_report",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised the diagnostic snippet to pass the resolved path string to Get-ChildItem, avoiding ambiguity in Resolve-Path output handling.",
+      "revision_required": true,
+      "final_id": "b07_ps_debug_empty_report"
+    },
+    {
+      "id": "b07_ps_assume_utf8_csv_output",
+      "language": "powershell",
+      "category": "files",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_assume_utf8_csv_output"
+    },
+    {
+      "id": "b07_ps_plan_bulk_rename",
+      "language": "powershell",
+      "category": "files",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised to say dry-run preview generically instead of naming -WhatIf inside prose, preserving the no-modification planning constraint.",
+      "revision_required": true,
+      "final_id": "b07_ps_plan_bulk_rename"
+    },
+    {
+      "id": "b07_ps_confirm_config_overwrite",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised the confirmation wording to require explicit overwrite confirmation while keeping the non-overwrite implementation unchanged.",
+      "revision_required": true,
+      "final_id": "b07_ps_confirm_config_overwrite"
+    },
+    {
+      "id": "b07_ps_review_force_delete_severity",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_review_force_delete_severity"
+    },
+    {
+      "id": "b07_ps_keep_simple_small_input",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_keep_simple_small_input"
+    },
+    {
+      "id": "b07_ps_decline_disable_execution_policy",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ps_decline_disable_execution_policy"
+    },
+    {
+      "id": "b07_sql_clarify_index_workload",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_clarify_index_workload"
+    },
+    {
+      "id": "b07_sql_parameterize_directly",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_parameterize_directly"
+    },
+    {
+      "id": "b07_sql_assume_nulls_last",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_assume_nulls_last"
+    },
+    {
+      "id": "b07_sql_plan_type_migration",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_plan_type_migration"
+    },
+    {
+      "id": "b07_sql_confirm_bulk_delete",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_confirm_bulk_delete"
+    },
+    {
+      "id": "b07_sql_debug_deadlock_evidence",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_debug_deadlock_evidence"
+    },
+    {
+      "id": "b07_sql_review_missing_where",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_sql_review_missing_where"
+    },
+    {
+      "id": "b07_sql_decline_guaranteed_fast",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as redundant with accepted performance-guarantee and workload-measurement examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_py_clarify_timezone_contract",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but lower priority than broader decision examples; validation coverage is already heavy.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_py_smallest_fix_missing_return",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_py_smallest_fix_missing_return"
+    },
+    {
+      "id": "b07_py_assume_blank_lines_ignored",
+      "language": "python",
+      "category": "files",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_py_assume_blank_lines_ignored"
+    },
+    {
+      "id": "b07_py_debug_intermittent_empty_file",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_py_debug_intermittent_empty_file"
+    },
+    {
+      "id": "b07_py_test_scope_parser_change",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_py_test_scope_parser_change"
+    },
+    {
+      "id": "b07_py_privacy_before_logging",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised the logging shape into a self-contained function so Python syntax and names can be checked directly.",
+      "revision_required": true,
+      "final_id": "b07_py_privacy_before_logging"
+    },
+    {
+      "id": "b07_ts_clarify_null_contract",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with existing null/undefined and API-contract examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b07_ts_smallest_fix_zero_value",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ts_smallest_fix_zero_value"
+    },
+    {
+      "id": "b07_ts_assume_reject_unknown_fields",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ts_assume_reject_unknown_fields"
+    },
+    {
+      "id": "b07_ts_plan_public_type_change",
+      "language": "typescript",
+      "category": "explanation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ts_plan_public_type_change"
+    },
+    {
+      "id": "b07_ts_review_non_null_assertion",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_ts_review_non_null_assertion"
+    },
+    {
+      "id": "b07_js_assume_empty_array_valid",
+      "language": "javascript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised to validate that the input is an array before reading length, keeping the stated assumption while avoiding a hidden type failure.",
+      "revision_required": true,
+      "final_id": "b07_js_assume_empty_array_valid"
+    },
+    {
+      "id": "b07_js_debug_duplicate_listener",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_js_debug_duplicate_listener"
+    },
+    {
+      "id": "b07_js_smallest_fix_sort_mutation",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_js_smallest_fix_sort_mutation"
+    },
+    {
+      "id": "b07_js_clarify_retry_idempotency",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_js_clarify_retry_idempotency"
+    },
+    {
+      "id": "b07_js_plan_major_dependency_upgrade",
+      "language": "javascript",
+      "category": "explanation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b07_js_plan_major_dependency_upgrade"
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py; 40 examples imported",
+    "training_data_quality_old_eval": "passed with zero warnings; 12 raw files, 331 instruction examples, 12 eval prompts",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings; 12 raw files, 331 instruction examples, 80 eval prompts",
+    "python_code_ast_parse": "passed for 3 accepted Python code answers and 1 Python bad_code snippet; prose Python-domain judgment rows were semantically reviewed",
+    "javascript_code_node_check": "passed for 2 accepted JavaScript code answers and 1 JavaScript bad_code snippet with node --check using Node 24.17.0; prose JavaScript-domain judgment rows were semantically reviewed",
+    "typescript_code_check": "passed locally for 1 accepted TypeScript code answer and 2 TypeScript bad_code snippets with tsc 6.0.3; prose TypeScript-domain judgment rows were semantically reviewed",
+    "powershell_parser": "passed for 7 embedded PowerShell code snippets using Windows PowerShell Parser.ParseInput; prose PowerShell-domain judgment rows were semantically reviewed",
+    "sql_check": "manual PostgreSQL semantic review only; no local SQL parser configured",
+    "stage_a_plan_sample": "8 planning sample rows verified as training_allowed=false and status=planning_sample; not imported into data/raw",
+    "python_py_compile": "passed for project scripts, src package, and tests",
+    "repository_tests": "18 unittest tests passed",
+    "post_batch07_audit": "passed with 331 records, zero exact duplicate flags, zero critical leakage flags, all curriculum capability targets met, and context_length_cleanup_required due to lexical proxy length caveat"
+  }
+}

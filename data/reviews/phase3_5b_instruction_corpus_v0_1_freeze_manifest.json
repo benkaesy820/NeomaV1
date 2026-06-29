@@ -1,0 +1,109 @@
+{
+  "phase": "Phase 3.5B Instruction Corpus v0.1 freeze review",
+  "baseline_after_batch07": "pending commit",
+  "batch07_manifest": "data/reviews/phase3_5b_batch07_review_manifest.json",
+  "stage_a_plan": "data/plans/ENGLISH_CODE_FOUNDATION_CORPUS_PLAN.md",
+  "stage_a_planning_sample": "data/plans/english_code_foundation_planning_sample.jsonl",
+  "report_directory": "data/reports/post_batch07",
+  "instruction_records": 331,
+  "accepted_phase3_5b_records": 280,
+  "legacy_protocol_records": 51,
+  "audit_decision": {
+    "status": "context_length_cleanup_required",
+    "reason": "Too many records exceed the intended 256-token context and need shortening, splitting, or deferral.",
+    "critical_leakage_flags": 0,
+    "exact_duplicate_flags": 0,
+    "expected_context": 256,
+    "records_over_expected_context": 112,
+    "underrepresented_languages": []
+  },
+  "duplicate_analysis": {
+    "total_flags": 14,
+    "exact_flags": 0,
+    "structural_flags": 5
+  },
+  "leakage_analysis": {
+    "critical": 0,
+    "review": 0,
+    "informational": 116
+  },
+  "language_counts": {
+    "javascript": 53,
+    "powershell": 50,
+    "python": 93,
+    "sql": 47,
+    "text": 28,
+    "typescript": 60
+  },
+  "capability_counts": {
+    "debugging": 119,
+    "efficiency": 47,
+    "explanation": 35,
+    "files_apis_automation": 96,
+    "functions_and_data": 109,
+    "security": 60,
+    "sql_database": 65,
+    "tests": 85,
+    "validation": 169
+  },
+  "length_analysis": {
+    "mode": "proxy_lexical_tokens",
+    "tokenizer_path": null,
+    "full_record_tokens": {
+      "count": 331,
+      "min": 83,
+      "median": 222,
+      "mean": 226.628,
+      "p90": 326.0,
+      "p95": 382.0,
+      "max": 524
+    },
+    "instruction_tokens": {
+      "count": 331,
+      "min": 5,
+      "median": 18,
+      "mean": 20.018,
+      "p90": 34.0,
+      "p95": 38.5,
+      "max": 57
+    },
+    "answer_tokens": {
+      "count": 331,
+      "min": 9,
+      "median": 82,
+      "mean": 104.127,
+      "p90": 199.0,
+      "p95": 247.5,
+      "max": 393
+    },
+    "context_fit": {
+      "128": {
+        "fits": 33,
+        "exceeds": 298
+      },
+      "192": {
+        "fits": 121,
+        "exceeds": 210
+      },
+      "256": {
+        "fits": 219,
+        "exceeds": 112
+      },
+      "512": {
+        "fits": 330,
+        "exceeds": 1
+      }
+    },
+    "expected_context": 256
+  },
+  "human_review_queue": {
+    "review_duplicate_flags": 14,
+    "review_context_or_supervision_flags": 43,
+    "notes": "No exact duplicate or critical/review leakage blockers remain. Context flags use lexical proxy counts and should be remeasured with the final tokenizer before rewriting or deferring records."
+  },
+  "human_recommendation": {
+    "status": "freeze_instruction_corpus_v0_1_recommended_with_tokenizer_length_caveat",
+    "reason": "All curriculum capability targets are met, language balance is acceptable, exact duplicates are zero, and critical leakage is zero. More instruction examples would likely add filler. The remaining action is tokenizer-based context measurement, not another broad instruction batch.",
+    "next_artifact": "Proceed to Stage A English-and-Code foundation corpus planning and tokenizer comparison; do not prepare a dataset or train until tokenizer/context measurements are reviewed."
+  }
+}
