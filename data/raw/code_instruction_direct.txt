@@ -132,27 +132,6 @@ function groupRecordsBy(records, propertyName) {
 </answer>
 
 <instruction>
-Create a Node request handler for a simple health check.
-</instruction>
-<constraints>
-</constraints>
-<answer>
-function sendJson(response, statusCode, body) {
-  response.writeHead(statusCode, { "content-type": "application/json" });
-  response.end(JSON.stringify(body));
-}
-
-function handleRequest(request, response) {
-  if (request.method === "GET" && request.url === "/health") {
-    sendJson(response, 200, { ok: true });
-    return;
-  }
-
-  sendJson(response, 404, { error: "not found" });
-}
-</answer>
-
-<instruction>
 Create a PowerShell function that summarizes file extensions in a folder.
 </instruction>
 <constraints>
@@ -202,29 +181,6 @@ CREATE TABLE issues (
 
 CREATE INDEX idx_issues_status_created_at
 ON issues(status, created_at);
-</answer>
-
-<instruction>
-Correct this Python loop so the accumulation happens inside the loop.
-</instruction>
-<constraints>
-</constraints>
-<bad_code>
-def total(values):
-    result = 0
-    for value in values:
-    result += value
-    return result
-</bad_code>
-<reasoning>
-The statement that updates result must be indented under the for loop.
-</reasoning>
-<answer>
-def total(values):
-    result = 0
-    for value in values:
-        result += value
-    return result
 </answer>
 
 <instruction>
