@@ -1,0 +1,21 @@
+left_id,right_id,field,score,reason,left_source,right_source
+legacy:code_instruction_direct:008,legacy:code_instruction_seed:009,answer,1.0,exact normalized match,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:011,legacy:code_instruction_seed:004,answer,1.0,exact normalized match,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+b03_js_await_each_async_write,legacy:code_instruction_phase3:014,answer_structure,1.0,same normalized code structure,data/incoming/phase3_5b_batch03_accepted.jsonl,data/raw/code_instruction_phase3.txt
+legacy:code_instruction_direct:001,legacy:code_instruction_seed:001,answer_structure,1.0,same normalized code structure,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:007,legacy:code_instruction_seed:008,answer_structure,1.0,same normalized code structure,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:008,legacy:code_instruction_phase3:015,answer_structure,1.0,same normalized code structure,data/raw/code_instruction_direct.txt,data/raw/code_instruction_phase3.txt
+legacy:code_instruction_direct:010,legacy:code_instruction_seed:011,answer_structure,1.0,same normalized code structure,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_phase3:015,legacy:code_instruction_seed:009,answer_structure,1.0,same normalized code structure,data/raw/code_instruction_phase3.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:006,legacy:code_instruction_seed:007,answer,0.905172,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:008,legacy:code_instruction_phase3:015,answer,0.882353,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_phase3.txt
+legacy:code_instruction_phase3:015,legacy:code_instruction_seed:009,answer,0.882353,high trigram Jaccard,data/raw/code_instruction_phase3.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:005,legacy:code_instruction_seed:006,answer,0.734513,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:001,legacy:code_instruction_seed:001,answer,0.728814,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:008,legacy:code_instruction_seed:009,rendered,0.7125,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:009,legacy:code_instruction_seed:010,answer,0.709091,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:006,legacy:code_instruction_seed:007,rendered,0.698324,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:008,legacy:code_instruction_phase3:015,rendered,0.68125,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_phase3.txt
+legacy:code_instruction_phase3:015,legacy:code_instruction_seed:009,rendered,0.651429,high trigram Jaccard,data/raw/code_instruction_phase3.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:005,legacy:code_instruction_seed:006,rendered,0.60452,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt
+legacy:code_instruction_direct:009,legacy:code_instruction_seed:010,rendered,0.563953,high trigram Jaccard,data/raw/code_instruction_direct.txt,data/raw/code_instruction_seed.txt

@@ -1,0 +1,880 @@
+{
+  "schema_version": 1,
+  "record_counts": {
+    "total_instruction_records": 213,
+    "accepted_phase3_5b_records": 160,
+    "legacy_protocol_records": 53,
+    "foundation_seed_files": 2
+  },
+  "language_counts": {
+    "javascript": 39,
+    "powershell": 21,
+    "python": 73,
+    "sql": 25,
+    "text": 11,
+    "typescript": 44
+  },
+  "category_counts": {
+    "data": 22,
+    "database": 8,
+    "debugging": 58,
+    "efficiency": 1,
+    "explanation": 9,
+    "files": 26,
+    "function": 14,
+    "security": 2,
+    "tests": 47,
+    "validation": 26
+  },
+  "capability_counts": {
+    "debugging": 64,
+    "efficiency": 7,
+    "explanation": 18,
+    "files_apis_automation": 49,
+    "functions_and_data": 93,
+    "security": 10,
+    "sql_database": 29,
+    "tests": 64,
+    "validation": 111
+  },
+  "difficulty_counts": {
+    "basic": 172,
+    "intermediate": 41
+  },
+  "secondary_tag_counts": {
+    "api": 12,
+    "async": 19,
+    "data": 83,
+    "database": 28,
+    "debugging": 64,
+    "efficiency": 7,
+    "explanation": 18,
+    "files": 42,
+    "security": 10,
+    "tests": 61,
+    "transactions": 7,
+    "validation": 107
+  },
+  "language_category_matrix": {
+    "javascript": {
+      "data": 5,
+      "debugging": 11,
+      "files": 5,
+      "function": 5,
+      "tests": 9,
+      "validation": 4
+    },
+    "powershell": {
+      "data": 2,
+      "debugging": 6,
+      "files": 4,
+      "function": 1,
+      "tests": 5,
+      "validation": 3
+    },
+    "python": {
+      "data": 5,
+      "debugging": 22,
+      "efficiency": 1,
+      "files": 13,
+      "function": 6,
+      "security": 1,
+      "tests": 16,
+      "validation": 9
+    },
+    "sql": {
+      "data": 3,
+      "database": 7,
+      "debugging": 8,
+      "tests": 5,
+      "validation": 2
+    },
+    "text": {
+      "database": 1,
+      "explanation": 9,
+      "tests": 1
+    },
+    "typescript": {
+      "data": 7,
+      "debugging": 11,
+      "files": 4,
+      "function": 2,
+      "security": 1,
+      "tests": 11,
+      "validation": 8
+    }
+  },
+  "language_difficulty_matrix": {
+    "javascript": {
+      "basic": 30,
+      "intermediate": 9
+    },
+    "powershell": {
+      "basic": 20,
+      "intermediate": 1
+    },
+    "python": {
+      "basic": 61,
+      "intermediate": 12
+    },
+    "sql": {
+      "basic": 18,
+      "intermediate": 7
+    },
+    "text": {
+      "basic": 10,
+      "intermediate": 1
+    },
+    "typescript": {
+      "basic": 33,
+      "intermediate": 11
+    }
+  },
+  "length_analysis": {
+    "mode": "proxy_lexical_tokens",
+    "tokenizer_path": null,
+    "full_record_tokens": {
+      "count": 213,
+      "min": 83,
+      "median": 225,
+      "mean": 225.883,
+      "p90": 320.2,
+      "p95": 361.2,
+      "max": 458
+    },
+    "instruction_tokens": {
+      "count": 213,
+      "min": 5,
+      "median": 16,
+      "mean": 19.474,
+      "p90": 36.0,
+      "p95": 39.4,
+      "max": 57
+    },
+    "answer_tokens": {
+      "count": 213,
+      "min": 11,
+      "median": 92,
+      "mean": 106.685,
+      "p90": 194.2,
+      "p95": 231.2,
+      "max": 333
+    },
+    "context_fit": {
+      "128": {
+        "fits": 29,
+        "exceeds": 184
+      },
+      "192": {
+        "fits": 72,
+        "exceeds": 141
+      },
+      "256": {
+        "fits": 136,
+        "exceeds": 77
+      },
+      "512": {
+        "fits": 213,
+        "exceeds": 0
+      }
+    },
+    "expected_context": 256
+  },
+  "supervision": {
+    "supervised_tokens": {
+      "count": 213,
+      "min": 11,
+      "median": 92,
+      "mean": 106.685,
+      "p90": 194.2,
+      "p95": 231.2,
+      "max": 333
+    },
+    "supervised_percentage": {
+      "count": 213,
+      "min": 7.432,
+      "median": 48.235,
+      "mean": 46.337,
+      "p90": 67.183,
+      "p95": 70.724,
+      "max": 82.182
+    },
+    "zero_supervised_records": 0
+  },
+  "duplicate_analysis": {
+    "total_flags": 20,
+    "exact_flags": 2,
+    "structural_flags": 6
+  },
+  "leakage_analysis": {
+    "critical": 0,
+    "review": 0,
+    "informational": 88
+  },
+  "pattern_counts": [
+    {
+      "pattern": "pester",
+      "records": 62,
+      "occurrences": 115,
+      "record_ids": [
+        "b01_py_require_trimmed_string_list",
+        "b01_text_duplicate_key_policy",
+        "b01_text_fail_fast_validation",
+        "b01_ts_debug_indexof_membership",
+        "b02_js_read_utf8_file_strict",
+        "b02_ps_get_directory_file_report",
+        "b02_py_debug_json_binary_mode",
+        "b02_py_require_json_value",
+        "b02_py_sha256_file",
+        "b02_sql_debug_safe_json_count",
+        "b02_text_utf8_bom",
+        "b02_ts_decode_utf8_strict",
+        "b02_ts_encode_csv_row",
+        "b03_js_await_each_async_write",
+        "b03_js_slice_without_splice_mutation",
+        "b03_js_strip_one_bom_and_crlf",
+        "b03_js_test_partial_numeric_rejection",
+        "b03_ps_compare_not_assign_enabled",
+        "b03_ps_contains_operand_order",
+        "b03_py_chunk_no_empty_tail",
+        "b03_py_copy_nested_options",
+        "b03_py_filter_without_list_mutation",
+        "b03_py_header_bom_and_crlf",
+        "b03_py_missing_return_normalized_keys",
+        "b03_py_preserve_explicit_empty_alias",
+        "b03_py_reject_duplicate_record_ids",
+        "b03_py_test_exact_boundary_result",
+        "b03_sql_count_rows_not_nullable_notes",
+        "b03_sql_distinct_wrong_duplicate_key",
+        "b03_sql_is_null_not_equals"
+      ]
+    },
+    {
+      "pattern": "parameter_placeholder",
+      "records": 46,
+      "occurrences": 111,
+      "record_ids": [
+        "b01_js_parse_sort_direction",
+        "b01_ps_convert_canonical_label",
+        "b01_ps_convert_percent_text",
+        "b01_ps_require_trimmed_strings",
+        "b01_py_parse_decimal_cents",
+        "b01_py_parse_hex_color",
+        "b01_py_require_snake_identifier",
+        "b01_sql_setting_upsert",
+        "b01_ts_parse_utc_offset",
+        "b02_js_canonical_flat_json",
+        "b02_js_list_directory_files",
+        "b02_js_read_utf8_file_strict",
+        "b02_js_serialize_json_lines",
+        "b02_ps_get_directory_file_report",
+        "b02_ps_measure_file_extension",
+        "b02_ps_read_utf8_lines_strict",
+        "b02_sql_debug_safe_json_count",
+        "b02_sql_order_lines_json",
+        "b02_ts_read_text_lines",
+        "b03_js_preserve_zero_threshold",
+        "b03_js_reject_partial_integer_text",
+        "b03_js_test_partial_numeric_rejection",
+        "b03_ps_contains_operand_order",
+        "b03_py_chunk_no_empty_tail",
+        "b03_sql_reserve_before_insert_order",
+        "b03_ts_preserve_zero_timeout",
+        "b04_js_async_rejection",
+        "b04_js_duplicate_event_listener",
+        "b04_js_error_code_and_message",
+        "b04_js_exact_sparse_array"
+      ]
+    },
+    {
+      "pattern": "type_error",
+      "records": 41,
+      "occurrences": 72,
+      "record_ids": [
+        "b01_js_debug_reduce_empty_total",
+        "b01_js_normalize_label_map",
+        "b01_js_sum_line_totals",
+        "b01_js_zip_equal",
+        "b01_py_build_query_string",
+        "b01_py_merge_nonnegative_counts",
+        "b01_py_parse_assignment",
+        "b01_py_parse_decimal_cents",
+        "b01_py_require_snake_identifier",
+        "b01_py_require_trimmed_string_list",
+        "b01_py_sum_nonnegative_cents",
+        "b01_ts_parse_core_semver",
+        "b01_ts_parse_utc_offset",
+        "b01_ts_require_trimmed_string_array",
+        "b02_js_canonical_flat_json",
+        "b02_js_index_rows_by_field",
+        "b02_js_parse_csv_row",
+        "b02_js_parse_json_string_array",
+        "b02_js_serialize_json_lines",
+        "b02_py_decode_utf8_text",
+        "b02_py_merge_disjoint_objects",
+        "b02_py_require_json_value",
+        "b02_py_sha256_file",
+        "b02_py_write_new_csv",
+        "b02_py_write_new_jsonl",
+        "b02_ts_decode_utf8_strict",
+        "b03_js_preserve_zero_threshold",
+        "b03_js_reject_duplicate_aliases",
+        "b03_js_reject_partial_integer_text",
+        "b03_js_strip_one_bom_and_crlf"
+      ]
+    },
+    {
+      "pattern": "value_error",
+      "records": 39,
+      "occurrences": 81,
+      "record_ids": [
+        "b01_py_build_query_string",
+        "b01_py_debug_independent_rows",
+        "b01_py_merge_nonnegative_counts",
+        "b01_py_parse_assignment",
+        "b01_py_parse_decimal_cents",
+        "b01_py_parse_hex_color",
+        "b01_py_parse_iso_calendar_date",
+        "b01_py_require_snake_identifier",
+        "b01_py_require_trimmed_string_list",
+        "b01_py_select_columns",
+        "b01_py_sum_nonnegative_cents",
+        "b01_py_tests_snake_identifier",
+        "b01_py_transpose_rectangular",
+        "b02_py_list_text_files",
+        "b02_py_load_build_toml",
+        "b02_py_merge_disjoint_objects",
+        "b02_py_parse_json_object_no_duplicates",
+        "b02_py_read_ini_section",
+        "b02_py_require_json_value",
+        "b02_py_sha256_file",
+        "b02_py_write_new_csv",
+        "b03_py_chunk_no_empty_tail",
+        "b03_py_header_bom_and_crlf",
+        "b03_py_reject_bool_as_count",
+        "b03_py_reject_duplicate_record_ids",
+        "b04_py_empty_average_error",
+        "b04_py_exception_chaining",
+        "b04_py_jsonl_error_line",
+        "b04_py_regression_even_midpoint",
+        "b04_py_subtest_validation_matrix"
+      ]
+    },
+    {
+      "pattern": "strip_or_trim",
+      "records": 33,
+      "occurrences": 50,
+      "record_ids": [
+        "b01_js_normalize_label_map",
+        "b01_ps_convert_canonical_label",
+        "b01_ps_require_trimmed_strings",
+        "b01_py_build_query_string",
+        "b01_py_merge_nonnegative_counts",
+        "b01_py_parse_assignment",
+        "b01_py_require_trimmed_string_list",
+        "b01_py_select_columns",
+        "b01_ts_map_unique_names",
+        "b01_ts_require_trimmed_string_array",
+        "b02_js_index_rows_by_field",
+        "b02_js_parse_json_string_array",
+        "b02_py_load_build_toml",
+        "b02_py_merge_disjoint_objects",
+        "b02_py_read_ini_section",
+        "b02_py_write_new_csv",
+        "b02_ts_index_composite_rows",
+        "b02_ts_merge_config_layers",
+        "b02_ts_parse_two_column_tsv",
+        "b03_py_filter_without_list_mutation",
+        "b03_py_missing_return_normalized_keys",
+        "b03_py_validate_before_sorting_names",
+        "legacy:code_instruction_direct:001",
+        "legacy:code_instruction_direct:005",
+        "legacy:code_instruction_phase3:001",
+        "legacy:code_instruction_phase3:008",
+        "legacy:code_instruction_phase3:010",
+        "legacy:code_instruction_phase3:011",
+        "legacy:code_instruction_seed:001",
+        "legacy:code_instruction_seed:006"
+      ]
+    },
+    {
+      "pattern": "explicit_size_limit",
+      "records": 32,
+      "occurrences": 64,
+      "record_ids": [
+        "b01_js_normalize_label_map",
+        "b01_js_zip_equal",
+        "b01_ps_convert_canonical_label",
+        "b01_ps_convert_percent_text",
+        "b01_ps_require_trimmed_strings",
+        "b01_py_transpose_rectangular",
+        "b01_ts_map_unique_names",
+        "b01_ts_require_trimmed_string_array",
+        "b01_ts_validate_rgb_tuple",
+        "b02_js_parse_csv_row",
+        "b02_js_read_utf8_file_strict",
+        "b02_js_serialize_json_lines",
+        "b02_ps_get_directory_file_report",
+        "b02_ps_read_utf8_lines_strict",
+        "b02_py_debug_json_binary_mode",
+        "b02_py_decode_utf8_text",
+        "b02_py_sha256_file",
+        "b02_text_utf8_bom",
+        "b02_ts_decode_utf8_strict",
+        "b02_ts_parse_two_column_tsv",
+        "b02_ts_read_text_lines",
+        "b03_js_independent_status_objects",
+        "b03_js_reject_duplicate_aliases",
+        "b03_js_slice_without_splice_mutation",
+        "b03_js_strip_one_bom_and_crlf",
+        "b03_py_chunk_no_empty_tail",
+        "b03_ts_independent_attempt_counters",
+        "b04_py_regression_even_midpoint",
+        "b04_py_table_ceil_div",
+        "b04_ts_chunk_boundaries"
+      ]
+    },
+    {
+      "pattern": "truthiness_guard",
+      "records": 30,
+      "occurrences": 44,
+      "record_ids": [
+        "b01_py_build_query_string",
+        "b01_py_merge_nonnegative_counts",
+        "b01_py_parse_assignment",
+        "b01_py_parse_decimal_cents",
+        "b01_py_parse_hex_color",
+        "b01_py_parse_iso_calendar_date",
+        "b01_py_require_snake_identifier",
+        "b01_py_require_trimmed_string_list",
+        "b01_py_transpose_rectangular",
+        "b02_py_decode_utf8_text",
+        "b02_py_list_text_files",
+        "b02_py_load_build_toml",
+        "b02_py_merge_disjoint_objects",
+        "b02_py_parse_json_object_no_duplicates",
+        "b02_py_read_ini_section",
+        "b02_py_require_json_value",
+        "b02_py_write_new_csv",
+        "b02_py_write_new_jsonl",
+        "b03_py_copy_nested_options",
+        "b03_py_filter_without_list_mutation",
+        "b03_py_preserve_explicit_empty_alias",
+        "b03_py_reject_bool_as_count",
+        "b03_py_reject_duplicate_record_ids",
+        "b03_py_validate_before_sorting_names",
+        "legacy:code_instruction_direct:002",
+        "legacy:code_instruction_phase3:001",
+        "legacy:code_instruction_phase3:002",
+        "legacy:code_instruction_phase3:004",
+        "legacy:code_instruction_seed:002",
+        "legacy:code_instruction_seed:014"
+      ]
+    },
+    {
+      "pattern": "pathlib_or_path",
+      "records": 28,
+      "occurrences": 166,
+      "record_ids": [
+        "b02_js_list_directory_files",
+        "b02_js_read_utf8_file_strict",
+        "b02_ps_get_directory_file_report",
+        "b02_ps_get_file_preview",
+        "b02_ps_read_utf8_lines_strict",
+        "b02_py_debug_json_binary_mode",
+        "b02_py_list_text_files",
+        "b02_py_load_build_toml",
+        "b02_py_read_ini_section",
+        "b02_py_read_utf8_lines",
+        "b02_py_require_json_value",
+        "b02_py_sha256_file",
+        "b02_py_write_new_csv",
+        "b02_py_write_new_json",
+        "b02_py_write_new_jsonl",
+        "b02_ts_read_text_lines",
+        "b04_js_json_file_fixture",
+        "b04_ps_testdrive_utf8_bom",
+        "b04_sql_upsert_idempotence",
+        "legacy:code_instruction_direct:002",
+        "legacy:code_instruction_direct:004",
+        "legacy:code_instruction_direct:009",
+        "legacy:code_instruction_phase3:002",
+        "legacy:code_instruction_phase3:016",
+        "legacy:code_instruction_phase3:017",
+        "legacy:code_instruction_seed:002",
+        "legacy:code_instruction_seed:005",
+        "legacy:code_instruction_seed:010"
+      ]
+    },
+    {
+      "pattern": "unittest",
+      "records": 17,
+      "occurrences": 71,
+      "record_ids": [
+        "b01_py_tests_snake_identifier",
+        "b03_py_test_exact_boundary_result",
+        "b04_py_async_dependency_order",
+        "b04_py_empty_average_error",
+        "b04_py_exception_chaining",
+        "b04_py_fix_set_assertion_duplicates",
+        "b04_py_jsonl_error_line",
+        "b04_py_missing_return_regression",
+        "b04_py_mock_clock_boundary",
+        "b04_py_regression_even_midpoint",
+        "b04_py_sorted_copy_no_mutation",
+        "b04_py_subtest_validation_matrix",
+        "b04_py_table_ceil_div",
+        "b04_py_table_parse_range_list",
+        "legacy:code_instruction_direct:003",
+        "legacy:code_instruction_phase3:003",
+        "legacy:code_instruction_seed:003"
+      ]
+    },
+    {
+      "pattern": "async_await",
+      "records": 16,
+      "occurrences": 81,
+      "record_ids": [
+        "b02_js_list_directory_files",
+        "b02_js_read_utf8_file_strict",
+        "b02_ts_read_text_lines",
+        "b03_js_await_each_async_write",
+        "b03_ts_return_async_repository_promise",
+        "b04_js_async_rejection",
+        "b04_js_fix_async_missing_await",
+        "b04_js_json_file_fixture",
+        "b04_py_async_dependency_order",
+        "b04_text_async_no_sleep",
+        "b04_ts_async_injected_loader",
+        "legacy:code_instruction_direct:006",
+        "legacy:code_instruction_phase3:013",
+        "legacy:code_instruction_phase3:014",
+        "legacy:code_instruction_seed:007",
+        "legacy:code_instruction_seed:016"
+      ]
+    },
+    {
+      "pattern": "set_membership",
+      "records": 16,
+      "occurrences": 19,
+      "record_ids": [
+        "b01_js_parse_sort_direction",
+        "b01_js_require_delimiter",
+        "b01_py_select_columns",
+        "b01_ts_map_unique_names",
+        "b02_js_index_rows_by_field",
+        "b02_py_require_json_value",
+        "b02_py_write_new_csv",
+        "b02_ts_index_composite_rows",
+        "b02_ts_merge_config_layers",
+        "b02_ts_parse_two_column_tsv",
+        "b03_js_reject_duplicate_aliases",
+        "b03_ts_check_duplicate_before_set",
+        "b04_py_fix_set_assertion_duplicates",
+        "legacy:code_instruction_phase3:005",
+        "legacy:code_instruction_phase3:024",
+        "legacy:code_instruction_seed:013"
+      ]
+    },
+    {
+      "pattern": "array_is_array",
+      "records": 10,
+      "occurrences": 14,
+      "record_ids": [
+        "b01_js_normalize_label_map",
+        "b01_js_sum_line_totals",
+        "b01_js_zip_equal",
+        "b01_ts_require_trimmed_string_array",
+        "b01_ts_validate_rgb_tuple",
+        "b02_js_canonical_flat_json",
+        "b02_js_index_rows_by_field",
+        "b02_js_parse_json_string_array",
+        "b02_js_serialize_json_lines",
+        "b02_ts_parse_json_record"
+      ]
+    },
+    {
+      "pattern": "explicit_none_or_null",
+      "records": 7,
+      "occurrences": 8,
+      "record_ids": [
+        "b01_py_debug_missing_key_vs_none",
+        "b01_py_parse_decimal_cents",
+        "b01_py_parse_hex_color",
+        "b01_py_parse_iso_calendar_date",
+        "b01_py_require_snake_identifier",
+        "b02_py_require_json_value",
+        "b03_py_mutable_default_history"
+      ]
+    },
+    {
+      "pattern": "transaction_begin",
+      "records": 7,
+      "occurrences": 17,
+      "record_ids": [
+        "b02_ps_measure_file_extension",
+        "b02_py_list_text_files",
+        "b03_sql_reserve_before_insert_order",
+        "b04_sql_check_null_and_negative",
+        "b04_sql_transaction_rollback_regression",
+        "b04_sql_upsert_idempotence",
+        "b04_sql_verify_unique_constraint"
+      ]
+    },
+    {
+      "pattern": "json_parse",
+      "records": 5,
+      "occurrences": 6,
+      "record_ids": [
+        "b02_js_parse_json_string_array",
+        "b02_py_parse_json_object_no_duplicates",
+        "b02_ts_parse_json_record",
+        "legacy:code_instruction_direct:002",
+        "legacy:code_instruction_seed:002"
+      ]
+    },
+    {
+      "pattern": "sort_operation",
+      "records": 5,
+      "occurrences": 9,
+      "record_ids": [
+        "b01_py_build_query_string",
+        "b02_py_list_text_files",
+        "b03_py_missing_return_normalized_keys",
+        "b03_py_validate_before_sorting_names",
+        "legacy:code_instruction_phase3:022"
+      ]
+    },
+    {
+      "pattern": "subtest",
+      "records": 5,
+      "occurrences": 11,
+      "record_ids": [
+        "b01_py_tests_snake_identifier",
+        "b04_py_empty_average_error",
+        "b04_py_subtest_validation_matrix",
+        "b04_py_table_ceil_div",
+        "b04_py_table_parse_range_list"
+      ]
+    },
+    {
+      "pattern": "transaction_rollback",
+      "records": 4,
+      "occurrences": 8,
+      "record_ids": [
+        "b04_sql_check_null_and_negative",
+        "b04_sql_transaction_rollback_regression",
+        "b04_sql_upsert_idempotence",
+        "b04_sql_verify_unique_constraint"
+      ]
+    },
+    {
+      "pattern": "object_create_null",
+      "records": 2,
+      "occurrences": 2,
+      "record_ids": [
+        "b01_js_normalize_label_map",
+        "b02_js_canonical_flat_json"
+      ]
+    },
+    {
+      "pattern": "transaction_commit",
+      "records": 2,
+      "occurrences": 4,
+      "record_ids": [
+        "b03_sql_reserve_before_insert_order",
+        "b04_sql_transaction_rollback_regression"
+      ]
+    },
+    {
+      "pattern": "pytest",
+      "records": 0,
+      "occurrences": 0,
+      "record_ids": []
+    }
+  ],
+  "curriculum_gaps": {
+    "language": [
+      {
+        "language": "powershell",
+        "count": 21,
+        "actual_share": 0.0986,
+        "target_share": 0.125,
+        "delta_examples_at_current_size": -5.62,
+        "status": "under"
+      },
+      {
+        "language": "text",
+        "count": 11,
+        "actual_share": 0.0516,
+        "target_share": 0.075,
+        "delta_examples_at_current_size": -4.97,
+        "status": "under"
+      },
+      {
+        "language": "sql",
+        "count": 25,
+        "actual_share": 0.1174,
+        "target_share": 0.125,
+        "delta_examples_at_current_size": -1.62,
+        "status": "near_target"
+      },
+      {
+        "language": "typescript",
+        "count": 44,
+        "actual_share": 0.2066,
+        "target_share": 0.2,
+        "delta_examples_at_current_size": 1.4,
+        "status": "near_target"
+      },
+      {
+        "language": "javascript",
+        "count": 39,
+        "actual_share": 0.1831,
+        "target_share": 0.175,
+        "delta_examples_at_current_size": 1.73,
+        "status": "near_target"
+      },
+      {
+        "language": "python",
+        "count": 73,
+        "actual_share": 0.3427,
+        "target_share": 0.3,
+        "delta_examples_at_current_size": 9.1,
+        "status": "over"
+      }
+    ],
+    "capability": [
+      {
+        "capability": "efficiency",
+        "count": 7,
+        "target_for_400_reviewed_examples": 35,
+        "progress": 0.2,
+        "remaining_to_target": 28
+      },
+      {
+        "capability": "security",
+        "count": 10,
+        "target_for_400_reviewed_examples": 35,
+        "progress": 0.2857,
+        "remaining_to_target": 25
+      },
+      {
+        "capability": "explanation",
+        "count": 18,
+        "target_for_400_reviewed_examples": 30,
+        "progress": 0.6,
+        "remaining_to_target": 12
+      },
+      {
+        "capability": "sql_database",
+        "count": 29,
+        "target_for_400_reviewed_examples": 45,
+        "progress": 0.6444,
+        "remaining_to_target": 16
+      },
+      {
+        "capability": "files_apis_automation",
+        "count": 49,
+        "target_for_400_reviewed_examples": 50,
+        "progress": 0.98,
+        "remaining_to_target": 1
+      },
+      {
+        "capability": "functions_and_data",
+        "count": 93,
+        "target_for_400_reviewed_examples": 90,
+        "progress": 1.0333,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "debugging",
+        "count": 64,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 1.1636,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "tests",
+        "count": 64,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 1.1636,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "validation",
+        "count": 111,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 2.0182,
+        "remaining_to_target": 0
+      }
+    ]
+  },
+  "integrity": {
+    "accepted_batch_render_checks": [
+      {
+        "jsonl": "data/incoming/phase3_5b_batch01_accepted.jsonl",
+        "raw": "data/raw/phase3_5b_batch01_accepted.txt",
+        "rows": 40,
+        "raw_exists": true,
+        "raw_matches_rendered_jsonl": true,
+        "jsonl_sha256": "c3798b380a7cebd51f5e57c986013c757dc1bb6a4226aca6701479c6710e7238",
+        "raw_sha256": "1c268b31b39ffdb39a457a01969bdd4a4fd8406a8c705099c1f1a760c3e672e9"
+      },
+      {
+        "jsonl": "data/incoming/phase3_5b_batch02_accepted.jsonl",
+        "raw": "data/raw/phase3_5b_batch02_accepted.txt",
+        "rows": 40,
+        "raw_exists": true,
+        "raw_matches_rendered_jsonl": true,
+        "jsonl_sha256": "9834efa8a07234ec1ed77b8221c8c22c76402149892e28c11700f794a4220cea",
+        "raw_sha256": "2d3f78c211cb9cc8b027a870e819297d33d5fc88cbaf9acfb2212edd9d87d569"
+      },
+      {
+        "jsonl": "data/incoming/phase3_5b_batch03_accepted.jsonl",
+        "raw": "data/raw/phase3_5b_batch03_accepted.txt",
+        "rows": 40,
+        "raw_exists": true,
+        "raw_matches_rendered_jsonl": true,
+        "jsonl_sha256": "e430bf48914bdeaa6876655fef4e6915379d83e4eca0dfd80453b4bf3ee2afe6",
+        "raw_sha256": "9ff00378c4540c91b24d8e910756d0a8229313f1db0190ed76514094af7c7146"
+      },
+      {
+        "jsonl": "data/incoming/phase3_5b_batch04_accepted.jsonl",
+        "raw": "data/raw/phase3_5b_batch04_accepted.txt",
+        "rows": 40,
+        "raw_exists": true,
+        "raw_matches_rendered_jsonl": true,
+        "jsonl_sha256": "7f0a5924f5c00a9bb8a00a6a88ff175d1552dcb01c3698dab3d02db64b5ceac7",
+        "raw_sha256": "35e4201f5d6df8921c98fb3f90e32cc2bc1603495b191dc55991a116ead03ebe"
+      }
+    ],
+    "all_accepted_raw_files_match": true,
+    "foundation_seed_files": [
+      {
+        "path": "data/raw/code_basics.txt",
+        "characters": 7551,
+        "proxy_tokens": 1990,
+        "sha256": "f857852528b3eb8bc167d84efc00e0f2343aed6a5e084e930335505408d02a31"
+      },
+      {
+        "path": "data/raw/code_quality_seed.txt",
+        "characters": 10427,
+        "proxy_tokens": 2456,
+        "sha256": "b9d153da882725cf2dcfe41b1bd183d5cafd3f63c037ed438b748e32de0986b1"
+      }
+    ]
+  },
+  "decision": {
+    "status": "structural_cleanup_required",
+    "reason": "Critical leakage or exact duplicate flags must be resolved before adding more data.",
+    "critical_leakage_flags": 0,
+    "exact_duplicate_flags": 2,
+    "expected_context": 256,
+    "records_over_expected_context": 77,
+    "underrepresented_languages": [
+      "powershell",
+      "text"
+    ]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "packet": "Phase 3.5B Work Packet 07",
+  "baseline": {
+    "expected_commit": "b771d01",
+    "source_zip": "23b6e224-0252-43fb-928e-f41a526bf850.zip",
+    "source_zip_sha256": "6d117a17937ebb5a2a3cec91aa7bbc8388e3056ee6b3bd2955f3262bb9d43404"
+  },
+  "purpose": "read-only corpus audit and curriculum gap analysis; safe to review beside Work Packet 06",
+  "tests": {
+    "audit_unit_tests": 10,
+    "audit_unit_tests_passed": 10,
+    "complete_repository_tests": 18,
+    "complete_repository_tests_passed": 18,
+    "python_compile": "passed",
+    "deterministic_reports": "passed; fresh combined-overlay reproduction was byte-identical"
+  },
+  "combined_overlay_validation": {
+    "work_packet_06_candidates_present": true,
+    "work_packet_06_candidates_counted_as_training": false,
+    "audited_instruction_records": 213,
+    "accepted_phase3_5b_records": 160,
+    "legacy_protocol_records": 53
+  },
+  "preview": {
+    "length_mode": "proxy_lexical_tokens",
+    "duplicate_flags": 20,
+    "exact_duplicate_flags": 2,
+    "structural_duplicate_flags": 6,
+    "critical_leakage_flags": 0,
+    "review_leakage_flags": 0,
+    "informational_term_overlaps": 88,
+    "length_outlier_rows": 86,
+    "human_review_queue_rows": 47,
+    "decision": "structural_cleanup_required"
+  },
+  "prohibitions_confirmed": {
+    "training_examples_added": false,
+    "candidate_examples_counted": false,
+    "raw_training_data_modified": false,
+    "accepted_jsonl_modified": false,
+    "tokenizer_rebuilt": false,
+    "dataset_prepared": false,
+    "training_run": false,
+    "model_code_changed": false
+  },
+  "files": [
+    {
+      "path": "APPLY_OVERLAY.md",
+      "sha256": "652dee5300517416d6488f11c48cda936082dca7bb25f2d4f4f37cf0264ca500",
+      "bytes": 2938
+    },
+    {
+      "path": "PHASE3_5B_WORK_PACKET_07.md",
+      "sha256": "0c3f47cee284dc0db4487360911cba61282c20142f7446dd9f5b8dd9385d9ca0",
+      "bytes": 7801
+    },
+    {
+      "path": "data/reports/README.md",
+      "sha256": "b824eee58bd9855731467040a97f4a3f171cb4f4f519a943e323f3774c0244f9",
+      "bytes": 1138
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_corpus_audit.json",
+      "sha256": "031c4039f3d3c7db241f2eab1670dafa44c86b8d39867eb89f30938dd81e034b",
+      "bytes": 25583
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_corpus_audit.md",
+      "sha256": "ffbb5a461b183cc4bb04af516022c739042a46121df601592e47cfb17c7594e8",
+      "bytes": 3091
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_curriculum_gaps.md",
+      "sha256": "66876e991305e6da34d3054ff5bac4d8a50eb194818e2a72f0f23542dd103bcc",
+      "bytes": 1658
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_eval_leakage_flags.csv",
+      "sha256": "f9f27c41d7ff92d90a3d82e957ffbccb87d9a474af6bb4d2f13c661bcc6b1b71",
+      "bytes": 12988
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_human_review_queue.csv",
+      "sha256": "e85164ce0adf95bc6a67b33b27a2615e3e4ef90fd638033b003a4bde8653fdf4",
+      "bytes": 15742
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_length_outliers.csv",
+      "sha256": "7ff76e8b1981e29f14bad9e0fabc1af865f34dbc1e5f2cc684f700de11dc9660",
+      "bytes": 13425
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_near_duplicates.csv",
+      "sha256": "76545fc72794b52ecb8f330679808ff30b4d71d2d88248a0ba0faed9af033aea",
+      "bytes": 3735
+    },
+    {
+      "path": "data/reports/pre_batch05_baseline/phase3_5b_record_inventory.csv",
+      "sha256": "5c0871d0d03e9aeb80c0fae46bf105e69d7368e2a7309d573ead5b6f8867226e",
+      "bytes": 28794
+    },
+    {
+      "path": "scripts/audit_instruction_corpus.py",
+      "sha256": "89cba60e22ab4deaf4bf581cc2d33fc71824d6f0b839991481c65cd850e12cc5",
+      "bytes": 55785
+    },
+    {
+      "path": "tests/test_audit_instruction_corpus.py",
+      "sha256": "54cc679f74015697cbce1a3f20b1c611c9bbd7329d5534e6addf6732dbe43db3",
+      "bytes": 8788
+    }
+  ]
+}

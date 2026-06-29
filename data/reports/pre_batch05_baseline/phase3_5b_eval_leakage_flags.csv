@@ -1,0 +1,89 @@
+record_id,eval_id,severity,field,score,reason
+b01_ts_validate_rgb_tuple,js_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isInteger
+b03_js_reject_partial_integer_text,js_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: parseInt(
+legacy:code_instruction_phase3:011,js_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: parseInt(
+b01_js_debug_reduce_empty_total,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b01_ts_cumulative_finite_totals,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b01_ts_map_unique_names,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b02_js_canonical_flat_json,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b03_js_preserve_zero_threshold,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b03_ts_reject_number_coercion,js_require_finite_number,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b03_js_test_partial_numeric_rejection,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_async_rejection,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_duplicate_event_listener,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_error_code_and_message,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_exact_sparse_array,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_fix_async_missing_await,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_json_file_fixture,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_no_mutation_grouping,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_regression_last_index,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_table_parse_mode,js_tests_parse_pagination,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b02_ps_get_directory_file_report,ps_get_largest_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+b02_ps_get_directory_file_report,ps_get_largest_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Select-Object
+legacy:code_instruction_direct:009,ps_get_largest_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_phase3:017,ps_get_largest_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_seed:010,ps_get_largest_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_direct:009,ps_group_log_levels,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Group-Object
+legacy:code_instruction_phase3:017,ps_group_log_levels,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Group-Object
+legacy:code_instruction_seed:010,ps_group_log_levels,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Group-Object
+b03_ps_contains_operand_order,ps_hashset_membership,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: OrdinalIgnoreCase
+b02_ps_get_directory_file_report,ps_preview_old_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_direct:009,ps_preview_old_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_phase3:017,ps_preview_old_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_seed:010,ps_preview_old_files,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Get-ChildItem
+legacy:code_instruction_phase3:007,py_debug_swallowed_error,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: except Exception
+b01_py_build_query_string,py_redact_url_query,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: urllib.parse
+b02_py_list_text_files,py_safe_child_path,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: startswith(
+b03_js_strip_one_bom_and_crlf,py_safe_child_path,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: startswith(
+b03_ps_split_lines_without_carriage_return,py_safe_child_path,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: startswith(
+b03_py_header_bom_and_crlf,py_safe_child_path,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: startswith(
+b01_py_tests_snake_identifier,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_empty_average_error,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_exception_chaining,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_jsonl_error_line,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_regression_even_midpoint,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_subtest_validation_matrix,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_table_ceil_div,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_table_parse_range_list,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_direct:003,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_phase3:003,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_seed:003,py_tests_clamp,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b01_py_tests_snake_identifier,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_empty_average_error,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_exception_chaining,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_jsonl_error_line,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_regression_even_midpoint,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_subtest_validation_matrix,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_table_ceil_div,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+b04_py_table_parse_range_list,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_direct:003,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_phase3:003,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_seed:003,py_tests_parse_bool_setting,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: assertRaises
+legacy:code_instruction_direct:010,sql_orders_schema,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+legacy:code_instruction_phase3:018,sql_orders_schema,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+legacy:code_instruction_seed:011,sql_orders_schema,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+b01_py_parse_iso_calendar_date,sql_parameterized_lookup,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: format(
+legacy:code_instruction_direct:010,sql_tenant_status_index,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+legacy:code_instruction_phase3:018,sql_tenant_status_index,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+legacy:code_instruction_seed:011,sql_tenant_status_index,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: CREATE INDEX
+b01_ts_validate_rgb_tuple,ts_chunk_array,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isInteger
+b01_js_debug_reduce_empty_total,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b01_ts_cumulative_finite_totals,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b01_ts_map_unique_names,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b02_js_canonical_flat_json,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b03_js_preserve_zero_threshold,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b03_ts_reject_number_coercion,ts_debug_zero_value,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isFinite
+b01_ts_validate_rgb_tuple,ts_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Number.isInteger
+b04_js_json_file_fixture,ts_path_segment_validation,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: path.join
+b01_js_normalize_label_map,ts_safe_record_builder,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Object.create(null)
+b02_js_canonical_flat_json,ts_safe_record_builder,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: Object.create(null)
+b03_js_test_partial_numeric_rejection,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_async_rejection,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_duplicate_event_listener,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_error_code_and_message,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_exact_sparse_array,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_fix_async_missing_await,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_json_file_fixture,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_no_mutation_grouping,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_regression_last_index,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
+b04_js_table_parse_mode,ts_tests_parse_page_size,informational,required_or_forbidden_term,1.0,held-out distinctive term appears: node:assert
