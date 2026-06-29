@@ -1,0 +1,1359 @@
+<instruction>
+Implement read_utf8_lines(path: Path) -> list[str].
+</instruction>
+<constraints>
+- Decode strictly as UTF-8.
+- Accept CRLF, LF, or CR line endings.
+- Remove line terminators only; preserve every other character, including leading and trailing spaces.
+- Use a context manager.
+</constraints>
+<answer>
+from pathlib import Path
+
+
+def read_utf8_lines(path: Path) -> list[str]:
+    with path.open("r", encoding="utf-8", errors="strict", newline=None) as handle:
+        return [line[:-1] if line.endswith("\n") else line for line in handle]
+</answer>
+<reasoning>
+Edge cases:
+- An empty file returns an empty list.
+- A final line without a terminator is retained.
+- Invalid UTF-8 raises UnicodeDecodeError.
+Quality notes:
+- Universal-newline translation removes platform-specific terminators without stripping content.
+</reasoning>
+
+<instruction>
+Implement parse_json_object(text: str) -> dict[str, object] for strict configuration JSON.
+</instruction>
+<constraints>
+- Require the root value to be an object.
+- Reject duplicate keys at any object depth.
+- Reject NaN and Infinity spellings.
+- Raise ValueError with a clear message for invalid JSON or an invalid root.
+</constraints>
+<answer>
+import json
+
+
+def parse_json_object(text: str) -> dict[str, object]:
+    def build_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"duplicate JSON key: {key}")
+            result[key] = value
+        return result
+
+    def reject_constant(token: str) -> object:
+        raise ValueError(f"invalid JSON number: {token}")
+
+    try:
+        value = json.loads(
+            text,
+            object_pairs_hook=build_object,
+            parse_constant=reject_constant,
+        )
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"invalid JSON at line {exc.lineno}, column {exc.colno}") from exc
+    if not isinstance(value, dict):
+        raise ValueError("JSON root must be an object")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- {} is valid.
+- Arrays and scalar roots are rejected.
+- A duplicate key nested inside another object is rejected.
+Quality notes:
+- Defines a duplicate-key policy instead of silently keeping the last value.
+</reasoning>
+
+<instruction>
+Implement write_new_json(path: Path, value: object) -> None.
+</instruction>
+<constraints>
+- Serialize before opening the destination so serialization failure cannot leave a partial file.
+- Write UTF-8 with two-space indentation, sorted keys, non-ASCII characters preserved, and one final newline.
+- Reject NaN and Infinity.
+- Refuse to overwrite an existing path.
+</constraints>
+<answer>
+import json
+from pathlib import Path
+
+
+def write_new_json(path: Path, value: object) -> None:
+    body = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        indent=2,
+        allow_nan=False,
+    ) + "\n"
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(body)
+</answer>
+<reasoning>
+Edge cases:
+- An existing destination raises FileExistsError.
+- Non-ASCII text remains readable.
+- A non-serializable value fails before the file is created.
+Quality notes:
+- Deterministic formatting helps reviews and tests.
+- Exclusive creation avoids accidental overwrite.
+</reasoning>
+
+<instruction>
+Implement write_new_jsonl(path: Path, records: list[dict[str, object]]) -> None.
+</instruction>
+<constraints>
+- Encode one compact JSON object per line in UTF-8.
+- Reject any non-dict record and reject NaN or Infinity.
+- Serialize every record before creating the file.
+- Write a final newline when records are present and refuse to overwrite an existing path.
+</constraints>
+<answer>
+import json
+from pathlib import Path
+
+
+def write_new_jsonl(path: Path, records: list[dict[str, object]]) -> None:
+    lines: list[str] = []
+    for index, record in enumerate(records):
+        if not isinstance(record, dict):
+            raise TypeError(f"record {index} must be a dict")
+        lines.append(
+            json.dumps(
+                record,
+                ensure_ascii=False,
+                allow_nan=False,
+                separators=(",", ":"),
+            )
+        )
+    body = "\n".join(lines) + ("\n" if lines else "")
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(body)
+</answer>
+<reasoning>
+Edge cases:
+- An empty record list creates an empty file.
+- An invalid later record does not create a partial destination.
+Quality notes:
+- Separates validation/serialization from the filesystem side effect.
+</reasoning>
+
+<instruction>
+Implement list_text_files(directory: Path, suffixes: set[str]) -> list[str].
+</instruction>
+<constraints>
+- Inspect only the immediate directory; do not recurse.
+- Require every suffix to be lowercase and begin with a dot.
+- Include regular non-symlink files whose suffix matches case-insensitively.
+- Return file names in deterministic case-insensitive order.
+</constraints>
+<answer>
+from pathlib import Path
+
+
+def list_text_files(directory: Path, suffixes: set[str]) -> list[str]:
+    if not directory.is_dir():
+        raise NotADirectoryError(directory)
+    if any(not suffix.startswith(".") or suffix != suffix.lower() for suffix in suffixes):
+        raise ValueError("suffixes must be lowercase and start with a dot")
+
+    names = [
+        entry.name
+        for entry in directory.iterdir()
+        if not entry.is_symlink()
+        and entry.is_file()
+        and entry.suffix.lower() in suffixes
+    ]
+    return sorted(names, key=lambda name: (name.casefold(), name))
+</answer>
+<reasoning>
+Edge cases:
+- An empty suffix set returns an empty list.
+- README without a suffix is omitted.
+- A .TXT file matches .txt.
+Quality notes:
+- Non-recursive inspection avoids surprising traversal.
+- Tie-breaking keeps output deterministic.
+</reasoning>
+
+<instruction>
+Implement sha256_file(path: Path, chunk_size: int = 65536) -> str.
+</instruction>
+<constraints>
+- Read the file in bounded binary chunks instead of loading it all at once.
+- Require chunk_size to be a positive int but not bool.
+- Return the lowercase hexadecimal SHA-256 digest.
+</constraints>
+<answer>
+import hashlib
+from pathlib import Path
+
+
+def sha256_file(path: Path, chunk_size: int = 65536) -> str:
+    if isinstance(chunk_size, bool) or not isinstance(chunk_size, int):
+        raise TypeError("chunk_size must be an integer")
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be positive")
+
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while chunk := handle.read(chunk_size):
+            digest.update(chunk)
+    return digest.hexdigest()
+</answer>
+<reasoning>
+Edge cases:
+- An empty file has the standard SHA-256 empty digest.
+- A chunk size of 1 is valid.
+Quality notes:
+- Streaming keeps memory bounded for large files.
+</reasoning>
+
+<instruction>
+Implement read_ini_section(path: Path, section: str) -> dict[str, str].
+</instruction>
+<constraints>
+- Use configparser with interpolation disabled and strict duplicate checking.
+- Preserve option-name case.
+- Reject a blank section name, DEFAULT values, and a missing section.
+- Return the section values as a new dictionary.
+</constraints>
+<answer>
+import configparser
+from pathlib import Path
+
+
+def read_ini_section(path: Path, section: str) -> dict[str, str]:
+    if not isinstance(section, str) or not section.strip():
+        raise ValueError("section must be non-blank")
+
+    parser = configparser.ConfigParser(interpolation=None, strict=True)
+    parser.optionxform = str
+    with path.open("r", encoding="utf-8") as handle:
+        parser.read_file(handle)
+    if parser.defaults():
+        raise ValueError("DEFAULT values are not allowed")
+    if not parser.has_section(section):
+        raise KeyError(section)
+    return dict(parser.items(section, raw=True))
+</answer>
+<reasoning>
+Edge cases:
+- An empty named section returns an empty dictionary.
+- Duplicate keys raise DuplicateOptionError.
+Quality notes:
+- Disables implicit interpolation so stored text is returned literally.
+</reasoning>
+
+<instruction>
+Implement decode_utf8_text(data: bytes) -> str.
+</instruction>
+<constraints>
+- Decode strictly as UTF-8.
+- Allow and remove one leading UTF-8 BOM.
+- Normalize CRLF and bare CR line endings to LF.
+- Do not trim whitespace or add a final newline.
+</constraints>
+<answer>
+def decode_utf8_text(data: bytes) -> str:
+    if not isinstance(data, bytes):
+        raise TypeError("data must be bytes")
+    text = data.decode("utf-8-sig", errors="strict")
+    return text.replace("\r\n", "\n").replace("\r", "\n")
+</answer>
+<reasoning>
+Edge cases:
+- Empty bytes decode to an empty string.
+- A BOM elsewhere in the text is preserved as a character.
+- Invalid byte sequences raise UnicodeDecodeError.
+Quality notes:
+- Keeps decoding policy and newline policy explicit.
+</reasoning>
+
+<instruction>
+Implement write_new_csv(path: Path, columns: list[str], rows: list[dict[str, str]]) -> None.
+</instruction>
+<constraints>
+- Require unique non-blank column names.
+- Require every row to have exactly the declared keys and string values.
+- Render with csv.DictWriter, LF line endings, and a header.
+- Build the complete text before creating the destination and refuse to overwrite an existing path.
+</constraints>
+<answer>
+import csv
+import io
+from pathlib import Path
+
+
+def write_new_csv(
+    path: Path,
+    columns: list[str],
+    rows: list[dict[str, str]],
+) -> None:
+    if not columns or any(not isinstance(name, str) or not name.strip() for name in columns):
+        raise ValueError("columns must contain non-blank strings")
+    if len(set(columns)) != len(columns):
+        raise ValueError("columns must be unique")
+    expected = set(columns)
+    for index, row in enumerate(rows):
+        if set(row) != expected:
+            raise ValueError(f"row {index} must have exactly the declared columns")
+        if any(not isinstance(value, str) for value in row.values()):
+            raise TypeError(f"row {index} values must be strings")
+
+    buffer = io.StringIO(newline="")
+    writer = csv.DictWriter(buffer, fieldnames=columns, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    with path.open("x", encoding="utf-8", newline="") as handle:
+        handle.write(buffer.getvalue())
+</answer>
+<reasoning>
+Edge cases:
+- An empty row list still writes the header.
+- Commas, quotes, and newlines in values are quoted by csv.
+Quality notes:
+- Validates the full table before creating the destination.
+</reasoning>
+
+<instruction>
+Implement load_build_toml(path: Path) -> tuple[str, bool].
+</instruction>
+<constraints>
+- Use the standard-library tomllib module.
+- Require a [build] table with target as a non-blank string and optimize as an actual bool.
+- Do not coerce numbers or strings to bool.
+- Return the trimmed target and optimize flag.
+</constraints>
+<answer>
+import tomllib
+from pathlib import Path
+
+
+def load_build_toml(path: Path) -> tuple[str, bool]:
+    with path.open("rb") as handle:
+        document = tomllib.load(handle)
+    build = document.get("build")
+    if not isinstance(build, dict):
+        raise ValueError("missing [build] table")
+    target = build.get("target")
+    optimize = build.get("optimize")
+    if not isinstance(target, str) or not target.strip():
+        raise ValueError("build.target must be a non-blank string")
+    if type(optimize) is not bool:
+        raise ValueError("build.optimize must be a boolean")
+    return target.strip(), optimize
+</answer>
+<reasoning>
+Edge cases:
+- A quoted "true" is rejected.
+- Other top-level tables are allowed.
+Quality notes:
+- Uses the language parser instead of ad-hoc TOML parsing.
+</reasoning>
+
+<instruction>
+Implement require_json_value(value: object) -> object.
+</instruction>
+<constraints>
+- Accept only None, bool, str, int, finite float, list, and dict with string keys.
+- Validate recursively.
+- Reject tuples, non-finite floats, non-string keys, and reference cycles.
+- Return the original value after validation.
+</constraints>
+<answer>
+import math
+
+
+def require_json_value(value: object) -> object:
+    active: set[int] = set()
+
+    def visit(item: object, path: str) -> None:
+        if item is None or isinstance(item, (bool, str, int)):
+            return
+        if isinstance(item, float):
+            if not math.isfinite(item):
+                raise ValueError(f"{path} contains a non-finite number")
+            return
+        if isinstance(item, (list, dict)):
+            marker = id(item)
+            if marker in active:
+                raise ValueError(f"{path} contains a reference cycle")
+            active.add(marker)
+            try:
+                if isinstance(item, list):
+                    for index, child in enumerate(item):
+                        visit(child, f"{path}[{index}]")
+                else:
+                    for key, child in item.items():
+                        if not isinstance(key, str):
+                            raise TypeError(f"{path} contains a non-string key")
+                        visit(child, f"{path}.{key}")
+            finally:
+                active.remove(marker)
+            return
+        raise TypeError(f"{path} contains unsupported type {type(item).__name__}")
+
+    visit(value, "$" )
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- Repeated references without a cycle are valid.
+- bool is valid even though it subclasses int.
+- NaN and Infinity are rejected.
+Quality notes:
+- Distinguishes active recursion from harmless shared references.
+</reasoning>
+
+<instruction>
+Implement merge_disjoint_objects(objects: list[dict[str, object]]) -> dict[str, object].
+</instruction>
+<constraints>
+- Require every key to be a non-blank string.
+- Reject a key that appears in more than one input object.
+- Return a new dictionary and preserve object order and key insertion order.
+- Do not mutate any input.
+</constraints>
+<answer>
+def merge_disjoint_objects(
+    objects: list[dict[str, object]],
+) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for object_index, item in enumerate(objects):
+        if not isinstance(item, dict):
+            raise TypeError(f"item {object_index} must be a dict")
+        for key, value in item.items():
+            if not isinstance(key, str) or not key.strip():
+                raise ValueError(f"item {object_index} contains an invalid key")
+            if key in result:
+                raise ValueError(f"duplicate key: {key}")
+            result[key] = value
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- An empty list returns an empty dictionary.
+- Empty input dictionaries are allowed.
+Quality notes:
+- Makes collision behavior explicit instead of silently overwriting data.
+</reasoning>
+
+<instruction>
+Fix write_json so it writes valid UTF-8 JSON and explain the failure briefly.
+</instruction>
+<constraints>
+- Use only the standard library.
+- Preserve non-ASCII characters.
+- Write one final newline.
+</constraints>
+<bad_code>
+import json
+
+
+def write_json(path, data):
+    with open(path, "wb") as handle:
+        json.dump(data, handle)
+</bad_code>
+<reasoning>
+json.dump writes text, but a binary file handle accepts bytes. Open the file in text mode with an explicit UTF-8 encoding.
+</reasoning>
+<answer>
+import json
+from pathlib import Path
+
+
+def write_json(path: Path, data: object) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        json.dump(data, handle, ensure_ascii=False, allow_nan=False)
+        handle.write("\n")
+</answer>
+<reasoning>
+Edge cases:
+- Non-ASCII strings are written directly.
+- NaN is rejected rather than emitted as non-standard JSON.
+Quality notes:
+- Teaches the text-versus-bytes boundary directly.
+</reasoning>
+
+<instruction>
+Implement parseJsonRecord(text: string): Record<string, unknown>.
+</instruction>
+<constraints>
+- Parse JSON with JSON.parse.
+- Require a non-null object root and reject arrays and scalar roots.
+- Throw a new Error with a stable public message while preserving the original error as cause when parsing fails.
+</constraints>
+<answer>
+export function parseJsonRecord(text: string): Record<string, unknown> {
+  let value: unknown;
+  try {
+    value = JSON.parse(text) as unknown;
+  } catch (error) {
+    throw new Error("invalid JSON", { cause: error });
+  }
+  if (value === null || Array.isArray(value) || typeof value !== "object") {
+    throw new Error("JSON root must be an object");
+  }
+  return value as Record<string, unknown>;
+}
+</answer>
+<reasoning>
+Edge cases:
+- {} is valid.
+- null, arrays, strings, and numbers are rejected.
+Quality notes:
+- Keeps the external error stable without discarding diagnostic cause.
+</reasoning>
+
+<instruction>
+Implement encodeCsvRow(fields: readonly string[]): string.
+</instruction>
+<constraints>
+- Join fields with commas.
+- Quote a field when it contains comma, double quote, CR, or LF.
+- Inside a quoted field, double every double quote.
+- Do not mutate the input.
+</constraints>
+<answer>
+export function encodeCsvRow(fields: readonly string[]): string {
+  return fields
+    .map((field) => {
+      if (/[",\r\n]/.test(field)) {
+        return `"${field.replaceAll('"', '""')}"`;
+      }
+      return field;
+    })
+    .join(",");
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array returns an empty string.
+- An empty field is represented by an empty position.
+- A multiline field is quoted.
+Quality notes:
+- Implements the core CSV quoting rule without manual escaping shortcuts.
+</reasoning>
+
+<instruction>
+Implement decodeUtf8Strict(bytes: Uint8Array): string.
+</instruction>
+<constraints>
+- Use TextDecoder with fatal UTF-8 decoding.
+- Allow a leading UTF-8 BOM without returning it.
+- Do not trim or normalize the decoded text.
+</constraints>
+<answer>
+export function decodeUtf8Strict(bytes: Uint8Array): string {
+  const decoder = new TextDecoder("utf-8", {
+    fatal: true,
+    ignoreBOM: false,
+  });
+  return decoder.decode(bytes);
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty byte array returns an empty string.
+- Invalid UTF-8 throws TypeError.
+Quality notes:
+- Avoids silent replacement characters at a file/input boundary.
+</reasoning>
+
+<instruction>
+Implement async readTextLines(path: string): Promise<string[]> for Node.js.
+</instruction>
+<constraints>
+- Read UTF-8 text with node:fs/promises.
+- Remove one leading Unicode BOM.
+- Accept CRLF, LF, or CR terminators and return lines without terminators.
+- Do not add an extra empty line solely because the file ends with a terminator.
+</constraints>
+<answer>
+import { readFile } from "node:fs/promises";
+
+export async function readTextLines(path: string): Promise<string[]> {
+  const text = (await readFile(path, "utf8")).replace(/^\uFEFF/, "");
+  if (text.length === 0) return [];
+
+  const lines = text.split(/\r\n|\n|\r/);
+  if (/(?:\r\n|\n|\r)$/.test(text)) lines.pop();
+  return lines;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty file returns an empty array.
+- Internal blank lines are preserved.
+- A final unterminated line is retained.
+Quality notes:
+- Makes trailing-terminator behavior explicit.
+</reasoning>
+
+<instruction>
+Implement parseTwoColumnTsv(text: string): Map<string, string>.
+</instruction>
+<constraints>
+- Each non-empty line must contain exactly one tab.
+- Trim the key but preserve the value exactly.
+- Reject blank or duplicate keys and include the 1-based line number in errors.
+- Accept CRLF, LF, or CR line endings.
+</constraints>
+<answer>
+export function parseTwoColumnTsv(text: string): Map<string, string> {
+  const result = new Map<string, string>();
+  const lines = text.split(/\r\n|\n|\r/);
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (line === "") continue;
+    const firstTab = line.indexOf("\t");
+    if (firstTab < 0 || firstTab !== line.lastIndexOf("\t")) {
+      throw new Error(`line ${index + 1}: expected exactly two columns`);
+    }
+    const key = line.slice(0, firstTab).trim();
+    const value = line.slice(firstTab + 1);
+    if (key === "") throw new Error(`line ${index + 1}: key is blank`);
+    if (result.has(key)) throw new Error(`line ${index + 1}: duplicate key ${key}`);
+    result.set(key, value);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- The second column may be empty.
+- A third tab is rejected.
+- Empty physical lines are skipped.
+Quality notes:
+- Defines exact delimiter and duplicate behavior for a narrow format.
+</reasoning>
+
+<instruction>
+Implement indexCompositeRows<T extends { tenantId: string; id: string }>(rows: readonly T[]): Map<string, T>.
+</instruction>
+<constraints>
+- Reject blank tenantId or id values.
+- Use a collision-free composite key representation.
+- Reject duplicate composite keys.
+- Preserve input order and do not mutate rows.
+</constraints>
+<answer>
+export function indexCompositeRows<
+  T extends { tenantId: string; id: string },
+>(rows: readonly T[]): Map<string, T> {
+  const result = new Map<string, T>();
+  for (const row of rows) {
+    if (row.tenantId.trim() === "" || row.id.trim() === "") {
+      throw new Error("tenantId and id must be non-blank");
+    }
+    const key = JSON.stringify([row.tenantId, row.id]);
+    if (result.has(key)) throw new Error("duplicate tenantId/id pair");
+    result.set(key, row);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- Values containing separators remain unambiguous because the key is encoded as JSON.
+Quality notes:
+- Avoids delimiter-collision bugs in composite string keys.
+</reasoning>
+
+<instruction>
+Fix firstCsvHeader so a CRLF file does not leave a carriage return in the last header, and explain the defect briefly.
+</instruction>
+<constraints>
+- Remove one leading Unicode BOM.
+- Return the first physical line split by commas.
+- An empty string must return an empty array.
+</constraints>
+<bad_code>
+export function firstCsvHeader(text: string): string[] {
+  return text.split("\n")[0].split(",");
+}
+</bad_code>
+<reasoning>
+Splitting only on LF leaves the CR from a CRLF terminator attached to the final field. Split on complete newline forms instead.
+</reasoning>
+<answer>
+export function firstCsvHeader(text: string): string[] {
+  const clean = text.replace(/^\uFEFF/, "");
+  if (clean === "") return [];
+  const [firstLine] = clean.split(/\r\n|\n|\r/, 1);
+  return firstLine.split(",");
+}
+</answer>
+<reasoning>
+Edge cases:
+- A BOM-prefixed header is handled.
+- A single-line header needs no newline.
+Quality notes:
+- Teaches a real cross-platform text-file defect.
+</reasoning>
+
+<instruction>
+Implement mergeConfigLayers(layers: readonly Readonly<Record<string, string | undefined>>[]): Map<string, string>.
+</instruction>
+<constraints>
+- Later defined values override earlier values.
+- Skip undefined values rather than deleting an earlier value.
+- Reject blank keys.
+- Return a new Map and do not mutate any input object.
+</constraints>
+<answer>
+export function mergeConfigLayers(
+  layers: readonly Readonly<Record<string, string | undefined>>[],
+): Map<string, string> {
+  const result = new Map<string, string>();
+  for (const layer of layers) {
+    for (const [key, value] of Object.entries(layer)) {
+      if (key.trim() === "") throw new Error("config keys must be non-blank");
+      if (value !== undefined) result.set(key, value);
+    }
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty string is a defined value and overrides earlier text.
+- An undefined later value leaves the earlier value in place.
+Quality notes:
+- Makes precedence and undefined behavior explicit.
+</reasoning>
+
+<instruction>
+Implement serializeJsonLines(records) that returns JSONL text.
+</instruction>
+<constraints>
+- Require an array of non-null, non-array objects.
+- Encode one compact JSON value per line.
+- Reject a record that JSON.stringify cannot serialize.
+- Return an empty string for no records and otherwise include one final newline.
+</constraints>
+<answer>
+function serializeJsonLines(records) {
+  if (!Array.isArray(records)) throw new TypeError("records must be an array");
+  const lines = records.map((record, index) => {
+    if (record === null || Array.isArray(record) || typeof record !== "object") {
+      throw new TypeError(`record ${index} must be an object`);
+    }
+    const encoded = JSON.stringify(record);
+    if (encoded === undefined) throw new TypeError(`record ${index} is not serializable`);
+    return encoded;
+  });
+  return lines.length === 0 ? "" : `${lines.join("\n")}\n`;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array returns an empty string.
+- A circular record causes JSON.stringify to throw.
+Quality notes:
+- Keeps record boundaries deterministic and explicit.
+</reasoning>
+
+<instruction>
+Implement parseCsvRow(line) for one comma-separated record.
+</instruction>
+<constraints>
+- Support quoted fields, commas inside quotes, and doubled quotes.
+- Reject a quote that begins after unquoted text, characters after a closing quote before a comma, and an unclosed quoted field.
+- Do not support embedded physical line breaks; reject CR or LF in line.
+</constraints>
+<answer>
+function parseCsvRow(line) {
+  if (typeof line !== "string") throw new TypeError("line must be a string");
+  if (/[\r\n]/.test(line)) throw new Error("line must contain one physical record");
+
+  const fields = [];
+  let field = "";
+  let quoted = false;
+  let closedQuote = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (quoted) {
+      if (char === '"') {
+        if (line[index + 1] === '"') {
+          field += '"';
+          index += 1;
+        } else {
+          quoted = false;
+          closedQuote = true;
+        }
+      } else {
+        field += char;
+      }
+    } else if (closedQuote) {
+      if (char !== ",") throw new Error("unexpected text after closing quote");
+      fields.push(field);
+      field = "";
+      closedQuote = false;
+    } else if (char === ",") {
+      fields.push(field);
+      field = "";
+    } else if (char === '"') {
+      if (field !== "") throw new Error("quote must start at the beginning of a field");
+      quoted = true;
+    } else {
+      field += char;
+    }
+  }
+
+  if (quoted) throw new Error("unclosed quoted field");
+  fields.push(field);
+  return fields;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty line is one empty field.
+- A trailing comma creates a final empty field.
+- "a""b" decodes to a"b.
+Quality notes:
+- Uses an explicit parser state instead of unsafe split(",").
+</reasoning>
+
+<instruction>
+Create readUtf8FileStrict(path), an asynchronous Node.js helper.
+</instruction>
+<constraints>
+- Read bytes with node:fs/promises.
+- Decode with fatal UTF-8 validation.
+- Allow one leading UTF-8 BOM without returning it.
+- Do not trim or normalize the text.
+</constraints>
+<answer>
+const { readFile } = require("node:fs/promises");
+
+async function readUtf8FileStrict(path) {
+  const bytes = await readFile(path);
+  return new TextDecoder("utf-8", {
+    fatal: true,
+    ignoreBOM: false,
+  }).decode(bytes);
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty file returns an empty string.
+- Invalid UTF-8 rejects the promise.
+Quality notes:
+- Avoids Node string decoding that silently inserts replacement characters.
+</reasoning>
+
+<instruction>
+Create listDirectoryFiles(path), an asynchronous Node.js directory-inspection helper.
+</instruction>
+<constraints>
+- Inspect only direct children with fs.promises.readdir and withFileTypes.
+- Return regular file names only; exclude directories and symbolic links.
+- Sort with deterministic code-unit ordering.
+- Do not modify the filesystem.
+</constraints>
+<answer>
+const { readdir } = require("node:fs/promises");
+
+async function listDirectoryFiles(path) {
+  const entries = await readdir(path, { withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() && !entry.isSymbolicLink())
+    .map((entry) => entry.name)
+    .sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty directory returns an empty array.
+- Nested files are not included.
+Quality notes:
+- Directory entries avoid an extra stat call for each child.
+</reasoning>
+
+<instruction>
+Implement indexRowsByField(rows, field) -> Map.
+</instruction>
+<constraints>
+- Require rows to be an array and field to be a non-blank string.
+- Require each row to be a non-null, non-array object with an own string value for field.
+- Reject blank and duplicate key values.
+- Preserve input order and do not mutate rows.
+</constraints>
+<answer>
+function indexRowsByField(rows, field) {
+  if (!Array.isArray(rows)) throw new TypeError("rows must be an array");
+  if (typeof field !== "string" || field.trim() === "") {
+    throw new TypeError("field must be a non-blank string");
+  }
+  const result = new Map();
+  rows.forEach((row, index) => {
+    if (row === null || Array.isArray(row) || typeof row !== "object") {
+      throw new TypeError(`row ${index} must be an object`);
+    }
+    if (!Object.hasOwn(row, field) || typeof row[field] !== "string") {
+      throw new TypeError(`row ${index} must have own string field ${field}`);
+    }
+    const key = row[field].trim();
+    if (key === "") throw new Error(`row ${index} has a blank key`);
+    if (result.has(key)) throw new Error(`duplicate key: ${key}`);
+    result.set(key, row);
+  });
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- Inherited properties do not satisfy the field requirement.
+- The returned Map contains original row objects without changing them.
+Quality notes:
+- Makes identity and duplicate policy explicit.
+</reasoning>
+
+<instruction>
+Implement parseJsonStringArray(text).
+</instruction>
+<constraints>
+- Parse JSON and require an array.
+- Require every item to be a string that is non-blank after trimming.
+- Return a new array of trimmed strings and include the failing index in errors.
+</constraints>
+<answer>
+function parseJsonStringArray(text) {
+  let value;
+  try {
+    value = JSON.parse(text);
+  } catch (error) {
+    throw new Error("invalid JSON", { cause: error });
+  }
+  if (!Array.isArray(value)) throw new Error("JSON root must be an array");
+  return value.map((item, index) => {
+    if (typeof item !== "string") throw new TypeError(`item ${index} must be a string`);
+    const cleaned = item.trim();
+    if (cleaned === "") throw new Error(`item ${index} must not be blank`);
+    return cleaned;
+  });
+}
+</answer>
+<reasoning>
+Edge cases:
+- [] is valid.
+- Nested arrays, null, and whitespace-only strings are rejected.
+Quality notes:
+- Combines parser-root validation with exact element validation.
+</reasoning>
+
+<instruction>
+Implement canonicalFlatJson(record) that returns deterministic JSON for a flat record.
+</instruction>
+<constraints>
+- Require a non-null, non-array object.
+- Allow only null, string, boolean, and finite number values.
+- Sort keys by code-unit order before encoding.
+- Do not mutate the input.
+</constraints>
+<answer>
+function canonicalFlatJson(record) {
+  if (record === null || Array.isArray(record) || typeof record !== "object") {
+    throw new TypeError("record must be an object");
+  }
+  const result = Object.create(null);
+  const keys = Object.keys(record).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  for (const key of keys) {
+    const value = record[key];
+    const valid =
+      value === null ||
+      typeof value === "string" ||
+      typeof value === "boolean" ||
+      (typeof value === "number" && Number.isFinite(value));
+    if (!valid) throw new TypeError(`unsupported value for key ${key}`);
+    result[key] = value;
+  }
+  return JSON.stringify(result);
+}
+</answer>
+<reasoning>
+Edge cases:
+- {} encodes as {}.
+- NaN, Infinity, arrays, nested objects, undefined, and functions are rejected.
+Quality notes:
+- Restricting the data model makes deterministic output easy to reason about.
+</reasoning>
+
+<instruction>
+Implement Read-Utf8LinesStrict.
+</instruction>
+<constraints>
+- Accept a mandatory LiteralPath.
+- Require an existing file.
+- Decode with a UTF8Encoding configured to throw on invalid bytes.
+- Return the lines without terminators and do not modify the file.
+</constraints>
+<answer>
+function Read-Utf8LinesStrict {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $LiteralPath
+    )
+
+    $resolved = Resolve-Path -LiteralPath $LiteralPath -ErrorAction Stop
+    if (-not [System.IO.File]::Exists($resolved.Path)) {
+        throw "Path is not a file: $LiteralPath"
+    }
+    $utf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    return [System.IO.File]::ReadAllLines($resolved.Path, $utf8)
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty file produces no output values.
+- Invalid UTF-8 throws DecoderFallbackException.
+Quality notes:
+- Uses .NET strict decoding rather than silently replacing invalid bytes.
+</reasoning>
+
+<instruction>
+Implement Get-DirectoryFileReport.
+</instruction>
+<constraints>
+- Accept one mandatory directory path.
+- Inspect only direct regular files.
+- Return objects with Name, Extension, and Length sorted by Name.
+- Do not recurse, follow symbolic links, or modify anything.
+</constraints>
+<answer>
+function Get-DirectoryFileReport {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $LiteralPath
+    )
+
+    $directory = Get-Item -LiteralPath $LiteralPath -ErrorAction Stop
+    if (-not $directory.PSIsContainer) {
+        throw "Path is not a directory: $LiteralPath"
+    }
+
+    Get-ChildItem -LiteralPath $directory.FullName -File -Force |
+        Where-Object { -not ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) } |
+        Sort-Object Name |
+        Select-Object Name, Extension, Length
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty directory returns no objects.
+- Hidden files are included because -Force is explicit.
+Quality notes:
+- Reports only; it does not recurse or change the filesystem.
+</reasoning>
+
+<instruction>
+Implement ConvertTo-JsonLine.
+</instruction>
+<constraints>
+- Accept one pipeline object at a time.
+- Require a hashtable or PSCustomObject root; reject null, arrays, and scalar roots.
+- Return one compressed JSON string using depth 10.
+- Do not write to a file.
+</constraints>
+<answer>
+function ConvertTo-JsonLine {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [AllowNull()]
+        [object] $InputObject
+    )
+
+    process {
+        $isRecord = $InputObject -is [System.Collections.IDictionary] -or
+            $InputObject -is [pscustomobject]
+        if ($null -eq $InputObject -or -not $isRecord -or $InputObject -is [array]) {
+            throw "InputObject must be a hashtable or PSCustomObject"
+        }
+        $InputObject | ConvertTo-Json -Compress -Depth 10
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty hashtable encodes as {}.
+- A string and an array are rejected.
+Quality notes:
+- Produces one record string suitable for a later JSONL writer.
+</reasoning>
+
+<instruction>
+Implement Measure-FileExtension.
+</instruction>
+<constraints>
+- Accept FileInfo objects from the pipeline.
+- Normalize extensions to lowercase; use <none> for files without an extension.
+- Return Extension and Count objects sorted by Extension.
+- Do not access file contents or modify files.
+</constraints>
+<answer>
+function Measure-FileExtension {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [System.IO.FileInfo] $File
+    )
+
+    begin { $counts = @{} }
+    process {
+        $extension = if ([string]::IsNullOrEmpty($File.Extension)) {
+            '<none>'
+        } else {
+            $File.Extension.ToLowerInvariant()
+        }
+        $counts[$extension] = 1 + [int] $counts[$extension]
+    }
+    end {
+        foreach ($extension in ($counts.Keys | Sort-Object)) {
+            [pscustomobject]@{
+                Extension = $extension
+                Count = $counts[$extension]
+            }
+        }
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- No input produces no output.
+- Extensions differing only by case are grouped together.
+Quality notes:
+- Aggregates metadata without repeated filesystem scans.
+</reasoning>
+
+<instruction>
+Implement Get-FilePreview.
+</instruction>
+<constraints>
+- Accept LiteralPath and Count with default 10.
+- Require Count from 1 through 100 and require an existing file.
+- Read at most Count UTF-8 lines and return them without modifying the file.
+- Use literal-path semantics.
+</constraints>
+<answer>
+function Get-FilePreview {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $LiteralPath,
+
+        [ValidateRange(1, 100)]
+        [int] $Count = 10
+    )
+
+    $item = Get-Item -LiteralPath $LiteralPath -ErrorAction Stop
+    if ($item.PSIsContainer) {
+        throw "Path is not a file: $LiteralPath"
+    }
+    Get-Content -LiteralPath $item.FullName -Encoding UTF8 -TotalCount $Count
+}
+</answer>
+<reasoning>
+Edge cases:
+- A shorter file returns only available lines.
+- Wildcard characters in a filename are treated literally.
+Quality notes:
+- Bounded preview avoids reading an entire large file.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create a json_documents table for named JSON objects.
+</instruction>
+<constraints>
+- Use a generated bigint primary key.
+- Require a unique non-blank name.
+- Require payload to be a JSON object, not an array or scalar.
+- Include created_at with a current timestamp default.
+</constraints>
+<answer>
+CREATE TABLE json_documents (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name text NOT NULL UNIQUE CHECK (btrim(name) <> ''),
+    payload jsonb NOT NULL CHECK (jsonb_typeof(payload) = 'object'),
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+</answer>
+<reasoning>
+Edge cases:
+- An empty JSON object is valid.
+- JSON null and arrays are rejected.
+Quality notes:
+- Places the root-shape invariant in the database.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a query returning id and a trimmed email from profiles.payload JSONB only when email is a non-blank JSON string.
+</instruction>
+<constraints>
+- Do not cast arbitrary JSON values.
+- Return columns id and email.
+- Order by id.
+</constraints>
+<answer>
+SELECT
+    id,
+    btrim(payload ->> 'email') AS email
+FROM profiles
+WHERE jsonb_typeof(payload -> 'email') = 'string'
+  AND btrim(payload ->> 'email') <> ''
+ORDER BY id;
+</answer>
+<reasoning>
+Edge cases:
+- Missing, null, numeric, object, array, and blank email values are excluded.
+Quality notes:
+- Checks JSON type before extracting text.
+</reasoning>
+
+<instruction>
+For PostgreSQL, return every order with its line items as an ordered JSONB array.
+</instruction>
+<constraints>
+- Return order_id and items.
+- Each item must contain sku and quantity.
+- Order items by line_number.
+- Orders with no lines must return [] instead of [null].
+</constraints>
+<answer>
+SELECT
+    o.id AS order_id,
+    COALESCE(
+        jsonb_agg(
+            jsonb_build_object(
+                'sku', l.sku,
+                'quantity', l.quantity
+            )
+            ORDER BY l.line_number
+        ) FILTER (WHERE l.id IS NOT NULL),
+        '[]'::jsonb
+    ) AS items
+FROM orders AS o
+LEFT JOIN order_lines AS l ON l.order_id = o.id
+GROUP BY o.id
+ORDER BY o.id;
+</answer>
+<reasoning>
+Edge cases:
+- An order with no rows in order_lines returns an empty JSON array.
+Quality notes:
+- Uses FILTER to avoid a synthetic null item from LEFT JOIN.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a data-quality query finding invalid profile payloads.
+</instruction>
+<constraints>
+- profiles.payload is JSONB.
+- A valid payload is an object with name as a non-blank string and tags as an array.
+- Return id and a short reason string.
+- Return only invalid rows ordered by id.
+</constraints>
+<answer>
+SELECT
+    id,
+    CASE
+        WHEN jsonb_typeof(payload) IS DISTINCT FROM 'object' THEN 'payload_not_object'
+        WHEN jsonb_typeof(payload -> 'name') IS DISTINCT FROM 'string' THEN 'name_not_string'
+        WHEN btrim(payload ->> 'name') = '' THEN 'name_blank'
+        WHEN jsonb_typeof(payload -> 'tags') IS DISTINCT FROM 'array' THEN 'tags_not_array'
+    END AS reason
+FROM profiles
+WHERE jsonb_typeof(payload) IS DISTINCT FROM 'object'
+   OR jsonb_typeof(payload -> 'name') IS DISTINCT FROM 'string'
+   OR btrim(payload ->> 'name') = ''
+   OR jsonb_typeof(payload -> 'tags') IS DISTINCT FROM 'array'
+ORDER BY id;
+</answer>
+<reasoning>
+Edge cases:
+- Missing name or tags keys are reported because IS DISTINCT FROM treats SQL NULL as different from the required type.
+Quality notes:
+- Uses null-safe comparisons so missing JSON keys cannot escape validation.
+</reasoning>
+
+<instruction>
+Fix the PostgreSQL query so malformed payload.count values do not abort the query, and explain the defect briefly.
+</instruction>
+<constraints>
+- Return id and count_value.
+- Accept only JSON numbers that are whole integers from 0 through 2147483647.
+- Return NULL for missing, wrong-type, fractional, negative, or out-of-range values.
+</constraints>
+<bad_code>
+SELECT id, (payload ->> 'count')::integer AS count_value
+FROM events;
+</bad_code>
+<reasoning>
+Casting arbitrary JSON text directly can abort the whole query. Check the JSON type, canonical integer spelling, and range before casting.
+</reasoning>
+<answer>
+SELECT
+    id,
+    CASE
+        WHEN jsonb_typeof(payload -> 'count') = 'number'
+         AND (payload ->> 'count') ~ '^(0|[1-9][0-9]*)$'
+         AND (payload ->> 'count')::numeric <= 2147483647
+        THEN (payload ->> 'count')::integer
+        ELSE NULL
+    END AS count_value
+FROM events
+ORDER BY id;
+</answer>
+<reasoning>
+Edge cases:
+- JSON 1.5, "2", -1, null, missing keys, and very large integers return NULL.
+Quality notes:
+- Guards the cast in the same CASE branch that performs it.
+</reasoning>
+
+<instruction>
+Explain what a UTF-8 BOM is and how a text reader should handle it.
+</instruction>
+<constraints>
+- Use at most five sentences.
+- Distinguish a leading BOM from the same character appearing later in content.
+- Mention strict invalid-byte handling.
+</constraints>
+<answer>
+A UTF-8 BOM is the optional byte sequence EF BB BF at the beginning of a file. A reader may recognize and remove one leading BOM, but it should not delete the same Unicode character from the middle of the content. The decoder should still reject invalid UTF-8 when data integrity matters instead of silently inserting replacement characters. Writers normally omit the BOM unless compatibility with a specific consumer requires it.
+</answer>
+<reasoning>
+Edge cases:
+- The explanation does not claim a BOM is required for UTF-8.
+Quality notes:
+- Separates encoding detection, content preservation, and error policy.
+</reasoning>
+
+<instruction>
+Explain why splitting a CSV line on commas is unreliable.
+</instruction>
+<constraints>
+- Use at most five sentences.
+- Mention quoted commas, doubled quotes, and embedded line breaks.
+- Recommend a real CSV parser.
+</constraints>
+<answer>
+CSV fields may be quoted, so a comma inside a quoted field is data rather than a separator. A double quote inside a quoted field is represented by two double quotes, and a quoted field may contain a line break. Simple string splitting does not track those parser states and can shift columns silently. Use the language's CSV library or a tested state-machine parser for the exact dialect.
+</answer>
+<reasoning>
+Edge cases:
+- Notes that physical lines and logical records may differ.
+Quality notes:
+- Explains the practical failure modes rather than only saying “CSV is complex.”
+</reasoning>
