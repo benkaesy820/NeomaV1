@@ -1,6 +1,6 @@
 {
   "phase": "Phase 3.5B Instruction Corpus v0.1 freeze review",
-  "baseline_after_batch07": "pending commit",
+  "baseline_after_batch07": "19a93e1",
   "batch07_manifest": "data/reviews/phase3_5b_batch07_review_manifest.json",
   "stage_a_plan": "data/plans/ENGLISH_CODE_FOUNDATION_CORPUS_PLAN.md",
   "stage_a_planning_sample": "data/plans/english_code_foundation_planning_sample.jsonl",
@@ -9,8 +9,8 @@
   "accepted_phase3_5b_records": 280,
   "legacy_protocol_records": 51,
   "audit_decision": {
-    "status": "context_length_cleanup_required",
-    "reason": "Too many records exceed the intended 256-token context and need shortening, splitting, or deferral.",
+    "status": "freeze_recommended_with_tokenizer_length_caveat",
+    "reason": "Curriculum coverage, duplicate checks, and leakage checks are clean. Proxy context length must be remeasured with the selected tokenizer before deriving Stage B context tiers.",
     "critical_leakage_flags": 0,
     "exact_duplicate_flags": 0,
     "expected_context": 256,
@@ -104,6 +104,6 @@
   "human_recommendation": {
     "status": "freeze_instruction_corpus_v0_1_recommended_with_tokenizer_length_caveat",
     "reason": "All curriculum capability targets are met, language balance is acceptable, exact duplicates are zero, and critical leakage is zero. More instruction examples would likely add filler. The remaining action is tokenizer-based context measurement, not another broad instruction batch.",
-    "next_artifact": "Proceed to Stage A English-and-Code foundation corpus planning and tokenizer comparison; do not prepare a dataset or train until tokenizer/context measurements are reviewed."
+    "next_artifact": "Stage A readiness, English evaluation, source acquisition, and tokenizer comparison. Do not add another broad instruction batch."
   }
 }

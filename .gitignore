@@ -8,3 +8,11 @@ __pycache__/
 data/*tokenizer.json
 data/*processed/
 runs/
+
+# Stage A corpora and downloaded source pools stay local.
+data/foundation/sources/raw/
+data/foundation/sources/manifests/
+data/foundation/staged/
+data/foundation/approved/
+data/foundation/rejected/
+data/foundation/tokenizers/

@@ -1,0 +1,353 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "stage_a_sources_v1_candidate",
+  "project": "NeomaV1",
+  "baseline": "19a93e1",
+  "created_utc": "2026-06-29T00:00:00Z",
+  "status": "candidate_not_acquired",
+  "private_use": true,
+  "public_release_assumed": false,
+  "source_freeze_policy": "After acquisition and review, pin hashes and versions in stage_a_sources_v1.lock.json. No new source may enter v1 without a versioned amendment and evaluation-backed justification.",
+  "freshness_policy": "Use a 2026 stable release or acquisition-day 2026 snapshot. A 2025 source is allowed only when it remains the latest stable release. Prereleases are excluded.",
+  "external_target_tokens": 45000000,
+  "internal_target_tokens": 5000000,
+  "total_target_tokens": 50000000,
+  "training_allowed": false,
+  "sources": [
+    {
+      "source_id": "gptnl_english_2026",
+      "name": "GPT-NL Public Corpus — selected English subsets",
+      "source_type": "dataset",
+      "upstream": "https://huggingface.co/datasets/GPT-NL/GPT-NL_Public_Corpus",
+      "version_policy": "Pin the exact Hugging Face dataset commit at acquisition. Use the 2026 corpus only.",
+      "pinned_version": null,
+      "release_date": "2026-04-01",
+      "freshness_status": "2026",
+      "release_channel": "published corpus",
+      "license": "CC-BY-4.0 corpus distribution; retain per-record source license metadata",
+      "license_status": "review_required",
+      "acquisition_method": "stream_selected_subsets",
+      "allowed_subsets": [
+        "cc_english-pd",
+        "cc_openalex"
+      ],
+      "allowed_paths": [],
+      "excluded_paths": [],
+      "target_tokens": 12000000,
+      "components": {
+        "simple_general_english": 7000000,
+        "technical_english": 5000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Do not download the 948 GB corpus. Stream only approved English rows with high language score, useful length, and retained provenance. If Hugging Face or acquisition tooling reports unsafe files, quarantine and exclude affected files until Leo reviews them explicitly."
+    },
+    {
+      "source_id": "cpython_3_14_6",
+      "name": "CPython",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/python/cpython",
+      "version_policy": "Exact stable release tag only.",
+      "pinned_version": "v3.14.6",
+      "release_date": "2026-06-10",
+      "freshness_status": "2026",
+      "release_channel": "stable",
+      "license": "Python-2.0 / PSF License Agreement and bundled notices",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "Doc/tutorial/",
+        "Doc/library/",
+        "Lib/"
+      ],
+      "excluded_paths": [
+        "Modules/",
+        "Objects/",
+        "Parser/",
+        "Python/",
+        "PCbuild/",
+        "externals/",
+        "Lib/test/**/data/"
+      ],
+      "target_tokens": 6000000,
+      "components": {
+        "python_code_tests_docs": 6000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Select readable Python, tests, docstrings, errors, and documentation. Do not ingest the repository wholesale."
+    },
+    {
+      "source_id": "pytest_9_1_1",
+      "name": "pytest",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/pytest-dev/pytest",
+      "version_policy": "Exact latest stable release tag.",
+      "pinned_version": "9.1.1",
+      "release_date": "2026-06-19",
+      "freshness_status": "2026",
+      "release_channel": "stable",
+      "license": "MIT",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "src/_pytest/",
+        "testing/",
+        "doc/"
+      ],
+      "excluded_paths": [
+        ".github/",
+        "build/",
+        "dist/",
+        "testing/example_scripts/issue*/"
+      ],
+      "target_tokens": 2000000,
+      "components": {
+        "python_testing_docs": 2000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Prefer compact fixtures, assertions, parametrization, failure messages, and matching docs."
+    },
+    {
+      "source_id": "typescript_6_0_3",
+      "name": "TypeScript compiler and tests",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/microsoft/TypeScript",
+      "version_policy": "Exact stable npm/repository release. Exclude 7.0 prerelease material.",
+      "pinned_version": "v6.0.3",
+      "release_date": null,
+      "freshness_status": "2026",
+      "release_channel": "stable",
+      "license": "Apache-2.0",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "src/",
+        "tests/cases/"
+      ],
+      "excluded_paths": [
+        "tests/baselines/",
+        "Herebyfile.mjs",
+        "node_modules/",
+        "built/"
+      ],
+      "target_tokens": 5000000,
+      "components": {
+        "typescript_code_tests_diagnostics": 5000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Prioritize small utilities, language-service examples, diagnostics, and focused conformance tests. Exact publication date must be recorded from npm/GitHub metadata during acquisition."
+    },
+    {
+      "source_id": "typescript_website_2026",
+      "name": "TypeScript Website and Handbook",
+      "source_type": "repository_snapshot",
+      "upstream": "https://github.com/microsoft/TypeScript-Website",
+      "version_policy": "Pin acquisition-day commit; retain stable TypeScript 6 material only.",
+      "pinned_version": null,
+      "release_date": null,
+      "freshness_status": "2026_snapshot_required",
+      "release_channel": "rolling documentation",
+      "license": "MIT for code; CC-BY-4.0 for documentation",
+      "license_status": "review_required",
+      "acquisition_method": "git_archive_at_commit",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "packages/documentation/",
+        "packages/playground-examples/",
+        "packages/tsconfig-reference/"
+      ],
+      "excluded_paths": [
+        "node_modules/",
+        "packages/typescriptlang-org/",
+        "packages/glossary/copy/",
+        "**/translations/",
+        "**/generated/"
+      ],
+      "target_tokens": 4000000,
+      "components": {
+        "typescript_developer_english_examples": 4000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Store documentation and code under separate license/provenance classes."
+    },
+    {
+      "source_id": "node_24_18_0",
+      "name": "Node.js LTS",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/nodejs/node",
+      "version_policy": "Latest production LTS patch release, not Current.",
+      "pinned_version": "v24.18.0",
+      "release_date": "2026-06-23",
+      "freshness_status": "2026",
+      "release_channel": "active_lts",
+      "license": "MIT project license with third-party notices; exclude vendored dependencies",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "doc/api/",
+        "lib/",
+        "test/parallel/"
+      ],
+      "excluded_paths": [
+        "deps/",
+        "tools/",
+        "benchmark/",
+        "test/fixtures/",
+        "out/",
+        "node_modules/"
+      ],
+      "target_tokens": 5000000,
+      "components": {
+        "javascript_node_docs_tests": 5000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Keep JavaScript, API docs, errors, streams, async behavior, and focused tests."
+    },
+    {
+      "source_id": "powershell_7_6_3",
+      "name": "PowerShell",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/PowerShell/PowerShell",
+      "version_policy": "Exact latest stable release; exclude preview builds.",
+      "pinned_version": "v7.6.3",
+      "release_date": "2026-06-16",
+      "freshness_status": "2026",
+      "release_channel": "stable_lts",
+      "license": "MIT",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "test/powershell/",
+        "tools/",
+        "docs/"
+      ],
+      "excluded_paths": [
+        "src/",
+        "assets/",
+        "packages/",
+        "test/tools/Modules/"
+      ],
+      "target_tokens": 2000000,
+      "components": {
+        "powershell_scripts_tests_errors": 2000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Most engine source is C# and should not enter the first corpus. Select PowerShell scripts and tests only."
+    },
+    {
+      "source_id": "powershell_docs_2026",
+      "name": "PowerShell Documentation",
+      "source_type": "repository_snapshot",
+      "upstream": "https://github.com/MicrosoftDocs/PowerShell-Docs",
+      "version_policy": "Pin acquisition-day commit and use the modern 7.6 documentation family.",
+      "pinned_version": null,
+      "release_date": null,
+      "freshness_status": "2026_snapshot_required",
+      "release_channel": "rolling documentation",
+      "license": "CC-BY-4.0 documentation; MIT code samples/tools where marked",
+      "license_status": "review_required",
+      "acquisition_method": "git_archive_at_commit",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "reference/7.6/",
+        "reference/docs-conceptual/",
+        "tests/",
+        "tools/"
+      ],
+      "excluded_paths": [
+        "reference/5.1/",
+        "reference/7.4/",
+        "reference/7.5/",
+        "media/",
+        "redirects/",
+        "**/locale/"
+      ],
+      "target_tokens": 3000000,
+      "components": {
+        "powershell_docs_examples": 3000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Deduplicate repeated cmdlet pages and keep conceptual explanations and examples."
+    },
+    {
+      "source_id": "pester_5_7_1",
+      "name": "Pester",
+      "source_type": "repository_release",
+      "upstream": "https://github.com/pester/Pester",
+      "version_policy": "Latest stable release. The 2026 v6 release candidate is excluded until stable.",
+      "pinned_version": "5.7.1",
+      "release_date": "2025-01-08",
+      "freshness_status": "2025_latest_stable",
+      "release_channel": "stable",
+      "license": "Apache-2.0",
+      "license_status": "review_required",
+      "acquisition_method": "source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "src/",
+        "tst/",
+        "docs/"
+      ],
+      "excluded_paths": [
+        "publish/",
+        "bin/",
+        "schemas/",
+        "**/generated/"
+      ],
+      "target_tokens": 2000000,
+      "components": {
+        "powershell_testing": 2000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "This is the only 2025 source because no newer stable release exists as of the acquisition plan date."
+    },
+    {
+      "source_id": "postgresql_18_4",
+      "name": "PostgreSQL",
+      "source_type": "repository_release",
+      "upstream": "https://www.postgresql.org/ftp/source/v18.4/",
+      "version_policy": "Exact latest stable maintenance release; exclude PostgreSQL 19 beta.",
+      "pinned_version": "18.4",
+      "release_date": "2026-05-14",
+      "freshness_status": "2026",
+      "release_channel": "stable",
+      "license": "PostgreSQL License",
+      "license_status": "review_required",
+      "acquisition_method": "official_source_archive",
+      "allowed_subsets": [],
+      "allowed_paths": [
+        "doc/src/sgml/",
+        "src/test/regress/sql/",
+        "src/test/regress/expected/",
+        "contrib/*/sql/"
+      ],
+      "excluded_paths": [
+        "src/backend/",
+        "src/include/",
+        "src/interfaces/",
+        "src/test/regress/data/",
+        "doc/src/sgml/ref/"
+      ],
+      "target_tokens": 4000000,
+      "components": {
+        "postgresql_sql_docs_tests": 4000000
+      },
+      "training_allowed": false,
+      "status": "candidate_not_acquired",
+      "notes": "Select SQL, transaction, constraint, index, planner documentation, and small paired expected outputs."
+    }
+  ]
+}

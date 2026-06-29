@@ -1,0 +1,11 @@
+source_id,version_or_commit,release_date_verified,license_verified,allowed_scope_verified,exclusions_verified,sample_quality,provenance_complete,decision,reviewer_notes
+gptnl_english_2026,,2026-04-01,,,,,,,
+cpython_3_14_6,v3.14.6,2026-06-10,,,,,,,
+pytest_9_1_1,9.1.1,2026-06-19,,,,,,,
+typescript_6_0_3,v6.0.3,2026-04-29,,,,,,,
+typescript_website_2026,,,,,,,,,
+node_24_18_0,v24.18.0,2026-06-23,,,,,,,
+powershell_7_6_3,v7.6.3,2026-06-16,,,,,,,
+powershell_docs_2026,,,,,,,,,
+pester_5_7_1,5.7.1,2025-01-08,,,,,,,
+postgresql_18_4,18.4,2026-05-14,,,,,,,

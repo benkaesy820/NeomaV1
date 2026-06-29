@@ -1,0 +1,53 @@
+{
+  "packet": "Phase 3.5B Work Packet 10",
+  "baseline": "19a93e1",
+  "status": "passed",
+  "development_records": 48,
+  "locked_records": 48,
+  "unique_ids": 96,
+  "category_counts": {
+    "clarification_judgment": 12,
+    "developer_language": 12,
+    "followup_state": 12,
+    "negation_falsy": 12,
+    "order_sequence": 12,
+    "quantity_boundary": 12,
+    "reference_resolution": 12,
+    "uncertainty_safety": 12
+  },
+  "language_counts": {
+    "javascript": 10,
+    "powershell": 8,
+    "python": 11,
+    "sql": 14,
+    "text": 46,
+    "typescript": 7
+  },
+  "answer_label_counts": {
+    "A": 32,
+    "B": 32,
+    "C": 32
+  },
+  "all_training_allowed_false": true,
+  "exact_overlap_with_existing_raw_or_eval": [],
+  "max_prompt_trigram_jaccard_against_existing": {
+    "score": 0.081632653,
+    "candidate_id": "engdev_order_02",
+    "source": "data\\eval\\phase3_5b_heldout_v1.jsonl",
+    "source_preview": "Write a Python function stable_unique(values: list[str]) -> list[str] that removes duplicates while preserving first-seen order. It should run in expected linea"
+  },
+  "max_prompt_trigram_jaccard_within_new_suites": {
+    "score": 0.230769231,
+    "left": "engdev_qty_01",
+    "right": "englock_qty_06"
+  },
+  "source_count": 10,
+  "external_target_tokens": 45000000,
+  "internal_target_tokens": 5000000,
+  "total_target_tokens": 50000000,
+  "errors": [],
+  "notes": [
+    "Lexical similarity is a review aid, not proof of semantic independence.",
+    "The source manifest is candidate-only. Acquisition hashes, exact rolling-repository commits, and license approvals remain required before any source becomes training-allowed."
+  ]
+}

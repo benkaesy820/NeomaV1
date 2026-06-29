@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Neoma Stage A Source Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "baseline",
+    "status",
+    "freshness_policy",
+    "external_target_tokens",
+    "internal_target_tokens",
+    "total_target_tokens",
+    "training_allowed",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "manifest_id": {
+      "type": "string"
+    },
+    "baseline": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "private_use": {
+      "type": "boolean"
+    },
+    "public_release_assumed": {
+      "type": "boolean"
+    },
+    "source_freeze_policy": {
+      "type": "string"
+    },
+    "freshness_policy": {
+      "type": "string"
+    },
+    "external_target_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "internal_target_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_target_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "training_allowed": {
+      "const": false
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "name",
+          "source_type",
+          "upstream",
+          "version_policy",
+          "freshness_status",
+          "release_channel",
+          "license",
+          "license_status",
+          "acquisition_method",
+          "allowed_paths",
+          "excluded_paths",
+          "target_tokens",
+          "components",
+          "training_allowed",
+          "status"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_type": {
+            "type": "string"
+          },
+          "upstream": {
+            "type": "string"
+          },
+          "version_policy": {
+            "type": "string"
+          },
+          "pinned_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "release_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "freshness_status": {
+            "type": "string"
+          },
+          "release_channel": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "license_status": {
+            "type": "string"
+          },
+          "acquisition_method": {
+            "type": "string"
+          },
+          "allowed_subsets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowed_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excluded_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "target_tokens": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "components": {
+            "type": "object"
+          },
+          "training_allowed": {
+            "const": false
+          },
+          "status": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

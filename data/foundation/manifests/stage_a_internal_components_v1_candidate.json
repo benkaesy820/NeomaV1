@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "stage_a_internal_components_v1_candidate",
+  "baseline": "19a93e1",
+  "status": "planning_only",
+  "training_allowed": false,
+  "total_target_tokens": 5000000,
+  "components": [
+    {
+      "component_id": "developer_dialogue",
+      "target_tokens": 1500000,
+      "creation_method": "Neoma project-authored and teacher-assisted short developer conversations; no hidden chain-of-thought.",
+      "required_checks": [
+        "constraint preservation",
+        "turn coherence",
+        "no eval paraphrase",
+        "human sample review"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    },
+    {
+      "component_id": "constraint_english",
+      "target_tokens": 1000000,
+      "creation_method": "Controlled paraphrase families for negation, quantity, order, boundaries, references, and conflicts.",
+      "required_checks": [
+        "semantic equivalence tests",
+        "template diversity",
+        "near-duplicate cap",
+        "no eval wording"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    },
+    {
+      "component_id": "bug_review_commit_language",
+      "target_tokens": 1000000,
+      "creation_method": "Authored bug reports, reproductions, review findings, severities, and commit summaries tied to verified small code examples.",
+      "required_checks": [
+        "evidence consistency",
+        "severity calibration",
+        "code linkage",
+        "human sample review"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    },
+    {
+      "component_id": "cli_config_errors",
+      "target_tokens": 750000,
+      "creation_method": "Authored CLI help, configuration comments, warnings, dry-run output, and diagnostic messages.",
+      "required_checks": [
+        "command consistency",
+        "safe examples",
+        "conciseness",
+        "no secret-shaped values"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    },
+    {
+      "component_id": "neoma_self_knowledge",
+      "target_tokens": 500000,
+      "creation_method": "Versioned, factual model-card and limitation text generated from the approved release manifest.",
+      "required_checks": [
+        "version consistency",
+        "no capability inflation",
+        "no false tool or memory claims",
+        "regenerate per model version"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    },
+    {
+      "component_id": "verified_transformations",
+      "target_tokens": 250000,
+      "creation_method": "Source-linked summaries, docstrings, test names, error explanations, and commit descriptions derived from approved external records.",
+      "required_checks": [
+        "retain parent source id",
+        "behavioral consistency",
+        "syntax/test verification where applicable",
+        "human sample review"
+      ],
+      "status": "not_created",
+      "training_allowed": false
+    }
+  ]
+}
