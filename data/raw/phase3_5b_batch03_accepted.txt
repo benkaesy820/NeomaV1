@@ -1,0 +1,1501 @@
+<instruction>
+Fix split_fixed_width so it returns consecutive chunks and does not append an empty chunk when the input length is an exact multiple of width.
+</instruction>
+<constraints>
+- Keep the original input list unchanged.
+- Raise ValueError when width is below 1.
+- Return an empty list for empty input.
+</constraints>
+<bad_code>
+def split_fixed_width(values: list[int], width: int) -> list[list[int]]:
+    if width < 1:
+        raise ValueError("width must be positive")
+    return [values[start:start + width] for start in range(0, len(values) + 1, width)]
+</bad_code>
+<reasoning>
+The stop value is one step too large. When len(values) is divisible by width, the final start equals len(values), so slicing produces an unwanted empty list.
+</reasoning>
+<answer>
+def split_fixed_width(values: list[int], width: int) -> list[list[int]]:
+    if width < 1:
+        raise ValueError("width must be positive")
+    return [values[start:start + width] for start in range(0, len(values), width)]
+</answer>
+<reasoning>
+Edge cases:
+- Empty input returns [].
+- An exact multiple of width has no empty tail.
+- A final partial chunk is preserved.
+Quality notes:
+- Single local off-by-one repair.
+- No mutation or unnecessary dependency.
+</reasoning>
+
+<instruction>
+Fix append_history so calls without a history argument never share state, and a supplied history list is not mutated.
+</instruction>
+<constraints>
+- Return a new list on every call.
+- Preserve the order of existing entries.
+- Do not use a mutable default value.
+</constraints>
+<bad_code>
+def append_history(message: str, history: list[str] = []) -> list[str]:
+    history.append(message)
+    return history
+</bad_code>
+<reasoning>
+The default list is created once and reused across calls. The function also mutates a caller-provided list.
+</reasoning>
+<answer>
+def append_history(message: str, history: list[str] | None = None) -> list[str]:
+    result = [] if history is None else list(history)
+    result.append(message)
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- Two calls with no history remain independent.
+- An empty supplied list remains unchanged.
+- Existing entries stay before the new message.
+Quality notes:
+- Teaches both mutable-default and aliasing bugs without a rewrite.
+</reasoning>
+
+<instruction>
+Fix normalized_keys so it returns sorted unique lowercase keys instead of returning None.
+</instruction>
+<constraints>
+- Ignore blank keys after trimming.
+- Do not mutate the input list.
+- Return list[str].
+</constraints>
+<bad_code>
+def normalized_keys(keys: list[str]) -> list[str]:
+    cleaned = {key.strip().lower() for key in keys if key.strip()}
+    sorted(cleaned)
+</bad_code>
+<reasoning>
+The sorted result is computed but never returned, so Python implicitly returns None.
+</reasoning>
+<answer>
+def normalized_keys(keys: list[str]) -> list[str]:
+    cleaned = {key.strip().lower() for key in keys if key.strip()}
+    return sorted(cleaned)
+</answer>
+<reasoning>
+Edge cases:
+- All-blank input returns [].
+- Case variants collapse to one key.
+- Input order and contents are unchanged.
+Quality notes:
+- Focused missing-return example with deterministic output.
+</reasoning>
+
+<instruction>
+Fix require_positive_count so True and False are rejected instead of being accepted as integers.
+</instruction>
+<constraints>
+- Accept only built-in int values.
+- Require a value of at least 1.
+- Raise TypeError for the wrong type and ValueError for a non-positive integer.
+</constraints>
+<bad_code>
+def require_positive_count(value: object) -> int:
+    if not isinstance(value, int):
+        raise TypeError("count must be an integer")
+    if value < 1:
+        raise ValueError("count must be positive")
+    return value
+</bad_code>
+<reasoning>
+In Python, bool is a subclass of int, so isinstance(True, int) is true. A strict boundary check must exclude booleans.
+</reasoning>
+<answer>
+def require_positive_count(value: object) -> int:
+    if type(value) is not int:
+        raise TypeError("count must be an integer")
+    if value < 1:
+        raise ValueError("count must be positive")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- True and False raise TypeError.
+- 1 is accepted.
+- 0 and negative integers raise ValueError.
+Quality notes:
+- Small Python-specific coercion bug at an external boundary.
+</reasoning>
+
+<instruction>
+Fix make_buckets so every key receives an independent list.
+</instruction>
+<constraints>
+- Return a dict[str, list[int]].
+- Do not add keys that were not requested.
+- An empty key list returns an empty dictionary.
+</constraints>
+<bad_code>
+def make_buckets(keys: list[str]) -> dict[str, list[int]]:
+    return dict.fromkeys(keys, [])
+</bad_code>
+<reasoning>
+dict.fromkeys stores the same list object for every key. Appending through one key changes every bucket.
+</reasoning>
+<answer>
+def make_buckets(keys: list[str]) -> dict[str, list[int]]:
+    return {key: [] for key in keys}
+</answer>
+<reasoning>
+Edge cases:
+- Appending to one bucket does not affect another.
+- Duplicate input keys still produce one dictionary entry.
+Quality notes:
+- Teaches shared-reference behavior directly.
+</reasoning>
+
+<instruction>
+Fix remove_blank_strings so it removes every blank string without skipping adjacent blanks or changing the caller list.
+</instruction>
+<constraints>
+- Treat whitespace-only strings as blank.
+- Return a new list.
+- Preserve the order of non-blank values.
+</constraints>
+<bad_code>
+def remove_blank_strings(values: list[str]) -> list[str]:
+    for value in values:
+        if not value.strip():
+            values.remove(value)
+    return values
+</bad_code>
+<reasoning>
+Removing elements from a list while iterating shifts later elements, so adjacent blanks can be skipped. It also mutates caller-owned data.
+</reasoning>
+<answer>
+def remove_blank_strings(values: list[str]) -> list[str]:
+    return [value for value in values if value.strip()]
+</answer>
+<reasoning>
+Edge cases:
+- Two adjacent blank strings are both removed.
+- An all-blank list returns [].
+- The original list is unchanged.
+Quality notes:
+- Correctness-first repair with simple data flow.
+</reasoning>
+
+<instruction>
+Fix index_records so duplicate id values raise ValueError instead of silently replacing an earlier record.
+</instruction>
+<constraints>
+- Each record must contain a non-empty string id.
+- Do not mutate the input records.
+- Return a dict keyed by id.
+</constraints>
+<bad_code>
+def index_records(records: list[dict[str, object]]) -> dict[str, dict[str, object]]:
+    result: dict[str, dict[str, object]] = {}
+    for record in records:
+        record_id = record["id"]
+        result[record_id] = record
+    return result
+</bad_code>
+<reasoning>
+Assigning directly into the dictionary gives an undocumented last-write-wins policy. Duplicate identifiers should be detected before insertion.
+</reasoning>
+<answer>
+def index_records(records: list[dict[str, object]]) -> dict[str, dict[str, object]]:
+    result: dict[str, dict[str, object]] = {}
+    for record in records:
+        record_id = record.get("id")
+        if not isinstance(record_id, str) or not record_id:
+            raise ValueError("record id must be a non-empty string")
+        if record_id in result:
+            raise ValueError(f"duplicate record id: {record_id}")
+        result[record_id] = record
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- A duplicate is rejected before replacement.
+- Missing, empty, and non-string ids are rejected.
+- One valid record is indexed unchanged.
+Quality notes:
+- Explicit duplicate policy and boundary validation.
+</reasoning>
+
+<instruction>
+Fix first_delimited_header so it handles one leading UTF-8 BOM, CRLF or CR newlines, and quoted comma-separated fields.
+</instruction>
+<constraints>
+- Return the first logical CSV record as list[str].
+- Raise ValueError for empty text.
+- Do not strip whitespace inside quoted fields.
+</constraints>
+<bad_code>
+def first_delimited_header(text: str) -> list[str]:
+    first_line = text.split("\n", 1)[0]
+    return first_line.split(",")
+</bad_code>
+<reasoning>
+Splitting only on newline can leave a carriage return, a BOM remains attached to the first name, and plain string splitting breaks quoted commas.
+</reasoning>
+<answer>
+import csv
+import io
+
+
+def first_delimited_header(text: str) -> list[str]:
+    if text.startswith("﻿"):
+        text = text[1:]
+    reader = csv.reader(io.StringIO(text))
+    try:
+        return next(reader)
+    except StopIteration as exc:
+        raise ValueError("header text is empty") from exc
+</answer>
+<reasoning>
+Edge cases:
+- A BOM is removed only at the start.
+- Quoted commas stay within one field.
+- CRLF and CR input do not leave carriage returns.
+Quality notes:
+- Local parsing repair using the standard library.
+</reasoning>
+
+<instruction>
+Fix enable_option so it returns an updated configuration without mutating the nested options dictionary owned by the caller.
+</instruction>
+<constraints>
+- Copy only the levels that are modified.
+- Treat a missing options key as an empty dictionary.
+- Raise TypeError when options is present but is not a dictionary.
+</constraints>
+<bad_code>
+def enable_option(config: dict[str, object]) -> dict[str, object]:
+    updated = config.copy()
+    options = updated.setdefault("options", {})
+    options["enabled"] = True
+    return updated
+</bad_code>
+<reasoning>
+A shallow top-level copy still points to the caller's nested options dictionary, so setting enabled mutates the original configuration.
+</reasoning>
+<answer>
+def enable_option(config: dict[str, object]) -> dict[str, object]:
+    existing = config.get("options", {})
+    if not isinstance(existing, dict):
+        raise TypeError("options must be a dictionary")
+    updated_options = dict(existing)
+    updated_options["enabled"] = True
+    return {**config, "options": updated_options}
+</answer>
+<reasoning>
+Edge cases:
+- Missing options creates a new nested dictionary.
+- Existing unrelated option keys are preserved.
+- The caller nested dictionary is unchanged.
+Quality notes:
+- Teaches shallow-copy aliasing with minimal copying.
+</reasoning>
+
+<instruction>
+Fix choose_alias so an explicitly supplied empty alias is preserved, while a missing alias falls back to username.
+</instruction>
+<constraints>
+- The alias key may hold a string, including an empty string.
+- Raise TypeError for a present non-string alias.
+- Require username to be a string when fallback is needed.
+</constraints>
+<bad_code>
+def choose_alias(record: dict[str, object]) -> str:
+    return record.get("alias") or record["username"]
+</bad_code>
+<reasoning>
+The or fallback treats an empty string as missing even though it is an explicit valid value.
+</reasoning>
+<answer>
+def choose_alias(record: dict[str, object]) -> str:
+    if "alias" in record:
+        alias = record["alias"]
+        if not isinstance(alias, str):
+            raise TypeError("alias must be a string")
+        return alias
+    username = record.get("username")
+    if not isinstance(username, str):
+        raise TypeError("username must be a string")
+    return username
+</answer>
+<reasoning>
+Edge cases:
+- An empty alias returns an empty string.
+- A missing alias uses username.
+- A present None alias raises TypeError.
+Quality notes:
+- Truthiness bug distinguished from key presence.
+</reasoning>
+
+<instruction>
+Fix sorted_names so invalid elements produce the documented TypeError before sorting is attempted.
+</instruction>
+<constraints>
+- Accept only non-blank strings.
+- Return trimmed names in ascending order.
+- Do not mutate the input list.
+</constraints>
+<bad_code>
+def sorted_names(values: list[object]) -> list[str]:
+    ordered = sorted(values)
+    result: list[str] = []
+    for value in ordered:
+        if not isinstance(value, str) or not value.strip():
+            raise TypeError("names must be non-blank strings")
+        result.append(value.strip())
+    return result
+</bad_code>
+<reasoning>
+Sorting mixed values can raise an unrelated comparison error before the function performs its own boundary validation.
+</reasoning>
+<answer>
+def sorted_names(values: list[object]) -> list[str]:
+    cleaned: list[str] = []
+    for value in values:
+        if not isinstance(value, str) or not value.strip():
+            raise TypeError("names must be non-blank strings")
+        cleaned.append(value.strip())
+    return sorted(cleaned)
+</answer>
+<reasoning>
+Edge cases:
+- A number among strings raises the documented TypeError.
+- Whitespace-only values are rejected.
+- The caller list is unchanged.
+Quality notes:
+- Teaches validation order and clear errors.
+</reasoning>
+
+<instruction>
+Fix the unittest so it actually verifies the exact zero boundary returned by remaining_capacity.
+</instruction>
+<constraints>
+- Use unittest assertions.
+- Keep the test focused on the exact-capacity boundary.
+- Do not change remaining_capacity.
+</constraints>
+<bad_code>
+import unittest
+
+from capacity import remaining_capacity
+
+
+class RemainingCapacityTests(unittest.TestCase):
+    def test_full_capacity(self) -> None:
+        self.assertFalse(remaining_capacity(5, 5))
+</bad_code>
+<reasoning>
+assertFalse accepts several wrong falsey results such as None, False, or an empty string. The contract requires the integer 0.
+</reasoning>
+<answer>
+import unittest
+
+from capacity import remaining_capacity
+
+
+class RemainingCapacityTests(unittest.TestCase):
+    def test_full_capacity_returns_zero(self) -> None:
+        self.assertEqual(remaining_capacity(5, 5), 0)
+</answer>
+<reasoning>
+Edge cases:
+- The correct integer zero passes.
+- None and False fail even though both are falsey.
+Quality notes:
+- Teaches a precise test oracle instead of a weak truthiness assertion.
+</reasoning>
+
+<instruction>
+Fix preview_and_sum so creating the preview does not discard values before the total is calculated.
+</instruction>
+<constraints>
+- Accept any iterable of integers.
+- Return at most the first three values as the preview.
+- Calculate the total from all values in one pass.
+</constraints>
+<bad_code>
+from collections.abc import Iterable
+
+
+def preview_and_sum(values: Iterable[int]) -> tuple[list[int], int]:
+    iterator = iter(values)
+    preview = [value for _, value in zip(range(3), iterator)]
+    return preview, sum(iterator)
+</bad_code>
+<reasoning>
+The preview consumes the first values, then sum only sees the remainder. The total must be accumulated while the preview is collected.
+</reasoning>
+<answer>
+from collections.abc import Iterable
+
+
+def preview_and_sum(values: Iterable[int]) -> tuple[list[int], int]:
+    preview: list[int] = []
+    total = 0
+    for value in values:
+        if len(preview) < 3:
+            preview.append(value)
+        total += value
+    return preview, total
+</answer>
+<reasoning>
+Edge cases:
+- Fewer than three inputs all appear in the preview.
+- The total includes previewed values.
+- A one-shot generator works correctly.
+Quality notes:
+- A second one-shot-iterator bug with a different contract and repair.
+</reasoning>
+
+<instruction>
+Fix resolveTimeoutMs so an explicit timeout of 0 is preserved and only undefined selects the default.
+</instruction>
+<constraints>
+- Accept number or undefined.
+- Require a non-negative safe integer.
+- Return the default value 5000 only for undefined.
+</constraints>
+<bad_code>
+function resolveTimeoutMs(value: number | undefined): number {
+  const timeout = value || 5000;
+  if (!Number.isSafeInteger(timeout) || timeout < 0) {
+    throw new RangeError("timeout must be a non-negative safe integer");
+  }
+  return timeout;
+}
+</bad_code>
+<reasoning>
+The || operator treats 0 as false and replaces it with the default. Missingness should be tested with nullish logic.
+</reasoning>
+<answer>
+function resolveTimeoutMs(value: number | undefined): number {
+  const timeout = value ?? 5000;
+  if (!Number.isSafeInteger(timeout) || timeout < 0) {
+    throw new RangeError("timeout must be a non-negative safe integer");
+  }
+  return timeout;
+}
+</answer>
+<reasoning>
+Edge cases:
+- 0 is returned unchanged.
+- undefined returns 5000.
+- Negative and fractional values are rejected.
+Quality notes:
+- Small nullish-versus-truthiness repair.
+</reasoning>
+
+<instruction>
+Fix requireFiniteAmount so it rejects strings, null, and booleans instead of coercing them to numbers.
+</instruction>
+<constraints>
+- Accept unknown input.
+- Return only an actual finite number.
+- Throw TypeError for every invalid input.
+</constraints>
+<bad_code>
+function requireFiniteAmount(value: unknown): number {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) {
+    throw new TypeError("amount must be finite");
+  }
+  return amount;
+}
+</bad_code>
+<reasoning>
+Number coercion accepts values outside the contract, including numeric strings, null as 0, and booleans as 0 or 1.
+</reasoning>
+<answer>
+function requireFiniteAmount(value: unknown): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new TypeError("amount must be a finite number");
+  }
+  return value;
+}
+</answer>
+<reasoning>
+Edge cases:
+- "12" is rejected.
+- null and true are rejected.
+- NaN and Infinity are rejected.
+Quality notes:
+- Boundary narrowing without unsafe coercion.
+</reasoning>
+
+<instruction>
+Fix collectIds so the block-bodied map callback returns each id.
+</instruction>
+<constraints>
+- Return string[].
+- Keep input order.
+- Do not mutate the input array.
+</constraints>
+<bad_code>
+function collectIds(items: readonly { id: string }[]): string[] {
+  return items.map((item) => {
+    item.id;
+  });
+}
+</bad_code>
+<reasoning>
+A block-bodied arrow callback does not return implicitly. Each callback currently produces undefined.
+</reasoning>
+<answer>
+function collectIds(items: readonly { id: string }[]): string[] {
+  return items.map((item) => item.id);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Empty input returns [].
+- Every id appears once in input order.
+Quality notes:
+- Focused missing-return bug caught by strict TypeScript.
+</reasoning>
+
+<instruction>
+Fix saveProfile so its returned promise settles only after repository.save completes and carries the saved profile result.
+</instruction>
+<constraints>
+- Do not change the Repository interface.
+- Propagate repository rejection.
+- Do not add unnecessary Promise construction.
+</constraints>
+<bad_code>
+interface Profile {
+  id: string;
+}
+
+interface Repository {
+  save(profile: Profile): Promise<Profile>;
+}
+
+async function saveProfile(repository: Repository, profile: Profile): Promise<Profile> {
+  repository.save(profile);
+}
+</bad_code>
+<reasoning>
+The repository promise is neither returned nor awaited, so the async function resolves with undefined before the save completes.
+</reasoning>
+<answer>
+interface Profile {
+  id: string;
+}
+
+interface Repository {
+  save(profile: Profile): Promise<Profile>;
+}
+
+function saveProfile(repository: Repository, profile: Profile): Promise<Profile> {
+  return repository.save(profile);
+}
+</answer>
+<reasoning>
+Edge cases:
+- A successful save result is returned.
+- A rejected save rejects saveProfile.
+Quality notes:
+- Correct promise chaining with no redundant async wrapper.
+</reasoning>
+
+<instruction>
+Fix makeAttemptCounters so each array element is a distinct object.
+</instruction>
+<constraints>
+- Reject negative or non-integer count.
+- Return Array<{ attempts: number }>.
+- Initialize every attempts value to 0.
+</constraints>
+<bad_code>
+function makeAttemptCounters(count: number): Array<{ attempts: number }> {
+  return Array(count).fill({ attempts: 0 });
+}
+</bad_code>
+<reasoning>
+Array.fill places the same object reference in every slot, so updating one counter updates all of them.
+</reasoning>
+<answer>
+function makeAttemptCounters(count: number): Array<{ attempts: number }> {
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new RangeError("count must be a non-negative safe integer");
+  }
+  return Array.from({ length: count }, () => ({ attempts: 0 }));
+}
+</answer>
+<reasoning>
+Edge cases:
+- Count 0 returns [].
+- Mutating one counter leaves the others unchanged.
+Quality notes:
+- Shared-reference repair plus bounded count validation.
+</reasoning>
+
+<instruction>
+Fix pageItems so each full page contains pageSize items.
+</instruction>
+<constraints>
+- page and pageSize are 1-based positive safe integers.
+- Do not mutate items.
+- Return [] when the page starts after the input.
+</constraints>
+<bad_code>
+function pageItems<T>(items: readonly T[], page: number, pageSize: number): T[] {
+  const start = (page - 1) * pageSize;
+  return items.slice(start, start + pageSize - 1);
+}
+</bad_code>
+<reasoning>
+Array.slice excludes its end index. Subtracting one makes every non-empty page one item too short.
+</reasoning>
+<answer>
+function pageItems<T>(items: readonly T[], page: number, pageSize: number): T[] {
+  if (!Number.isSafeInteger(page) || page < 1) {
+    throw new RangeError("page must be a positive safe integer");
+  }
+  if (!Number.isSafeInteger(pageSize) || pageSize < 1) {
+    throw new RangeError("pageSize must be a positive safe integer");
+  }
+  const start = (page - 1) * pageSize;
+  return items.slice(start, start + pageSize);
+}
+</answer>
+<reasoning>
+Edge cases:
+- The first page has pageSize items when available.
+- A final partial page is returned.
+- An out-of-range page returns [].
+Quality notes:
+- Clear end-exclusive off-by-one bug.
+</reasoning>
+
+<instruction>
+Fix optionalLabel so undefined selects the fallback but null is rejected.
+</instruction>
+<constraints>
+- Accept string, null, or undefined.
+- Return fallback only for undefined.
+- Throw TypeError for null.
+</constraints>
+<bad_code>
+function optionalLabel(value: string | null | undefined, fallback: string): string {
+  if (value == null) {
+    return fallback;
+  }
+  return value;
+}
+</bad_code>
+<reasoning>
+The loose null check combines null and undefined, even though the contract assigns them different meanings.
+</reasoning>
+<answer>
+function optionalLabel(value: string | null | undefined, fallback: string): string {
+  if (value === undefined) {
+    return fallback;
+  }
+  if (value === null) {
+    throw new TypeError("label cannot be null");
+  }
+  return value;
+}
+</answer>
+<reasoning>
+Edge cases:
+- undefined returns fallback.
+- null throws.
+- An empty string is preserved.
+Quality notes:
+- Precise null-versus-undefined handling.
+</reasoning>
+
+<instruction>
+Fix indexUniqueCodes so it accepts the first unique item and rejects only actual duplicate codes.
+</instruction>
+<constraints>
+- Require non-empty code strings.
+- Do not mutate input objects.
+- Return Map<string, T>.
+</constraints>
+<bad_code>
+function indexUniqueCodes<T extends { code: string }>(items: readonly T[]): Map<string, T> {
+  const result = new Map<string, T>();
+  for (const item of items) {
+    result.set(item.code, item);
+    if (result.has(item.code)) {
+      throw new Error(`duplicate code: ${item.code}`);
+    }
+  }
+  return result;
+}
+</bad_code>
+<reasoning>
+The code checks Map.has after insertion, so even the first item always looks like a duplicate.
+</reasoning>
+<answer>
+function indexUniqueCodes<T extends { code: string }>(items: readonly T[]): Map<string, T> {
+  const result = new Map<string, T>();
+  for (const item of items) {
+    if (!item.code) {
+      throw new TypeError("code must be non-empty");
+    }
+    if (result.has(item.code)) {
+      throw new Error(`duplicate code: ${item.code}`);
+    }
+    result.set(item.code, item);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- The first code is accepted.
+- The second identical code is rejected before replacement.
+- Empty codes are rejected.
+Quality notes:
+- Ordering bug in duplicate detection.
+</reasoning>
+
+<instruction>
+Fix parseWholeCount so partial numeric strings such as "12px" are rejected.
+</instruction>
+<constraints>
+- Accept canonical non-negative decimal digits only.
+- Return a safe integer.
+- Reject leading signs, decimals, blanks, and partial strings.
+</constraints>
+<bad_code>
+function parseWholeCount(value) {
+  const count = parseInt(value, 10);
+  if (Number.isNaN(count) || count < 0) {
+    throw new TypeError("count must be a non-negative integer");
+  }
+  return count;
+}
+</bad_code>
+<reasoning>
+parseInt stops at the first invalid character, so malformed input can be silently accepted as a valid prefix.
+</reasoning>
+<answer>
+function parseWholeCount(value) {
+  if (typeof value !== "string" || !/^(?:0|[1-9]\d*)$/.test(value)) {
+    throw new TypeError("count must be canonical non-negative integer text");
+  }
+  const count = Number(value);
+  if (!Number.isSafeInteger(count)) {
+    throw new RangeError("count is outside the safe integer range");
+  }
+  return count;
+}
+</answer>
+<reasoning>
+Edge cases:
+- "0" and "12" are accepted.
+- "12px", "+1", "01", and "1.0" are rejected.
+- Unsafe integers are rejected.
+Quality notes:
+- Demonstrates why prefix parsers are unsafe at strict boundaries.
+</reasoning>
+
+<instruction>
+Fix makeStatuses so changing one status object does not change all entries.
+</instruction>
+<constraints>
+- Reject a negative or non-integer count.
+- Initialize each entry with { done: false }.
+- Return a fresh array.
+</constraints>
+<bad_code>
+function makeStatuses(count) {
+  return new Array(count).fill({ done: false });
+}
+</bad_code>
+<reasoning>
+Array.fill repeats one object reference, so every slot aliases the same status object.
+</reasoning>
+<answer>
+function makeStatuses(count) {
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new RangeError("count must be a non-negative safe integer");
+  }
+  return Array.from({ length: count }, () => ({ done: false }));
+}
+</answer>
+<reasoning>
+Edge cases:
+- Count 0 returns [].
+- Mutating the first object does not affect the second.
+Quality notes:
+- JavaScript shared-reference bug with a direct repair.
+</reasoning>
+
+<instruction>
+Fix writeAll so it does not resolve before asynchronous writes finish and stops on the first rejection.
+</instruction>
+<constraints>
+- Preserve input order.
+- Run writes sequentially.
+- Propagate a write rejection.
+</constraints>
+<bad_code>
+async function writeAll(values, writeOne) {
+  values.forEach(async (value) => {
+    await writeOne(value);
+  });
+}
+</bad_code>
+<reasoning>
+forEach ignores promises returned by its callback, so writeAll resolves immediately and callback failures can become unhandled rejections.
+</reasoning>
+<answer>
+async function writeAll(values, writeOne) {
+  for (const value of values) {
+    await writeOne(value);
+  }
+}
+</answer>
+<reasoning>
+Edge cases:
+- Empty input resolves immediately.
+- Later writes are not started after a rejection.
+- Writes occur in source order.
+Quality notes:
+- Async control-flow bug fixed without unnecessary concurrency.
+</reasoning>
+
+<instruction>
+Fix resolveThreshold so an explicit numeric zero is preserved while a missing value uses the default.
+</instruction>
+<constraints>
+- Accept number or undefined.
+- Require a finite non-negative number.
+- Use 10 only for undefined.
+</constraints>
+<bad_code>
+function resolveThreshold(value) {
+  const threshold = value || 10;
+  if (!Number.isFinite(threshold) || threshold < 0) {
+    throw new TypeError("threshold must be non-negative");
+  }
+  return threshold;
+}
+</bad_code>
+<reasoning>
+The || fallback treats 0 as missing and changes valid caller input to 10.
+</reasoning>
+<answer>
+function resolveThreshold(value) {
+  const threshold = value ?? 10;
+  if (typeof threshold !== "number" || !Number.isFinite(threshold) || threshold < 0) {
+    throw new TypeError("threshold must be a finite non-negative number");
+  }
+  return threshold;
+}
+</answer>
+<reasoning>
+Edge cases:
+- 0 is returned.
+- undefined returns 10.
+- NaN, Infinity, strings, and negatives are rejected.
+Quality notes:
+- Truthiness and type validation repaired together.
+</reasoning>
+
+<instruction>
+Fix indexAliases so duplicate aliases are rejected instead of silently overwriting the first value.
+</instruction>
+<constraints>
+- Require each alias to be a non-empty string.
+- Return a Map.
+- Do not mutate the input entries.
+</constraints>
+<bad_code>
+function indexAliases(entries) {
+  return new Map(entries.map((entry) => [entry.alias, entry.value]));
+}
+</bad_code>
+<reasoning>
+The Map constructor applies last-write-wins semantics, hiding duplicate aliases that the contract requires rejecting.
+</reasoning>
+<answer>
+function indexAliases(entries) {
+  const result = new Map();
+  for (const entry of entries) {
+    if (typeof entry.alias !== "string" || entry.alias.length === 0) {
+      throw new TypeError("alias must be a non-empty string");
+    }
+    if (result.has(entry.alias)) {
+      throw new Error(`duplicate alias: ${entry.alias}`);
+    }
+    result.set(entry.alias, entry.value);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- The first alias is retained.
+- A duplicate is rejected before replacement.
+- An empty alias is rejected.
+Quality notes:
+- Explicit duplicate policy instead of constructor shorthand.
+</reasoning>
+
+<instruction>
+Fix firstLineFields so it removes one leading BOM and does not leave a carriage return when input uses CRLF.
+</instruction>
+<constraints>
+- Split the first logical line on tab characters.
+- Return [] for empty text.
+- Do not trim field contents.
+</constraints>
+<bad_code>
+function firstLineFields(text) {
+  const firstLine = text.split("\n", 1)[0];
+  return firstLine.split("\t");
+}
+</bad_code>
+<reasoning>
+Splitting on newline alone leaves a trailing carriage return, and a leading BOM becomes part of the first field.
+</reasoning>
+<answer>
+function firstLineFields(text) {
+  if (typeof text !== "string") {
+    throw new TypeError("text must be a string");
+  }
+  if (text.startsWith("\uFEFF")) {
+    text = text.slice(1);
+  }
+  if (text.length === 0) {
+    return [];
+  }
+  const firstLine = text.split(/\r\n|\n|\r/, 1)[0];
+  return firstLine.split("\t");
+}
+</answer>
+<reasoning>
+Edge cases:
+- BOM plus CRLF is handled.
+- A lone CR newline is handled.
+- Tabs define fields without trimming them.
+Quality notes:
+- Targeted newline/BOM repair distinct from full file readers.
+</reasoning>
+
+<instruction>
+Fix the Node assertion tests so a prefix-parsing implementation cannot pass.
+</instruction>
+<constraints>
+- Use node:assert/strict.
+- Test one valid value and malformed values with numeric prefixes.
+- Do not duplicate parseWholeCount in the test.
+</constraints>
+<bad_code>
+const assert = require("node:assert/strict");
+const { parseWholeCount } = require("./counts");
+
+assert.equal(parseWholeCount("12"), 12);
+assert.throws(() => parseWholeCount("abc"));
+</bad_code>
+<reasoning>
+The invalid case starts with no digits, so it does not catch an implementation that accepts a valid numeric prefix such as 12px.
+</reasoning>
+<answer>
+const assert = require("node:assert/strict");
+const { parseWholeCount } = require("./counts");
+
+assert.equal(parseWholeCount("12"), 12);
+assert.throws(() => parseWholeCount("12px"), TypeError);
+assert.throws(() => parseWholeCount("1.5"), TypeError);
+assert.throws(() => parseWholeCount("+2"), TypeError);
+</answer>
+<reasoning>
+Edge cases:
+- A canonical integer passes.
+- Partial, decimal, and signed strings fail.
+Quality notes:
+- Test cases target the actual parser weakness.
+</reasoning>
+
+<instruction>
+Fix takeFirst so it returns the first count items without removing them from the caller array.
+</instruction>
+<constraints>
+- Require a non-negative safe-integer count.
+- Return a new array.
+- If count exceeds length, return all items.
+</constraints>
+<bad_code>
+function takeFirst(items, count) {
+  return items.splice(0, count);
+}
+</bad_code>
+<reasoning>
+splice mutates the original array by deleting the selected elements. The contract requires a non-mutating read.
+</reasoning>
+<answer>
+function takeFirst(items, count) {
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new RangeError("count must be a non-negative safe integer");
+  }
+  return items.slice(0, count);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Count 0 returns [].
+- A large count returns a shallow copy of all items.
+- The caller array is unchanged.
+Quality notes:
+- Mutation bug repaired with the matching non-mutating method.
+</reasoning>
+
+<instruction>
+Fix Test-AllowedName so it checks whether the allowed-name array contains the supplied name.
+</instruction>
+<constraints>
+- Use an ordinal-ignore-case comparison.
+- Return one Boolean.
+- Reject a blank name.
+</constraints>
+<bad_code>
+function Test-AllowedName {
+    param(
+        [string[]] $Allowed,
+        [string] $Name
+    )
+
+    return $Name -contains $Allowed
+}
+</bad_code>
+<reasoning>
+The -contains operator expects the collection on the left and the candidate value on the right. The operands are reversed.
+</reasoning>
+<answer>
+function Test-AllowedName {
+    param(
+        [Parameter(Mandatory)]
+        [string[]] $Allowed,
+
+        [Parameter(Mandatory)]
+        [string] $Name
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Name)) {
+        throw "Name must be non-blank."
+    }
+
+    foreach ($candidate in $Allowed) {
+        if ([string]::Equals(
+            $candidate,
+            $Name,
+            [System.StringComparison]::OrdinalIgnoreCase
+        )) {
+            return $true
+        }
+    }
+    return $false
+}
+</answer>
+<reasoning>
+Edge cases:
+- A case-only difference matches.
+- A missing value does not match.
+- A blank name throws.
+Quality notes:
+- Corrects collection-operator direction and states comparison semantics.
+</reasoning>
+
+<instruction>
+Fix Get-RecordSummary so its diagnostic message does not become an extra pipeline result.
+</instruction>
+<constraints>
+- Return exactly one object.
+- Send diagnostics through the verbose stream.
+- Do not remove the summary properties.
+</constraints>
+<bad_code>
+function Get-RecordSummary {
+    param([hashtable] $Record)
+
+    Write-Output "Building summary"
+    [pscustomobject]@{
+        Name = $Record.Name
+        Count = $Record.Count
+    }
+}
+</bad_code>
+<reasoning>
+Write-Output writes to the success stream, so callers receive a string plus the summary object instead of exactly one object.
+</reasoning>
+<answer>
+function Get-RecordSummary {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [hashtable] $Record
+    )
+
+    Write-Verbose "Building summary"
+    [pscustomobject]@{
+        Name = $Record.Name
+        Count = $Record.Count
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- Normal invocation returns one PSCustomObject.
+- -Verbose displays the message without changing data output.
+Quality notes:
+- Teaches PowerShell stream discipline.
+</reasoning>
+
+<instruction>
+Fix Select-EnabledItem so it compares the Enabled property instead of assigning to it.
+</instruction>
+<constraints>
+- Accept pipeline input.
+- Do not mutate input objects.
+- Return only rows whose Enabled property is exactly true.
+</constraints>
+<bad_code>
+function Select-EnabledItem {
+    param([object[]] $InputObject)
+
+    $InputObject | Where-Object { $_.Enabled = $true }
+}
+</bad_code>
+<reasoning>
+The script block uses assignment rather than comparison, changing each object and making the condition true.
+</reasoning>
+<answer>
+function Select-EnabledItem {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [object] $InputObject
+    )
+
+    process {
+        if ($InputObject.Enabled -eq $true) {
+            $InputObject
+        }
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- False items are excluded without mutation.
+- True items pass through unchanged.
+- Multiple pipeline items are processed.
+Quality notes:
+- Small but consequential assignment-versus-comparison bug.
+</reasoning>
+
+<instruction>
+Fix ConvertFrom-RawLines so CRLF and lone CR input do not leave carriage-return characters in returned lines.
+</instruction>
+<constraints>
+- Remove one leading BOM.
+- Preserve empty interior lines.
+- Return an array of strings.
+</constraints>
+<bad_code>
+function ConvertFrom-RawLines {
+    param([string] $Text)
+
+    return $Text.Split("`n")
+}
+</bad_code>
+<reasoning>
+Splitting only on line feed leaves carriage returns from CRLF and does not handle files that use lone carriage returns. A leading BOM also remains in the first line.
+</reasoning>
+<answer>
+function ConvertFrom-RawLines {
+    param(
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string] $Text
+    )
+
+    if ($Text.StartsWith([char]0xFEFF)) {
+        $Text = $Text.Substring(1)
+    }
+
+    return ,($Text -split "`r`n|`n|`r", 0)
+}
+</answer>
+<reasoning>
+Edge cases:
+- CRLF, LF, and CR separators are accepted.
+- A leading BOM is removed once.
+- Interior empty lines are retained.
+Quality notes:
+- Targets newline normalization without filesystem access.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL query so it returns users whose id does not appear in blocked_users even when blocked_users contains a NULL user_id.
+</instruction>
+<constraints>
+- Return u.id and u.email.
+- Use NOT EXISTS.
+- Do not filter out valid users because of a NULL in the child table.
+</constraints>
+<bad_code>
+SELECT u.id, u.email
+FROM users AS u
+WHERE u.id NOT IN (
+    SELECT b.user_id
+    FROM blocked_users AS b
+);
+</bad_code>
+<reasoning>
+NOT IN becomes unknown for every comparison when the subquery contains NULL, which can make the query return no users.
+</reasoning>
+<answer>
+SELECT u.id, u.email
+FROM users AS u
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM blocked_users AS b
+    WHERE b.user_id = u.id
+);
+</answer>
+<reasoning>
+Edge cases:
+- A NULL blocked user id does not exclude everyone.
+- A matching blocked id is excluded.
+- An unblocked user is returned.
+Quality notes:
+- Classic SQL three-valued-logic bug with a correlated repair.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL query so it returns rows whose deleted_at value is NULL.
+</instruction>
+<constraints>
+- Return id and name only.
+- Use the SQL NULL predicate.
+- Do not change the table.
+</constraints>
+<bad_code>
+SELECT id, name
+FROM projects
+WHERE deleted_at = NULL;
+</bad_code>
+<reasoning>
+NULL is not equal to anything, including NULL. The equality expression evaluates to unknown instead of true.
+</reasoning>
+<answer>
+SELECT id, name
+FROM projects
+WHERE deleted_at IS NULL;
+</answer>
+<reasoning>
+Edge cases:
+- Rows with NULL deleted_at are returned.
+- Rows with a timestamp are excluded.
+Quality notes:
+- Minimal SQL NULL comparison repair.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL query so it counts all comments per post, including comments whose note column is NULL.
+</instruction>
+<constraints>
+- Keep posts with zero comments.
+- Return post_id and comment_count.
+- Order by post_id.
+</constraints>
+<bad_code>
+SELECT p.id AS post_id, COUNT(c.note) AS comment_count
+FROM posts AS p
+LEFT JOIN comments AS c ON c.post_id = p.id
+GROUP BY p.id
+ORDER BY p.id;
+</bad_code>
+<reasoning>
+COUNT(c.note) counts only non-NULL note values, so comments with a NULL note are omitted. Counting a non-null child key preserves the outer-join zero case.
+</reasoning>
+<answer>
+SELECT p.id AS post_id, COUNT(c.id) AS comment_count
+FROM posts AS p
+LEFT JOIN comments AS c ON c.post_id = p.id
+GROUP BY p.id
+ORDER BY p.id;
+</answer>
+<reasoning>
+Edge cases:
+- A post with no comments reports 0.
+- A comment with NULL note is still counted.
+Quality notes:
+- Clarifies COUNT(column) semantics in an outer join.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL transaction so an order line is inserted only when enough inventory was atomically reserved.
+</instruction>
+<constraints>
+- Use one transaction.
+- Reject a non-positive requested quantity before executing this SQL.
+- Use UPDATE ... RETURNING to detect insufficient inventory.
+</constraints>
+<bad_code>
+BEGIN;
+
+INSERT INTO order_lines (order_id, product_id, quantity)
+VALUES (:order_id, :product_id, :quantity);
+
+UPDATE inventory
+SET quantity = quantity - :quantity
+WHERE product_id = :product_id;
+
+COMMIT;
+</bad_code>
+<reasoning>
+The line is inserted before inventory is checked, and the update can drive quantity negative or affect no row. The reservation must be conditional and verified before insertion.
+</reasoning>
+<answer>
+BEGIN;
+
+WITH reserved AS (
+    UPDATE inventory
+    SET quantity = quantity - :quantity
+    WHERE product_id = :product_id
+      AND quantity >= :quantity
+    RETURNING product_id
+)
+INSERT INTO order_lines (order_id, product_id, quantity)
+SELECT :order_id, product_id, :quantity
+FROM reserved;
+
+-- The caller must treat zero inserted rows as insufficient or missing inventory
+-- and roll back instead of reporting success.
+COMMIT;
+</answer>
+<reasoning>
+Edge cases:
+- Missing inventory inserts no line.
+- Insufficient inventory inserts no line.
+- A successful reservation and line insert occur in one transaction.
+Quality notes:
+- The conditional UPDATE atomically reserves inventory.
+- The review must confirm the application checks UPDATE row count before INSERT/COMMIT.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL query so it keeps only the newest import row for each non-NULL external_id.
+</instruction>
+<constraints>
+- Return external_id, payload, and imported_at.
+- Use PostgreSQL DISTINCT ON.
+- Use id DESC as a deterministic tie-breaker.
+</constraints>
+<bad_code>
+SELECT DISTINCT external_id, payload, imported_at
+FROM imports
+WHERE external_id IS NOT NULL
+ORDER BY imported_at DESC;
+</bad_code>
+<reasoning>
+DISTINCT applies to the entire selected row, so rows sharing external_id remain distinct when payload or imported_at differs.
+</reasoning>
+<answer>
+SELECT DISTINCT ON (external_id)
+       external_id,
+       payload,
+       imported_at
+FROM imports
+WHERE external_id IS NOT NULL
+ORDER BY external_id, imported_at DESC, id DESC;
+</answer>
+<reasoning>
+Edge cases:
+- One row is returned per external_id.
+- The newest timestamp wins.
+- Equal timestamps are resolved by highest id.
+Quality notes:
+- PostgreSQL-specific duplicate-selection repair.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL CHECK constraint so start_at and end_at are either both NULL or both present with end_at later than start_at.
+</instruction>
+<constraints>
+- Keep both columns nullable.
+- Reject one-sided NULL values.
+- Reject equal or reversed timestamps.
+</constraints>
+<bad_code>
+CREATE TABLE maintenance_windows (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    start_at timestamptz,
+    end_at timestamptz,
+    CHECK (end_at > start_at)
+);
+</bad_code>
+<reasoning>
+A CHECK passes when its expression is unknown, so one NULL endpoint is accepted. The constraint also fails to state the allowed both-NULL case explicitly.
+</reasoning>
+<answer>
+CREATE TABLE maintenance_windows (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    start_at timestamptz,
+    end_at timestamptz,
+    CHECK (
+        (start_at IS NULL AND end_at IS NULL)
+        OR
+        (start_at IS NOT NULL AND end_at IS NOT NULL AND end_at > start_at)
+    )
+);
+</answer>
+<reasoning>
+Edge cases:
+- Both NULL values are accepted.
+- Exactly one NULL is rejected.
+- Equal or reversed non-NULL endpoints are rejected.
+Quality notes:
+- Different SQL NULL/CHECK lesson from the existing non-null quantity repair.
+</reasoning>
+
+<instruction>
+Explain and fix the test so its expected value is not calculated with the same helper being tested.
+</instruction>
+<constraints>
+- Keep the explanation under six sentences.
+- Use a literal expected result.
+- Name the testing defect.
+</constraints>
+<bad_code>
+def test_total_price():
+    items = [2, 3]
+    assert total_price(items) == total_price(items)
+</bad_code>
+<reasoning>
+The test uses the system under test as its own oracle. Both sides are identical even when total_price is wrong, so the assertion is vacuous.
+</reasoning>
+<answer>
+This is a self-fulfilling or circular test oracle: the same buggy function computes both actual and expected values. Use an independently known result instead.
+
+
+def test_total_price():
+    items = [2, 3]
+    assert total_price(items) == 5
+</answer>
+<reasoning>
+Edge cases:
+- A wrong implementation no longer automatically agrees with itself.
+- The expected value can be checked by inspection.
+Quality notes:
+- Teaches test independence rather than another implementation pattern.
+</reasoning>

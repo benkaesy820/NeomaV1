@@ -1,0 +1,529 @@
+{
+  "packet": "Phase 3.5B Work Packet 04",
+  "batch": "03 - Debugging Fundamentals",
+  "baseline_commit": "28886a6",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-04-Overlay.zip",
+  "source_overlay_sha256": "E849CF8CE90BCA57A88C4CC0534DCCDC660321646973C56848FE56BAE5037AA6",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 2,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch03_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch03_accepted.txt",
+  "language_counts": {
+    "javascript": 8,
+    "powershell": 4,
+    "python": 13,
+    "sql": 6,
+    "text": 1,
+    "typescript": 8
+  },
+  "category_counts": {
+    "debugging": 37,
+    "tests": 3
+  },
+  "difficulty_counts": {
+    "basic": 23,
+    "intermediate": 17
+  },
+  "decisions": [
+    {
+      "id": "b03_py_chunk_no_empty_tail",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_chunk_no_empty_tail"
+    },
+    {
+      "id": "b03_py_mutable_default_history",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_mutable_default_history"
+    },
+    {
+      "id": "b03_py_missing_return_normalized_keys",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_missing_return_normalized_keys"
+    },
+    {
+      "id": "b03_py_reject_bool_as_count",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_reject_bool_as_count"
+    },
+    {
+      "id": "b03_py_independent_bucket_lists",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_independent_bucket_lists"
+    },
+    {
+      "id": "b03_py_filter_without_list_mutation",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_filter_without_list_mutation"
+    },
+    {
+      "id": "b03_py_reject_duplicate_record_ids",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_reject_duplicate_record_ids"
+    },
+    {
+      "id": "b03_py_header_bom_and_crlf",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised answer to parse the first logical CSV record with csv.reader over StringIO instead of splitting physical lines before CSV parsing.",
+      "revision_required": true,
+      "final_id": "b03_py_header_bom_and_crlf"
+    },
+    {
+      "id": "b03_py_single_pass_count_total",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with the stronger accepted iterator preview-and-sum candidate.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_py_copy_nested_options",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_copy_nested_options"
+    },
+    {
+      "id": "b03_py_include_last_search_item",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as lower-priority because Batch 03 already admits stronger off-by-one examples in chunking, paging, and SQL/window contexts.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_py_preserve_explicit_empty_alias",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_preserve_explicit_empty_alias"
+    },
+    {
+      "id": "b03_py_validate_before_sorting_names",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_validate_before_sorting_names"
+    },
+    {
+      "id": "b03_py_test_exact_boundary_result",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_test_exact_boundary_result"
+    },
+    {
+      "id": "b03_py_test_detects_exact_chunk_boundary",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected because it duplicates the accepted split_fixed_width debugging task too closely; save this style for a dedicated tests batch if needed.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_py_do_not_reuse_iterator_for_preview",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_py_do_not_reuse_iterator_for_preview"
+    },
+    {
+      "id": "b03_ts_preserve_zero_timeout",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_preserve_zero_timeout"
+    },
+    {
+      "id": "b03_ts_reject_number_coercion",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_reject_number_coercion"
+    },
+    {
+      "id": "b03_ts_return_from_block_callback",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_return_from_block_callback"
+    },
+    {
+      "id": "b03_ts_return_async_repository_promise",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_return_async_repository_promise"
+    },
+    {
+      "id": "b03_ts_independent_attempt_counters",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_independent_attempt_counters"
+    },
+    {
+      "id": "b03_ts_page_slice_end_exclusive",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_page_slice_end_exclusive"
+    },
+    {
+      "id": "b03_ts_null_is_not_missing",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_null_is_not_missing"
+    },
+    {
+      "id": "b03_ts_check_duplicate_before_set",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ts_check_duplicate_before_set"
+    },
+    {
+      "id": "b03_ts_test_zero_result_exactly",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with the accepted Python exact-zero test and TS/JS zero-preservation debugging examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_js_reject_partial_integer_text",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_reject_partial_integer_text"
+    },
+    {
+      "id": "b03_js_independent_status_objects",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_independent_status_objects"
+    },
+    {
+      "id": "b03_js_await_each_async_write",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_await_each_async_write"
+    },
+    {
+      "id": "b03_js_preserve_zero_threshold",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_preserve_zero_threshold"
+    },
+    {
+      "id": "b03_js_reject_duplicate_aliases",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_reject_duplicate_aliases"
+    },
+    {
+      "id": "b03_js_strip_one_bom_and_crlf",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_strip_one_bom_and_crlf"
+    },
+    {
+      "id": "b03_js_test_partial_numeric_rejection",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_test_partial_numeric_rejection"
+    },
+    {
+      "id": "b03_js_slice_without_splice_mutation",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_js_slice_without_splice_mutation"
+    },
+    {
+      "id": "b03_ps_contains_operand_order",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ps_contains_operand_order"
+    },
+    {
+      "id": "b03_ps_verbose_not_output_item",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ps_verbose_not_output_item"
+    },
+    {
+      "id": "b03_ps_compare_not_assign_enabled",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ps_compare_not_assign_enabled"
+    },
+    {
+      "id": "b03_ps_return_does_not_stop_pipeline",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected because local Windows PowerShell testing showed return in this process block still emitted results for later pipeline inputs, so the defect premise is unreliable.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_ps_null_is_not_empty_collection",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected because local Windows PowerShell testing showed @($null) has one null element, not an empty array; the reasoning is inaccurate.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_ps_split_lines_without_carriage_return",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_ps_split_lines_without_carriage_return"
+    },
+    {
+      "id": "b03_sql_not_in_null_trap",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_sql_not_in_null_trap"
+    },
+    {
+      "id": "b03_sql_is_null_not_equals",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_sql_is_null_not_equals"
+    },
+    {
+      "id": "b03_sql_count_rows_not_nullable_notes",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_sql_count_rows_not_nullable_notes"
+    },
+    {
+      "id": "b03_sql_reserve_before_insert_order",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised answer to make the INSERT depend on the UPDATE ... RETURNING result through a CTE, avoiding an unconditional order-line insert.",
+      "revision_required": true,
+      "final_id": "b03_sql_reserve_before_insert_order"
+    },
+    {
+      "id": "b03_sql_distinct_wrong_duplicate_key",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_sql_distinct_wrong_duplicate_key"
+    },
+    {
+      "id": "b03_sql_nullable_window_check",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_sql_nullable_window_check"
+    },
+    {
+      "id": "b03_text_test_reuses_buggy_logic",
+      "language": "text",
+      "category": "tests",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b03_text_test_reuses_buggy_logic"
+    },
+    {
+      "id": "b03_text_aliasing_not_copying",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but redundant with accepted Python/TypeScript/JavaScript shared-reference debugging examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b03_text_truthiness_hides_valid_zero",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but redundant with accepted TypeScript and JavaScript zero-preservation debugging examples.",
+      "revision_required": false,
+      "final_id": null
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py; 40 examples imported",
+    "training_data_quality_old_eval": "passed with zero warnings; 8 raw files, 173 instruction examples, 12 eval prompts",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings; 8 raw files, 173 instruction examples, 80 eval prompts",
+    "python_ast_parse": "passed for 13 accepted Python answers and 13 Python bad_code snippets",
+    "javascript_node_check": "passed for 8 accepted JavaScript answers and 8 JavaScript bad_code snippets with node --check using Node 24.17.0",
+    "typescript_check": "passed locally for 8 accepted TypeScript answers with tsc 6.0.3 --strict --noEmit; 8 TypeScript bad_code snippets parsed with --noCheck --noEmit",
+    "powershell_parser": "passed for 4 accepted PowerShell answers and 4 PowerShell bad_code snippets using Windows PowerShell Parser.ParseInput",
+    "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
+    "exact_instruction_overlap_with_existing_or_eval": [],
+    "max_instruction_trigram_jaccard_with_existing_or_eval": {
+      "candidate_id": "b03_js_strip_one_bom_and_crlf",
+      "score": 0.125
+    },
+    "unsafe_keyword_hits": [],
+    "python_py_compile": "passed for project scripts, src package, and tests",
+    "repository_tests": "8 unittest tests passed"
+  }
+}
