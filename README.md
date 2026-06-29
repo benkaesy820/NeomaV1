@@ -10,6 +10,11 @@ training data, checkpoints, and inference path are controlled by this project.
 For the complete file-by-file engineering handoff, phase-label clarification,
 and remaining decision points, read [`UPDATES.md`](UPDATES.md).
 
+Phase 3.5B capability planning is tracked in
+[`PHASE3_5B_WORK_PACKET_01.md`](PHASE3_5B_WORK_PACKET_01.md). Its held-out
+evaluation suite under `data/eval/phase3_5b_heldout_v1.jsonl` is never training
+data.
+
 ## Hardware target
 
 The default configurations are aimed at a 6-core CPU and 8–16 GB RAM. The main

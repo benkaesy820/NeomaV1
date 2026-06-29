@@ -1,0 +1,32 @@
+{
+  "suite": "phase3_5b_heldout_v1",
+  "records": 80,
+  "unique_ids": 80,
+  "language_counts": {
+    "javascript": 12,
+    "powershell": 10,
+    "python": 24,
+    "sql": 12,
+    "text": 8,
+    "typescript": 14
+  },
+  "category_counts": {
+    "api": 1,
+    "data": 4,
+    "database": 4,
+    "debugging": 14,
+    "efficiency": 12,
+    "explanation": 5,
+    "files": 5,
+    "function": 5,
+    "security": 12,
+    "tests": 7,
+    "types": 1,
+    "validation": 10
+  },
+  "records_with_test_code": 12,
+  "exact_overlap_with_existing_instructions_or_eval": 0,
+  "max_token_trigram_jaccard_against_existing": 0.087,
+  "max_similarity_record": "py_group_counts_counter",
+  "notes": "Simple lexical validation only; semantic leakage review remains mandatory."
+}
