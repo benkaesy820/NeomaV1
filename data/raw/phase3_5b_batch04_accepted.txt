@@ -1,0 +1,1510 @@
+<instruction>
+Write table-driven unittest tests for parse_range_list(text: str) -> list[int]. The contract accepts comma-separated integers and inclusive ranges such as "1,3-5", preserves token order, and rejects blank tokens, descending ranges, and non-integers.
+</instruction>
+<constraints>
+- Use unittest and subTest.
+- Do not test implementation details.
+- Treat the empty string as an empty list, not as an error.
+</constraints>
+<answer>
+import unittest
+
+from ranges import parse_range_list
+
+
+class ParseRangeListTests(unittest.TestCase):
+    def test_valid_cases(self) -> None:
+        cases = {
+            "": [],
+            "4": [4],
+            "1,3-5,8": [1, 3, 4, 5, 8],
+            "2-2": [2],
+            "-2--1": [-2, -1],
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(parse_range_list(text), expected)
+
+    def test_invalid_cases(self) -> None:
+        for text in ("1,,2", "5-3", "1.5", "a", "1-"):
+            with self.subTest(text=text):
+                with self.assertRaises(ValueError):
+                    parse_range_list(text)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- A one-value range is valid.
+- Negative range endpoints remain unambiguous.
+- A blank token between commas is invalid.
+Quality notes:
+- Partitions valid and invalid inputs explicitly.
+- Expected results are independent constants.
+</reasoning>
+
+<instruction>
+Write unittest regression tests for lower_midpoint(values: list[int]) -> int. The function requires a non-empty list and returns the lower of the two middle values when the length is even.
+</instruction>
+<constraints>
+- Use exact equality assertions.
+- Include a case that distinguishes lower-middle from upper-middle behavior.
+</constraints>
+<answer>
+import unittest
+
+from midpoint import lower_midpoint
+
+
+class LowerMidpointTests(unittest.TestCase):
+    def test_odd_length(self) -> None:
+        self.assertEqual(lower_midpoint([10, 20, 30]), 20)
+
+    def test_even_length_uses_lower_middle(self) -> None:
+        self.assertEqual(lower_midpoint([10, 20, 30, 40]), 20)
+
+    def test_single_item(self) -> None:
+        self.assertEqual(lower_midpoint([7]), 7)
+
+    def test_empty_input_is_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            lower_midpoint([])
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Single item.
+- Even-length list.
+- Empty list.
+Quality notes:
+- The even-length case catches the common off-by-one choice.
+</reasoning>
+
+<instruction>
+Write unittest tests for make_slug(parts: list[str]) -> str. It trims each part, lowercases it, drops blank parts, joins the rest with hyphens, and must return a string.
+</instruction>
+<constraints>
+- Assert the return value rather than only calling the function.
+- Do not duplicate the production normalization logic inside the test.
+</constraints>
+<answer>
+import unittest
+
+from slugs import make_slug
+
+
+class MakeSlugTests(unittest.TestCase):
+    def test_normalizes_and_returns_text(self) -> None:
+        result = make_slug(["  Hello ", "WORLD"])
+        self.assertIsInstance(result, str)
+        self.assertEqual(result, "hello-world")
+
+    def test_drops_blank_parts(self) -> None:
+        self.assertEqual(make_slug(["a", " ", "b"]), "a-b")
+
+    def test_all_blank_parts_return_empty_string(self) -> None:
+        self.assertEqual(make_slug(["", "  "]), "")
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- All parts blank.
+- Leading and trailing whitespace.
+Quality notes:
+- The type and value assertions catch a missing return.
+</reasoning>
+
+<instruction>
+Write IsolatedAsyncioTestCase tests for load_profiles(ids, fetch_profile). It must await fetch_profile once per id in input order and return results in that same order.
+</instruction>
+<constraints>
+- Use an injected async dependency; do not make network calls.
+- Verify awaited arguments, not only output values.
+</constraints>
+<answer>
+import unittest
+from unittest.mock import AsyncMock, call
+
+from profiles import load_profiles
+
+
+class LoadProfilesTests(unittest.IsolatedAsyncioTestCase):
+    async def test_calls_dependency_in_order_and_preserves_results(self) -> None:
+        fetch_profile = AsyncMock(side_effect=[{"id": 2}, {"id": 1}])
+
+        result = await load_profiles([2, 1], fetch_profile)
+
+        self.assertEqual(result, [{"id": 2}, {"id": 1}])
+        self.assertEqual(fetch_profile.await_args_list, [call(2), call(1)])
+
+    async def test_empty_input_makes_no_calls(self) -> None:
+        fetch_profile = AsyncMock()
+
+        result = await load_profiles([], fetch_profile)
+
+        self.assertEqual(result, [])
+        fetch_profile.assert_not_awaited()
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Empty input.
+- Non-sorted input order.
+Quality notes:
+- Checks observable interaction and result ordering without external I/O.
+</reasoning>
+
+<instruction>
+Write unittest tests for parse_jsonl_objects(text: str) -> list[dict[str, object]]. Blank lines are skipped. Invalid JSON and non-object JSON must raise ValueError whose message includes the 1-based physical line number.
+</instruction>
+<constraints>
+- Use assertRaisesRegex for the line number.
+- Count blank lines when determining physical line numbers.
+</constraints>
+<answer>
+import unittest
+
+from jsonl_reader import parse_jsonl_objects
+
+
+class ParseJsonlObjectsTests(unittest.TestCase):
+    def test_skips_blank_lines_and_preserves_objects(self) -> None:
+        text = '{"id": 1}\n\n  \n{"id": 2}\n'
+        self.assertEqual(parse_jsonl_objects(text), [{"id": 1}, {"id": 2}])
+
+    def test_invalid_json_reports_physical_line(self) -> None:
+        with self.assertRaisesRegex(ValueError, r"\bline 3\b"):
+            parse_jsonl_objects('{"ok": true}\n\nnot-json\n')
+
+    def test_non_object_reports_physical_line(self) -> None:
+        with self.assertRaisesRegex(ValueError, r"\bline 2\b"):
+            parse_jsonl_objects('{"ok": true}\n[1, 2]\n')
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Blank physical lines.
+- Valid JSON array that violates the object-root contract.
+Quality notes:
+- Verifies user-facing diagnostics, not only exception type.
+</reasoning>
+
+<instruction>
+Write unittest tests for load_settings_text(text: str) -> dict[str, object]. Invalid JSON must raise ValueError("invalid settings JSON") and preserve the original JSONDecodeError as __cause__.
+</instruction>
+<constraints>
+- Check both the public error message and exception chaining.
+- Use only the standard library.
+</constraints>
+<answer>
+import json
+import unittest
+
+from settings import load_settings_text
+
+
+class LoadSettingsTextTests(unittest.TestCase):
+    def test_invalid_json_has_clear_message_and_cause(self) -> None:
+        with self.assertRaisesRegex(ValueError, r"^invalid settings JSON$") as caught:
+            load_settings_text("{")
+        self.assertIsInstance(caught.exception.__cause__, json.JSONDecodeError)
+
+    def test_valid_object_is_returned(self) -> None:
+        self.assertEqual(load_settings_text('{"enabled": true}'), {"enabled": True})
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Malformed JSON.
+- Valid object JSON.
+Quality notes:
+- Teaches stable public diagnostics without discarding root cause.
+</reasoning>
+
+<instruction>
+Write table-driven unittest tests for ceil_div(total: int, size: int) -> int. total must be non-negative, size must be positive, and the result is the number of size-wide groups needed.
+</instruction>
+<constraints>
+- Include exact multiples and one-over-boundary cases.
+- Do not calculate expected values by calling the implementation.
+</constraints>
+<answer>
+import unittest
+
+from arithmetic import ceil_div
+
+
+class CeilDivTests(unittest.TestCase):
+    def test_valid_table(self) -> None:
+        cases = [
+            (0, 3, 0),
+            (1, 3, 1),
+            (3, 3, 1),
+            (4, 3, 2),
+            (10, 4, 3),
+        ]
+        for total, size, expected in cases:
+            with self.subTest(total=total, size=size):
+                self.assertEqual(ceil_div(total, size), expected)
+
+    def test_invalid_arguments(self) -> None:
+        for total, size in ((-1, 3), (1, 0), (1, -2)):
+            with self.subTest(total=total, size=size):
+                with self.assertRaises(ValueError):
+                    ceil_div(total, size)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Zero total.
+- Exact multiple.
+- Invalid divisor.
+Quality notes:
+- Boundary table catches floor-division-only implementations.
+</reasoning>
+
+<instruction>
+Write unittest tests for mean_finite(values: list[float]) -> float. It rejects an empty list and any NaN or infinity, but accepts zero and negative finite values.
+</instruction>
+<constraints>
+- Test NaN explicitly; ordinary equality cannot detect it reliably.
+- Keep empty-input behavior separate from non-finite behavior.
+</constraints>
+<answer>
+import math
+import unittest
+
+from statistics_helpers import mean_finite
+
+
+class MeanFiniteTests(unittest.TestCase):
+    def test_finite_values(self) -> None:
+        self.assertEqual(mean_finite([0.0, -2.0, 5.0]), 1.0)
+
+    def test_empty_input_is_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            mean_finite([])
+
+    def test_non_finite_values_are_rejected(self) -> None:
+        for value in (math.nan, math.inf, -math.inf):
+            with self.subTest(value=value):
+                with self.assertRaises(ValueError):
+                    mean_finite([1.0, value])
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Zero and negative finite numbers.
+- NaN.
+- Positive and negative infinity.
+Quality notes:
+- Prevents silent ZeroDivisionError or non-finite propagation.
+</reasoning>
+
+<instruction>
+Write unittest tests for sorted_records(records: list[dict[str, int]]) -> list[dict[str, int]]. It returns records sorted by score descending then id ascending, without reordering the caller list.
+</instruction>
+<constraints>
+- Use input data where the secondary key changes the tie order.
+- Check non-mutation and result identity.
+</constraints>
+<answer>
+import unittest
+
+from records import sorted_records
+
+
+class SortedRecordsTests(unittest.TestCase):
+    def test_tie_break_and_input_order(self) -> None:
+        records = [
+            {"id": 3, "score": 10},
+            {"id": 2, "score": 20},
+            {"id": 1, "score": 20},
+        ]
+        before = records.copy()
+
+        result = sorted_records(records)
+
+        self.assertEqual([item["id"] for item in result], [1, 2, 3])
+        self.assertEqual(records, before)
+        self.assertIsNot(result, records)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Equal primary sort keys.
+- Caller list remains in original order.
+Quality notes:
+- Catches in-place sort and missing tie-breaker defects.
+</reasoning>
+
+<instruction>
+Fix the unittest so it detects when expand_counts returns the right distinct values but the wrong duplicate counts. Keep the production contract: {"a": 2, "b": 1} expands to ["a", "a", "b"] in key insertion order.
+</instruction>
+<constraints>
+- Replace the lossy set comparison with an exact sequence assertion.
+</constraints>
+<bad_code>
+def test_expand_counts():
+    assert set(expand_counts({"a": 2, "b": 1})) == {"a", "b"}
+</bad_code>
+<reasoning>
+A set discards duplicate counts and order, so an implementation returning only one "a" would still pass. The contract includes both multiplicity and insertion order.
+</reasoning>
+<answer>
+import unittest
+
+from counts import expand_counts
+
+
+class ExpandCountsTests(unittest.TestCase):
+    def test_preserves_duplicate_counts_and_order(self) -> None:
+        self.assertEqual(expand_counts({"a": 2, "b": 1}), ["a", "a", "b"])
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Duplicate count greater than one.
+Quality notes:
+- Repairs the test oracle rather than production code.
+</reasoning>
+
+<instruction>
+Write unittest tests for is_expired(expires_at: datetime, now: Callable[[], datetime]) -> bool. Expiration is inclusive: a value is expired when expires_at <= now().
+</instruction>
+<constraints>
+- Inject the clock; do not sleep or read wall-clock time.
+- Test equality at the boundary.
+</constraints>
+<answer>
+import unittest
+from datetime import datetime, timezone
+from unittest.mock import Mock
+
+from expiry import is_expired
+
+
+class IsExpiredTests(unittest.TestCase):
+    def test_boundary_is_inclusive(self) -> None:
+        instant = datetime(2026, 1, 2, tzinfo=timezone.utc)
+        clock = Mock(return_value=instant)
+        self.assertTrue(is_expired(instant, clock))
+        clock.assert_called_once_with()
+
+    def test_future_value_is_not_expired(self) -> None:
+        now = datetime(2026, 1, 2, tzinfo=timezone.utc)
+        later = datetime(2026, 1, 3, tzinfo=timezone.utc)
+        self.assertFalse(is_expired(later, Mock(return_value=now)))
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Expiration exactly equals now.
+- Expiration after now.
+Quality notes:
+- Deterministic boundary test with no timing flakiness.
+</reasoning>
+
+<instruction>
+Write unittest subtests for require_ascii_token(value: object) -> str. It requires at least one ASCII letter or digit, may also contain underscore and hyphen, and rejects whitespace, Unicode letters, empty text, separator-only text, and non-strings.
+</instruction>
+<constraints>
+- Use subTest to keep the validation matrix readable.
+- Do not normalize invalid values before passing them to the function.
+</constraints>
+<answer>
+import unittest
+
+from tokens import require_ascii_token
+
+
+class RequireAsciiTokenTests(unittest.TestCase):
+    def test_valid_values(self) -> None:
+        for value in ("a", "A_1", "part-two"):
+            with self.subTest(value=value):
+                self.assertEqual(require_ascii_token(value), value)
+
+    def test_invalid_values(self) -> None:
+        for value in ("", "a b", "?", "_", "-", None, 12):
+            with self.subTest(value=value):
+                with self.assertRaises((TypeError, ValueError)):
+                    require_ascii_token(value)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Non-string input.
+- Unicode letter.
+- Separator-only token.
+Quality notes:
+- Compact partition testing for an external-input boundary.
+</reasoning>
+
+<instruction>
+Write strict TypeScript table-driven tests for parseBoolean(value: unknown): boolean. It accepts only the exact strings "true" and "false" and rejects every other type or spelling.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Use explicit invalid partitions, including actual booleans.
+</constraints>
+<answer>
+declare function parseBoolean(value: unknown): boolean;
+
+function assertEqual<T>(actual: T, expected: T, label: string): void {
+  if (!Object.is(actual, expected)) {
+    throw new Error(`${label}: expected ${String(expected)}, got ${String(actual)}`);
+  }
+}
+
+function assertDeepEqual(actual: unknown, expected: unknown, label: string): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${label}: values differ`);
+  }
+}
+
+function assertThrows(fn: () => unknown, label: string): void {
+  let threw = false;
+  try { fn(); } catch { threw = true; }
+  if (!threw) throw new Error(`${label}: expected an exception`);
+}
+
+for (const [input, expected] of [["true", true], ["false", false]] as const) {
+  assertEqual(parseBoolean(input), expected, `valid ${input}`);
+}
+
+for (const input of ["True", " false", "1", 1, true, null, undefined] as const) {
+  assertThrows(() => parseBoolean(input), `invalid ${String(input)}`);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Capitalization.
+- Leading whitespace.
+- Boolean value versus boolean text.
+Quality notes:
+- Table distinguishes exact protocol text from coercion.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for chunkExact<T>(values: readonly T[], size: number): T[][]. It preserves order, permits a final partial chunk, returns [] for empty input, and rejects size below 1.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Include exact-multiple and partial-tail cases.
+</constraints>
+<answer>
+declare function chunkExact<T>(values: readonly T[], size: number): T[][];
+
+function assertEqual<T>(actual: T, expected: T, label: string): void {
+  if (!Object.is(actual, expected)) {
+    throw new Error(`${label}: expected ${String(expected)}, got ${String(actual)}`);
+  }
+}
+
+function assertDeepEqual(actual: unknown, expected: unknown, label: string): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${label}: values differ`);
+  }
+}
+
+function assertThrows(fn: () => unknown, label: string): void {
+  let threw = false;
+  try { fn(); } catch { threw = true; }
+  if (!threw) throw new Error(`${label}: expected an exception`);
+}
+
+assertDeepEqual(chunkExact([1, 2, 3, 4], 2), [[1, 2], [3, 4]], "exact multiple");
+assertDeepEqual(chunkExact([1, 2, 3], 2), [[1, 2], [3]], "partial tail");
+assertDeepEqual(chunkExact([], 3), [], "empty input");
+assertThrows(() => chunkExact([1], 0), "zero size");
+</answer>
+<reasoning>
+Edge cases:
+- Exact multiple must not add an empty chunk.
+- Empty input.
+Quality notes:
+- Targets classic boundary and empty-tail bugs.
+</reasoning>
+
+<instruction>
+Write a strict asynchronous test for loadPair(ids, loadOne), where loadOne is injected. Verify that both ids are requested exactly once and results preserve id order even if promises resolve in reverse order.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit with ES2022 libraries.
+- Use injected promises; do not use timers or network calls.
+</constraints>
+<answer>
+declare function loadPair<T>(
+  ids: readonly [number, number],
+  loadOne: (id: number) => Promise<T>,
+): Promise<[T, T]>;
+
+function deferred<T>(): { promise: Promise<T>; resolve: (value: T) => void } {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => { resolve = done; });
+  return { promise, resolve };
+}
+
+async function testLoadPair(): Promise<void> {
+  const first = deferred<string>();
+  const second = deferred<string>();
+  const calls: number[] = [];
+  const loadOne = (id: number): Promise<string> => {
+    calls.push(id);
+    return id === 10 ? first.promise : second.promise;
+  };
+
+  const pending = loadPair([10, 20], loadOne);
+  second.resolve("twenty");
+  first.resolve("ten");
+  const result = await pending;
+
+  if (JSON.stringify(calls) !== JSON.stringify([10, 20])) throw new Error("wrong calls");
+  if (JSON.stringify(result) !== JSON.stringify(["ten", "twenty"])) throw new Error("wrong order");
+}
+
+export {};
+await testLoadPair();
+</answer>
+<reasoning>
+Edge cases:
+- Second dependency resolves first.
+- Output still follows input order.
+Quality notes:
+- Deterministic concurrency test without sleeps.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for orderTasks(tasks), which returns tasks sorted by priority descending then id ascending without mutating the readonly input array.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Check the secondary tie-breaker and non-mutation.
+</constraints>
+<answer>
+type Task = Readonly<{ id: number; priority: number }>;
+declare function orderTasks(tasks: readonly Task[]): Task[];
+
+function assertEqual<T>(actual: T, expected: T, label: string): void {
+  if (!Object.is(actual, expected)) {
+    throw new Error(`${label}: expected ${String(expected)}, got ${String(actual)}`);
+  }
+}
+
+function assertDeepEqual(actual: unknown, expected: unknown, label: string): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${label}: values differ`);
+  }
+}
+
+function assertThrows(fn: () => unknown, label: string): void {
+  let threw = false;
+  try { fn(); } catch { threw = true; }
+  if (!threw) throw new Error(`${label}: expected an exception`);
+}
+
+const tasks: readonly Task[] = [
+  { id: 3, priority: 1 },
+  { id: 2, priority: 5 },
+  { id: 1, priority: 5 },
+];
+const before = JSON.stringify(tasks);
+const result = orderTasks(tasks);
+
+assertDeepEqual(result.map((task) => task.id), [1, 2, 3], "sort order");
+assertEqual(JSON.stringify(tasks), before, "input mutation");
+if (result === tasks) throw new Error("expected a new array");
+</answer>
+<reasoning>
+Edge cases:
+- Equal priorities.
+- Readonly caller array.
+Quality notes:
+- Catches in-place Array.sort and incomplete ordering.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for resolveLabel(value: string | null | undefined, fallback: string): string. undefined uses fallback, null maps to an empty string, and any string is preserved exactly.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Test undefined, null, and empty string separately.
+</constraints>
+<answer>
+declare function resolveLabel(value: string | null | undefined, fallback: string): string;
+
+function assertEqual<T>(actual: T, expected: T, label: string): void {
+  if (!Object.is(actual, expected)) {
+    throw new Error(`${label}: expected ${String(expected)}, got ${String(actual)}`);
+  }
+}
+
+function assertDeepEqual(actual: unknown, expected: unknown, label: string): void {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`${label}: values differ`);
+  }
+}
+
+function assertThrows(fn: () => unknown, label: string): void {
+  let threw = false;
+  try { fn(); } catch { threw = true; }
+  if (!threw) throw new Error(`${label}: expected an exception`);
+}
+
+assertEqual(resolveLabel(undefined, "default"), "default", "undefined fallback");
+assertEqual(resolveLabel(null, "default"), "", "null empty");
+assertEqual(resolveLabel("", "default"), "", "empty string preserved");
+assertEqual(resolveLabel("name", "default"), "name", "text preserved");
+</answer>
+<reasoning>
+Edge cases:
+- Empty string is not absence.
+- Null has distinct semantics from undefined.
+Quality notes:
+- Protects against a broad value || fallback implementation.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for indexUniqueRows(rows), which returns Map<string, Row> and throws when two rows share the same id.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Verify duplicate rejection rather than silently checking the final winner.
+</constraints>
+<answer>
+type Row = Readonly<{ id: string; value: number }>;
+declare function indexUniqueRows(rows: readonly Row[]): Map<string, Row>;
+
+function assertThrows(fn: () => unknown, label: string): void {
+  try { fn(); } catch { return; }
+  throw new Error(`${label}: expected an exception`);
+}
+
+const first: Row = { id: "a", value: 1 };
+const second: Row = { id: "b", value: 2 };
+const index = indexUniqueRows([first, second]);
+if (index.size !== 2 || index.get("a") !== first || index.get("b") !== second) {
+  throw new Error("valid rows were not indexed exactly");
+}
+
+assertThrows(
+  () => indexUniqueRows([first, { id: "a", value: 9 }]),
+  "duplicate id",
+);
+</answer>
+<reasoning>
+Edge cases:
+- Duplicate id with a different value.
+- Object identity preserved for valid rows.
+Quality notes:
+- Teaches explicit duplicate policy verification.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for requirePositiveInteger(value: unknown, field: string): number. Invalid input must throw TypeError whose message names the field.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Inspect unknown caught values safely.
+</constraints>
+<answer>
+declare function requirePositiveInteger(value: unknown, field: string): number;
+
+function captureError(fn: () => unknown): Error {
+  try { fn(); } catch (error: unknown) {
+    if (error instanceof Error) return error;
+    throw new Error("non-Error value was thrown");
+  }
+  throw new Error("expected an exception");
+}
+
+if (requirePositiveInteger(3, "count") !== 3) throw new Error("valid value failed");
+for (const value of [0, -1, 1.5, "3", null] as const) {
+  const error = captureError(() => requirePositiveInteger(value, "count"));
+  if (!(error instanceof TypeError)) throw new Error("expected TypeError");
+  if (!error.message.includes("count")) throw new Error("field name missing from message");
+}
+</answer>
+<reasoning>
+Edge cases:
+- Numeric string.
+- Fraction.
+- Zero.
+Quality notes:
+- Checks exception type and useful boundary diagnostics.
+</reasoning>
+
+<instruction>
+Write strict TypeScript tests for parseAssignments(text): Map<string, string>. Blank lines are ignored; malformed non-blank lines throw an Error containing the 1-based physical line number.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Count ignored blank lines in diagnostics.
+</constraints>
+<answer>
+declare function parseAssignments(text: string): Map<string, string>;
+
+function captureError(fn: () => unknown): Error {
+  try { fn(); } catch (error: unknown) {
+    if (error instanceof Error) return error;
+    throw new Error("expected Error instance");
+  }
+  throw new Error("expected an exception");
+}
+
+const parsed = parseAssignments("a=1\n\nb=2\n");
+if (JSON.stringify([...parsed]) !== JSON.stringify([["a", "1"], ["b", "2"]])) {
+  throw new Error("valid assignments parsed incorrectly");
+}
+
+const error = captureError(() => parseAssignments("a=1\n\nmissing-separator\n"));
+if (!/\bline 3\b/.test(error.message)) throw new Error("physical line number missing");
+</answer>
+<reasoning>
+Edge cases:
+- Blank line before malformed content.
+- Map insertion order.
+Quality notes:
+- Checks physical-line diagnostics and exact parsed entries.
+</reasoning>
+
+<instruction>
+Write strict TypeScript table tests for parseSmallInt(text): { ok: true; value: number } | { ok: false; reason: string }. Accept canonical integers from -9 through 9 and reject all other text without throwing.
+</instruction>
+<constraints>
+- Compile under --strict --noEmit.
+- Narrow the discriminated union before reading value or reason.
+</constraints>
+<answer>
+type ParseResult = { ok: true; value: number } | { ok: false; reason: string };
+declare function parseSmallInt(text: string): ParseResult;
+
+const valid: readonly [string, number][] = [["-9", -9], ["0", 0], ["9", 9]];
+for (const [text, expected] of valid) {
+  const result = parseSmallInt(text);
+  if (!result.ok || result.value !== expected) throw new Error(`valid case failed: ${text}`);
+}
+
+for (const text of ["10", "-10", "+1", "01", " 1", "x"]) {
+  const result = parseSmallInt(text);
+  if (result.ok || result.reason.length === 0) throw new Error(`invalid case passed: ${text}`);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Signed zero range boundaries.
+- Leading plus and leading zero.
+Quality notes:
+- Tests both union branches and safe narrowing.
+</reasoning>
+
+<instruction>
+Write Node.js tests for parseMode(value), which accepts only "read", "write", or "append" and throws TypeError for every other value.
+</instruction>
+<constraints>
+- Use node:test and node:assert/strict.
+- Include non-string values and near-valid strings.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { parseMode } = require("./modes");
+
+test("parseMode accepts exact allowed modes", () => {
+  for (const mode of ["read", "write", "append"]) {
+    assert.equal(parseMode(mode), mode);
+  }
+});
+
+test("parseMode rejects other spellings and types", () => {
+  for (const value of ["Read", " read", "", 1, null, undefined]) {
+    assert.throws(() => parseMode(value), TypeError);
+  }
+});
+</answer>
+<reasoning>
+Edge cases:
+- Capitalization.
+- Leading space.
+- Null and undefined.
+Quality notes:
+- Exact enum boundary tests with no coercion.
+</reasoning>
+
+<instruction>
+Write Node.js regression tests for findLastIndexOf(values, target). It returns the final matching index or -1 when absent.
+</instruction>
+<constraints>
+- Use exact index assertions.
+- Include a match at the final element and repeated matches.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { findLastIndexOf } = require("./search");
+
+test("returns the final duplicate index", () => {
+  assert.equal(findLastIndexOf(["a", "b", "a"], "a"), 2);
+});
+
+test("checks the final array element", () => {
+  assert.equal(findLastIndexOf(["a", "b", "c"], "c"), 2);
+});
+
+test("returns -1 when absent or empty", () => {
+  assert.equal(findLastIndexOf(["a"], "z"), -1);
+  assert.equal(findLastIndexOf([], "z"), -1);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Final index.
+- Duplicate target.
+- Empty input.
+Quality notes:
+- Catches reverse-loop boundary and first-match mistakes.
+</reasoning>
+
+<instruction>
+Write Node.js async tests for runJob(job, saveResult). It awaits job, passes the resolved value to saveResult once, and must not call saveResult when job rejects.
+</instruction>
+<constraints>
+- Use async test functions and assert.rejects.
+- Use injected callbacks; no timers or network calls.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { runJob } = require("./jobs");
+
+test("saves a successful result once", async () => {
+  const saved = [];
+  const result = await runJob(async () => 7, async value => { saved.push(value); });
+  assert.equal(result, 7);
+  assert.deepEqual(saved, [7]);
+});
+
+test("propagates rejection without saving", async () => {
+  const saved = [];
+  await assert.rejects(
+    runJob(async () => { throw new Error("boom"); }, async value => { saved.push(value); }),
+    /boom/,
+  );
+  assert.deepEqual(saved, []);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Rejected job.
+- Exactly one save on success.
+Quality notes:
+- Verifies both return behavior and forbidden side effect.
+</reasoning>
+
+<instruction>
+Write Node.js tests for loadJsonArray(path), which reads UTF-8 JSON and accepts only an array root. Use a temporary directory and clean it up.
+</instruction>
+<constraints>
+- Use a per-test temporary directory.
+- Register cleanup with t.after.
+- Do not use a fixed shared filename.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs/promises");
+const os = require("node:os");
+const path = require("node:path");
+const { loadJsonArray } = require("./json-file");
+
+test("loads an array root", async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "json-array-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const file = path.join(directory, "items.json");
+  await fs.writeFile(file, '[1, {"id": 2}]', "utf8");
+  assert.deepEqual(await loadJsonArray(file), [1, { id: 2 }]);
+});
+
+test("rejects an object root", async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "json-array-"));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const file = path.join(directory, "items.json");
+  await fs.writeFile(file, '{"id": 1}', "utf8");
+  await assert.rejects(loadJsonArray(file), /array/i);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Valid array root.
+- Valid JSON with wrong root type.
+Quality notes:
+- Isolated filesystem fixture with deterministic cleanup.
+</reasoning>
+
+<instruction>
+Write Node.js tests for subscribeOnce(emitter, event, handler). Calling it twice with the same emitter, event, and handler must still register only one listener.
+</instruction>
+<constraints>
+- Use EventEmitter from the standard library.
+- Assert both observed calls and listener count.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { EventEmitter } = require("node:events");
+const { subscribeOnce } = require("./subscriptions");
+
+test("duplicate subscription invokes handler only once", () => {
+  const emitter = new EventEmitter();
+  let calls = 0;
+  const handler = () => { calls += 1; };
+
+  subscribeOnce(emitter, "ready", handler);
+  subscribeOnce(emitter, "ready", handler);
+
+  assert.equal(emitter.listenerCount("ready"), 1);
+  emitter.emit("ready");
+  assert.equal(calls, 1);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Same function registered twice.
+Quality notes:
+- Catches duplicate-listener accumulation rather than only checking one emission result.
+</reasoning>
+
+<instruction>
+Write Node.js tests for groupByKind(items). It returns a Map from kind to arrays in input order and must not mutate either the input array or item objects.
+</instruction>
+<constraints>
+- Use deep and identity assertions deliberately.
+- Do not sort the expected values.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { groupByKind } = require("./groups");
+
+test("groups in stable order without mutation", () => {
+  const items = [
+    { id: 1, kind: "b" },
+    { id: 2, kind: "a" },
+    { id: 3, kind: "b" },
+  ];
+  const snapshot = JSON.stringify(items);
+
+  const groups = groupByKind(items);
+
+  assert.deepEqual([...groups.keys()], ["b", "a"]);
+  assert.deepEqual(groups.get("b").map(item => item.id), [1, 3]);
+  assert.equal(JSON.stringify(items), snapshot);
+  assert.equal(groups.get("b")[0], items[0]);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Repeated group separated by another group.
+- Original object identity.
+Quality notes:
+- Verifies stable grouping and absence of hidden mutation.
+</reasoning>
+
+<instruction>
+Fix the Node.js test so a rejected promise is actually observed by the test runner instead of becoming an unhandled late rejection.
+</instruction>
+<constraints>
+- Return or await the rejection assertion.
+- Use node:test and node:assert/strict.
+</constraints>
+<bad_code>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { parseRemoteConfig } = require("./config");
+
+test("rejects malformed configuration", () => {
+  assert.rejects(parseRemoteConfig("{"), /invalid/i);
+});
+</bad_code>
+<reasoning>
+The test callback finishes before the promise assertion settles. Marking the callback async and awaiting assert.rejects makes failure part of the test lifecycle.
+</reasoning>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { parseRemoteConfig } = require("./config");
+
+test("rejects malformed configuration", async () => {
+  await assert.rejects(parseRemoteConfig("{"), /invalid/i);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Promise unexpectedly resolves.
+- Promise rejects with the wrong error.
+Quality notes:
+- Repairs asynchronous test control flow, not production code.
+</reasoning>
+
+<instruction>
+Write Node.js tests for compactDefined(values), which removes only undefined entries. It must preserve null, false, zero, empty strings, and sparse-array holes as undefined removals.
+</instruction>
+<constraints>
+- Use assert.deepEqual.
+- Include every common falsy value separately.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { compactDefined } = require("./compact");
+
+test("removes only undefined values", () => {
+  assert.deepEqual(
+    compactDefined([undefined, null, false, 0, "", "x"]),
+    [null, false, 0, "", "x"],
+  );
+});
+
+test("treats a sparse hole as undefined", () => {
+  const values = [];
+  values[1] = "x";
+  assert.deepEqual(compactDefined(values), ["x"]);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Sparse array hole.
+- Null, false, zero, and empty string.
+Quality notes:
+- Would fail a broad filter(Boolean) implementation.
+</reasoning>
+
+<instruction>
+Write Node.js tests for requireOwn(record, key), which returns an own property even when its value is undefined and throws an error with code "MISSING_KEY" when absent.
+</instruction>
+<constraints>
+- Use a predicate assertion for custom error fields.
+- Distinguish own undefined from missing or inherited.
+</constraints>
+<answer>
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { requireOwn } = require("./objects");
+
+function isMissingKeyError(error) {
+  return error instanceof Error && error.code === "MISSING_KEY" && /value/.test(error.message);
+}
+
+test("returns an own property whose value is undefined", () => {
+  assert.equal(requireOwn({ value: undefined }, "value"), undefined);
+});
+
+test("rejects an inherited property", () => {
+  const record = Object.create({ value: 1 });
+  assert.throws(() => requireOwn(record, "value"), isMissingKeyError);
+});
+
+test("rejects a missing own property", () => {
+  assert.throws(() => requireOwn({}, "value"), isMissingKeyError);
+});
+</answer>
+<reasoning>
+Edge cases:
+- Own property with undefined value.
+- Inherited property only.
+Quality notes:
+- Tests property ownership rather than truthiness.
+</reasoning>
+
+<instruction>
+Write table-driven Pester tests for ConvertTo-WholeCount. It accepts non-negative [int] values and rejects strings, fractions, negative values, and null.
+</instruction>
+<constraints>
+- Use Pester -ForEach cases.
+- Include integer zero as valid.
+</constraints>
+<answer>
+Describe 'ConvertTo-WholeCount' {
+    It 'accepts <Value>' -ForEach @(
+        @{ Value = 0; Expected = 0 }
+        @{ Value = 7; Expected = 7 }
+    ) {
+        ConvertTo-WholeCount -Value $Value | Should -BeExactly $Expected
+    }
+
+    It 'rejects invalid value <Label>' -ForEach @(
+        @{ Label = 'numeric string'; Value = '7' }
+        @{ Label = 'fraction'; Value = 1.5 }
+        @{ Label = 'negative'; Value = -1 }
+        @{ Label = 'null'; Value = $null }
+    ) {
+        { ConvertTo-WholeCount -Value $Value } | Should -Throw
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- Zero.
+- Numeric string.
+- Null.
+Quality notes:
+- Compact boundary matrix catches PowerShell coercion.
+</reasoning>
+
+<instruction>
+Write Pester tests for Read-KeyValueText. Use TestDrive to verify a UTF-8 BOM and CRLF file is parsed correctly, blank lines are ignored, and a duplicate key throws.
+</instruction>
+<constraints>
+- Use Pester TestDrive.
+- Create controlled file content; do not use real user paths.
+</constraints>
+<answer>
+Describe 'Read-KeyValueText' {
+    It 'handles BOM, CRLF, and blank lines' {
+        $path = Join-Path $TestDrive 'settings.txt'
+        $encoding = [System.Text.UTF8Encoding]::new($true)
+        [System.IO.File]::WriteAllText($path, "alpha=1`r`n`r`nbeta=2`r`n", $encoding)
+
+        $result = Read-KeyValueText -Path $path
+
+        $result.Count | Should -Be 2
+        $result['alpha'] | Should -BeExactly '1'
+        $result['beta'] | Should -BeExactly '2'
+    }
+
+    It 'rejects duplicate keys' {
+        $path = Join-Path $TestDrive 'duplicate.txt'
+        Set-Content -LiteralPath $path -Value "a=1`na=2" -Encoding utf8
+        { Read-KeyValueText -Path $path } | Should -Throw
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- UTF-8 BOM.
+- CRLF and blank lines.
+- Duplicate key.
+Quality notes:
+- Isolated filesystem tests with exact encoding/newline fixtures.
+</reasoning>
+
+<instruction>
+Fix the Pester test so it verifies exact ordered output with duplicates instead of merely checking that two values are present.
+</instruction>
+<constraints>
+- Use exact positional assertions.
+- Keep duplicate count and order observable.
+</constraints>
+<bad_code>
+Describe 'Expand-Labels' {
+    It 'contains the labels' {
+        $result = Expand-Labels -Counts ([ordered]@{ a = 2; b = 1 })
+        $result | Should -Contain 'a'
+        $result | Should -Contain 'b'
+    }
+}
+</bad_code>
+<reasoning>
+Containment assertions ignore multiplicity and order. An implementation returning one of each label would pass even though it violates the contract.
+</reasoning>
+<answer>
+Describe 'Expand-Labels' {
+    It 'preserves order and duplicate counts' {
+        $result = @(Expand-Labels -Counts ([ordered]@{ a = 2; b = 1 }))
+        $result | Should -HaveCount 3
+        $result[0] | Should -BeExactly 'a'
+        $result[1] | Should -BeExactly 'a'
+        $result[2] | Should -BeExactly 'b'
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- Duplicate output value.
+- Ordered input keys.
+Quality notes:
+- Strengthens the test oracle rather than production code.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a transactional verification script for a users(email text UNIQUE NOT NULL) table. Confirm one insert succeeds, a duplicate email is rejected, and leave no persistent rows.
+</instruction>
+<constraints>
+- Use a transaction and ROLLBACK.
+- Catch unique_violation specifically.
+- Use reserved example.test data only.
+</constraints>
+<answer>
+BEGIN;
+
+INSERT INTO users (email) VALUES ('one@example.test');
+
+DO $$
+BEGIN
+    BEGIN
+        INSERT INTO users (email) VALUES ('one@example.test');
+        RAISE EXCEPTION 'duplicate insert unexpectedly succeeded';
+    EXCEPTION
+        WHEN unique_violation THEN
+            NULL;
+    END;
+END
+$$;
+
+DO $$
+BEGIN
+    IF (SELECT count(*) FROM users WHERE email = 'one@example.test') <> 1 THEN
+        RAISE EXCEPTION 'expected exactly one row after duplicate rejection';
+    END IF;
+END
+$$;
+
+ROLLBACK;
+</answer>
+<reasoning>
+Edge cases:
+- Duplicate insert.
+- No persistent fixture rows.
+Quality notes:
+- Verifies both constraint failure and unchanged row count.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a self-checking query that verifies a report result exactly matches expected rows, including duplicate counts. Use CTE fixtures and fail by returning any mismatch rows.
+</instruction>
+<constraints>
+- Use EXCEPT ALL in both directions.
+- An empty result means the verification passed.
+</constraints>
+<answer>
+WITH source(category, amount) AS (
+    VALUES ('a', 2), ('a', 3), ('b', 5)
+),
+actual AS (
+    SELECT category, sum(amount)::bigint AS total
+    FROM source
+    GROUP BY category
+),
+expected(category, total) AS (
+    VALUES ('a', 5::bigint), ('b', 5::bigint)
+),
+mismatch AS (
+    (SELECT 'actual_only' AS side, * FROM actual
+     EXCEPT ALL
+     SELECT 'actual_only', * FROM expected)
+    UNION ALL
+    (SELECT 'expected_only' AS side, * FROM expected
+     EXCEPT ALL
+     SELECT 'expected_only', * FROM actual)
+)
+SELECT *
+FROM mismatch
+ORDER BY side, category, total;
+</answer>
+<reasoning>
+Edge cases:
+- Unexpected extra row.
+- Missing row.
+- Wrong duplicate count or total.
+Quality notes:
+- Two-way multiset comparison avoids one-sided false confidence.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a transactional verification script for inventory(quantity integer NOT NULL CHECK (quantity >= 0)). Confirm zero is accepted, NULL is rejected, and a negative value is rejected.
+</instruction>
+<constraints>
+- Catch not_null_violation and check_violation separately.
+- Include zero as a valid boundary.
+- Rollback all fixtures.
+</constraints>
+<answer>
+BEGIN;
+
+INSERT INTO inventory (quantity) VALUES (0);
+
+DO $$
+BEGIN
+    BEGIN
+        INSERT INTO inventory (quantity) VALUES (NULL);
+        RAISE EXCEPTION 'NULL quantity unexpectedly succeeded';
+    EXCEPTION
+        WHEN not_null_violation THEN
+            NULL;
+    END;
+
+    BEGIN
+        INSERT INTO inventory (quantity) VALUES (-1);
+        RAISE EXCEPTION 'negative quantity unexpectedly succeeded';
+    EXCEPTION
+        WHEN check_violation THEN
+            NULL;
+    END;
+END
+$$;
+
+ROLLBACK;
+</answer>
+<reasoning>
+Edge cases:
+- Zero boundary.
+- NULL.
+- Negative value.
+Quality notes:
+- Distinguishes NOT NULL from CHECK semantics.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a transaction-scoped verification script for an upsert into settings(key text PRIMARY KEY, value text). Running the same upsert twice must leave one row with the expected value.
+</instruction>
+<constraints>
+- Run the identical statement twice.
+- Check row count and stored value.
+- Rollback fixtures.
+</constraints>
+<answer>
+BEGIN;
+
+INSERT INTO settings (key, value)
+VALUES ('theme', 'dark')
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
+INSERT INTO settings (key, value)
+VALUES ('theme', 'dark')
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
+DO $$
+BEGIN
+    IF (SELECT count(*) FROM settings WHERE key = 'theme') <> 1 THEN
+        RAISE EXCEPTION 'upsert created duplicate rows';
+    END IF;
+    IF (SELECT value FROM settings WHERE key = 'theme') IS DISTINCT FROM 'dark' THEN
+        RAISE EXCEPTION 'upsert stored the wrong value';
+    END IF;
+END
+$$;
+
+ROLLBACK;
+</answer>
+<reasoning>
+Edge cases:
+- Repeated identical request.
+- Primary-key conflict path.
+Quality notes:
+- Tests idempotent observable state rather than command success alone.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a verification script showing that a failed second statement rolls back the first statement when both are inside one transaction. Use a temporary table so no permanent schema is changed.
+</instruction>
+<constraints>
+- Use a temporary table.
+- Verify both balances after the handled failure.
+- Do not alter permanent tables.
+</constraints>
+<answer>
+BEGIN;
+
+CREATE TEMP TABLE transfer_test (
+    id integer PRIMARY KEY,
+    balance integer NOT NULL CHECK (balance >= 0)
+) ON COMMIT DROP;
+
+INSERT INTO transfer_test (id, balance) VALUES (1, 10), (2, 0);
+
+DO $$
+BEGIN
+    BEGIN
+        UPDATE transfer_test SET balance = balance - 5 WHERE id = 1;
+        UPDATE transfer_test SET balance = balance - 1 WHERE id = 2;
+    EXCEPTION
+        WHEN check_violation THEN
+            NULL;
+    END;
+
+    IF (SELECT balance FROM transfer_test WHERE id = 1) IS DISTINCT FROM 10
+       OR (SELECT balance FROM transfer_test WHERE id = 2) IS DISTINCT FROM 0 THEN
+        RAISE EXCEPTION 'failed transfer left partial changes';
+    END IF;
+END
+$$;
+
+ROLLBACK;
+</answer>
+<reasoning>
+Edge cases:
+- First update succeeds, then the second update violates the balance check.
+- No partial state remains.
+Quality notes:
+- Demonstrates subtransaction rollback inside an exception block.
+</reasoning>
+
+<instruction>
+Explain why fixed sleep calls make asynchronous tests unreliable and name a deterministic alternative for testing completion order.
+</instruction>
+<constraints>
+- Keep the answer under four sentences.
+- Name at least one deterministic alternative.
+</constraints>
+<answer>
+A fixed sleep guesses how long work will take, so the test can be slow on fast machines and flaky on slow ones. Inject controllable promises, events, or a fake clock, then resolve or advance them explicitly in the order the test needs. The test should wait for a known condition rather than elapsed wall-clock time.
+</answer>
+<reasoning>
+Edge cases:
+- Slow CI machine.
+- Fast local machine.
+Quality notes:
+- Promotes deterministic async verification.
+</reasoning>
+
+<instruction>
+Explain what a regression test should capture after a bug is fixed and why it should usually be smaller than a broad end-to-end scenario.
+</instruction>
+<constraints>
+- Keep the answer under four sentences.
+- Distinguish the focused regression test from broader integration coverage.
+</constraints>
+<answer>
+A regression test should reproduce the smallest input and observable outcome that failed before the fix. Keeping it narrow makes the cause clear, runs quickly, and helps future failures point to the same contract. A separate integration test can still cover the wider workflow when that interaction matters.
+</answer>
+<reasoning>
+Edge cases:
+- Bug caused by one exact boundary.
+Quality notes:
+- Encourages local, diagnostic regression tests.
+</reasoning>

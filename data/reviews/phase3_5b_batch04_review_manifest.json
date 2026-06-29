@@ -1,0 +1,531 @@
+{
+  "packet": "Phase 3.5B Work Packet 05",
+  "batch": "04 - Tests and Verification Fundamentals",
+  "baseline_commit": "444482e",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-05-Overlay.zip",
+  "source_overlay_sha256": "531F09E52EA8D7121B95D4959899F3B653EAAF70C133CB40A4127A268ADB6816",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 4,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch04_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch04_accepted.txt",
+  "language_counts": {
+    "javascript": 9,
+    "powershell": 3,
+    "python": 12,
+    "sql": 5,
+    "text": 2,
+    "typescript": 9
+  },
+  "category_counts": {
+    "debugging": 3,
+    "explanation": 2,
+    "tests": 35
+  },
+  "difficulty_counts": {
+    "basic": 39,
+    "intermediate": 1
+  },
+  "decisions": [
+    {
+      "id": "b04_py_table_parse_range_list",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_table_parse_range_list"
+    },
+    {
+      "id": "b04_py_regression_even_midpoint",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_regression_even_midpoint"
+    },
+    {
+      "id": "b04_py_shared_default_regression",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with already-admitted mutable-default/shared-state debugging coverage; Batch 04 keeps higher-diversity test patterns.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_py_missing_return_regression",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_missing_return_regression"
+    },
+    {
+      "id": "b04_py_truthiness_zero_regression",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with existing zero-preservation and truthiness examples across Batches 03 and 04.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_py_async_dependency_order",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_async_dependency_order"
+    },
+    {
+      "id": "b04_py_tempfile_bom_newlines",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but lower-priority because BOM/newline file parsing is already covered strongly in the admitted files/structured-data material.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_py_jsonl_error_line",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_jsonl_error_line"
+    },
+    {
+      "id": "b04_py_stable_unique_order",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because it is the highest-overlap candidate against existing stable-unique material and adds less new verification behavior than other rows.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_py_exception_chaining",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_exception_chaining"
+    },
+    {
+      "id": "b04_py_table_ceil_div",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_table_ceil_div"
+    },
+    {
+      "id": "b04_py_empty_average_error",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_empty_average_error"
+    },
+    {
+      "id": "b04_py_sorted_copy_no_mutation",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_sorted_copy_no_mutation"
+    },
+    {
+      "id": "b04_py_fix_set_assertion_duplicates",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_fix_set_assertion_duplicates"
+    },
+    {
+      "id": "b04_py_mock_clock_boundary",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_py_mock_clock_boundary"
+    },
+    {
+      "id": "b04_py_subtest_validation_matrix",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised invalid matrix to include hyphen-only text so both allowed separators are tested as invalid when no ASCII letter/digit is present.",
+      "revision_required": true,
+      "final_id": "b04_py_subtest_validation_matrix"
+    },
+    {
+      "id": "b04_ts_table_parse_boolean",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_table_parse_boolean"
+    },
+    {
+      "id": "b04_ts_chunk_boundaries",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_chunk_boundaries"
+    },
+    {
+      "id": "b04_ts_async_injected_loader",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised async TypeScript test to use top-level await in a module so failures are observed instead of hidden behind a floating promise.",
+      "revision_required": true,
+      "final_id": "b04_ts_async_injected_loader"
+    },
+    {
+      "id": "b04_ts_no_mutation_sort",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_no_mutation_sort"
+    },
+    {
+      "id": "b04_ts_null_undefined_distinction",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_null_undefined_distinction"
+    },
+    {
+      "id": "b04_ts_duplicate_index_rejection",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_duplicate_index_rejection"
+    },
+    {
+      "id": "b04_ts_error_message_contract",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_error_message_contract"
+    },
+    {
+      "id": "b04_ts_fix_weak_truthy_assert",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with accepted exact-zero and truthiness-regression examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_ts_parser_line_numbers",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_parser_line_numbers"
+    },
+    {
+      "id": "b04_ts_table_discriminated_result",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ts_table_discriminated_result"
+    },
+    {
+      "id": "b04_js_table_parse_mode",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_table_parse_mode"
+    },
+    {
+      "id": "b04_js_regression_last_index",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_regression_last_index"
+    },
+    {
+      "id": "b04_js_async_rejection",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_async_rejection"
+    },
+    {
+      "id": "b04_js_json_file_fixture",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_json_file_fixture"
+    },
+    {
+      "id": "b04_js_duplicate_event_listener",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised listener-count assertion to run before emitting the event, so correct one-shot implementations are not falsely rejected after emission.",
+      "revision_required": true,
+      "final_id": "b04_js_duplicate_event_listener"
+    },
+    {
+      "id": "b04_js_no_mutation_grouping",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_no_mutation_grouping"
+    },
+    {
+      "id": "b04_js_fix_async_missing_await",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_fix_async_missing_await"
+    },
+    {
+      "id": "b04_js_exact_sparse_array",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_js_exact_sparse_array"
+    },
+    {
+      "id": "b04_js_error_code_and_message",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised tests to also cover a truly missing own property and centralize the custom error predicate.",
+      "revision_required": true,
+      "final_id": "b04_js_error_code_and_message"
+    },
+    {
+      "id": "b04_ps_pester_scalar_array",
+      "language": "powershell",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because wrapping output with @() makes the array-shape assertion less meaningful and can mask scalar output behavior.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_ps_pester_table_validation",
+      "language": "powershell",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ps_pester_table_validation"
+    },
+    {
+      "id": "b04_ps_testdrive_utf8_bom",
+      "language": "powershell",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ps_testdrive_utf8_bom"
+    },
+    {
+      "id": "b04_ps_mock_native_command",
+      "language": "powershell",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because native-command mocking and $LASTEXITCODE semantics are brittle across Pester/PowerShell versions for a foundational example.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_ps_fix_contains_assertion",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_ps_fix_contains_assertion"
+    },
+    {
+      "id": "b04_sql_verify_unique_constraint",
+      "language": "sql",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_sql_verify_unique_constraint"
+    },
+    {
+      "id": "b04_sql_expected_rows_except",
+      "language": "sql",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_sql_expected_rows_except"
+    },
+    {
+      "id": "b04_sql_check_null_and_negative",
+      "language": "sql",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_sql_check_null_and_negative"
+    },
+    {
+      "id": "b04_sql_upsert_idempotence",
+      "language": "sql",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_sql_upsert_idempotence"
+    },
+    {
+      "id": "b04_sql_transaction_rollback_regression",
+      "language": "sql",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_sql_transaction_rollback_regression"
+    },
+    {
+      "id": "b04_text_boundary_partitioning",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but generic; the accepted batch keeps more concrete executable verification examples plus two focused explanations.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b04_text_async_no_sleep",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_text_async_no_sleep"
+    },
+    {
+      "id": "b04_text_regression_test_scope",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b04_text_regression_test_scope"
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py; 40 examples imported",
+    "training_data_quality_old_eval": "passed with zero warnings; 9 raw files, 213 instruction examples, 12 eval prompts",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings; 9 raw files, 213 instruction examples, 80 eval prompts",
+    "python_ast_parse": "passed for 12 accepted Python answers and 1 Python bad_code snippet",
+    "javascript_node_check": "passed for 9 accepted JavaScript answers and 1 JavaScript bad_code snippet with node --check using Node 24.17.0",
+    "typescript_check": "passed locally for 9 accepted TypeScript answers with tsc 6.0.3 --strict --noEmit --module ES2022",
+    "powershell_parser": "passed for 3 accepted PowerShell answers and 1 PowerShell bad_code snippet using Windows PowerShell Parser.ParseInput",
+    "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
+    "exact_instruction_overlap_with_existing_or_eval": [],
+    "max_instruction_trigram_jaccard_with_existing_or_eval": {
+      "candidate_id": "b04_py_exception_chaining",
+      "reference_id": "b02_py_parse_json_object_no_duplicates",
+      "score": 0.10344827586206896
+    },
+    "unsafe_keyword_hits": [],
+    "python_py_compile": "passed for project scripts, src package, and tests",
+    "repository_tests": "8 unittest tests passed"
+  }
+}
