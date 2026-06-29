@@ -1,0 +1,534 @@
+{
+  "packet": "Phase 3.5B Work Packet 02",
+  "batch": "01 - Core Functions and Exact Validation",
+  "baseline_commit": "c6954f7",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-02-Overlay.zip",
+  "source_overlay_sha256": "CB82C4E6C9CE5EE6C9BB3F32EB598BF83B615A95BBE4FE49B0A9BADF9130824F",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 1,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch01_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch01_accepted.txt",
+  "language_counts": {
+    "javascript": 6,
+    "powershell": 5,
+    "python": 14,
+    "sql": 5,
+    "text": 2,
+    "typescript": 8
+  },
+  "category_counts": {
+    "data": 5,
+    "database": 2,
+    "debugging": 6,
+    "explanation": 2,
+    "function": 6,
+    "tests": 1,
+    "validation": 18
+  },
+  "difficulty_counts": {
+    "basic": 36,
+    "intermediate": 4
+  },
+  "decisions": [
+    {
+      "id": "b01_py_parse_iso_calendar_date",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_parse_iso_calendar_date"
+    },
+    {
+      "id": "b01_py_require_trimmed_string_list",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_require_trimmed_string_list"
+    },
+    {
+      "id": "b01_py_parse_assignment",
+      "language": "python",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_parse_assignment"
+    },
+    {
+      "id": "b01_py_parse_hex_color",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_parse_hex_color"
+    },
+    {
+      "id": "b01_py_sum_nonnegative_cents",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_sum_nonnegative_cents"
+    },
+    {
+      "id": "b01_py_rotate_left_copy",
+      "language": "python",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as lower-priority simple list manipulation; Batch 01 already has stronger boundary-validation coverage.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_py_require_snake_identifier",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_require_snake_identifier"
+    },
+    {
+      "id": "b01_py_merge_nonnegative_counts",
+      "language": "python",
+      "category": "data",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_merge_nonnegative_counts"
+    },
+    {
+      "id": "b01_py_parse_decimal_cents",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_parse_decimal_cents"
+    },
+    {
+      "id": "b01_py_transpose_rectangular",
+      "language": "python",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_transpose_rectangular"
+    },
+    {
+      "id": "b01_py_build_query_string",
+      "language": "python",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised answer to validate all keys and values before sorting, and to reject whitespace-only keys.",
+      "revision_required": true,
+      "final_id": "b01_py_build_query_string"
+    },
+    {
+      "id": "b01_py_debug_independent_rows",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_debug_independent_rows"
+    },
+    {
+      "id": "b01_py_debug_missing_key_vs_none",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_debug_missing_key_vs_none"
+    },
+    {
+      "id": "b01_py_tests_parse_assignment",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected for Batch 01 because it duplicates an accepted parse_assignment implementation; save this shape for the dedicated tests batch.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_py_tests_snake_identifier",
+      "language": "python",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_tests_snake_identifier"
+    },
+    {
+      "id": "b01_py_select_columns",
+      "language": "python",
+      "category": "data",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_py_select_columns"
+    },
+    {
+      "id": "b01_ts_require_trimmed_string_array",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_require_trimmed_string_array"
+    },
+    {
+      "id": "b01_ts_require_enum_member",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_require_enum_member"
+    },
+    {
+      "id": "b01_ts_parse_utc_offset",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_parse_utc_offset"
+    },
+    {
+      "id": "b01_ts_validate_rgb_tuple",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_validate_rgb_tuple"
+    },
+    {
+      "id": "b01_ts_parse_core_semver",
+      "language": "typescript",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_parse_core_semver"
+    },
+    {
+      "id": "b01_ts_cumulative_finite_totals",
+      "language": "typescript",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_cumulative_finite_totals"
+    },
+    {
+      "id": "b01_ts_debug_indexof_membership",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_debug_indexof_membership"
+    },
+    {
+      "id": "b01_ts_tests_enum_member",
+      "language": "typescript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected for Batch 01 because it duplicates an accepted enum-member helper; save this shape for the dedicated tests batch.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_ts_map_unique_names",
+      "language": "typescript",
+      "category": "data",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ts_map_unique_names"
+    },
+    {
+      "id": "b01_js_zip_equal",
+      "language": "javascript",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_zip_equal"
+    },
+    {
+      "id": "b01_js_require_delimiter",
+      "language": "javascript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_require_delimiter"
+    },
+    {
+      "id": "b01_js_sum_line_totals",
+      "language": "javascript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_sum_line_totals"
+    },
+    {
+      "id": "b01_js_parse_sort_direction",
+      "language": "javascript",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_parse_sort_direction"
+    },
+    {
+      "id": "b01_js_debug_reduce_empty_total",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_debug_reduce_empty_total"
+    },
+    {
+      "id": "b01_js_invert_boolean_map",
+      "language": "javascript",
+      "category": "data",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because it says every own enumerable value but Object.entries ignores enumerable symbol keys.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_js_tests_zip_equal",
+      "language": "javascript",
+      "category": "tests",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected for Batch 01 because it duplicates an accepted zipEqual implementation; save this shape for the dedicated tests batch.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_js_normalize_label_map",
+      "language": "javascript",
+      "category": "data",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_js_normalize_label_map"
+    },
+    {
+      "id": "b01_ps_convert_canonical_label",
+      "language": "powershell",
+      "category": "function",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ps_convert_canonical_label"
+    },
+    {
+      "id": "b01_ps_require_trimmed_strings",
+      "language": "powershell",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ps_require_trimmed_strings"
+    },
+    {
+      "id": "b01_ps_convert_percent_text",
+      "language": "powershell",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ps_convert_percent_text"
+    },
+    {
+      "id": "b01_ps_convert_canonical_guid",
+      "language": "powershell",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ps_convert_canonical_guid"
+    },
+    {
+      "id": "b01_ps_debug_zero_retry_count",
+      "language": "powershell",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_ps_debug_zero_retry_count"
+    },
+    {
+      "id": "b01_ps_new_unique_name_map",
+      "language": "powershell",
+      "category": "data",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected because the PowerShell signature/property handling is ambiguous enough to risk teaching a brittle pattern.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_sql_coupon_table",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_sql_coupon_table"
+    },
+    {
+      "id": "b01_sql_event_window_table",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as a sound but low-priority generic table-definition task for this batch.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b01_sql_normalized_status_counts",
+      "language": "sql",
+      "category": "data",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_sql_normalized_status_counts"
+    },
+    {
+      "id": "b01_sql_setting_upsert",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_sql_setting_upsert"
+    },
+    {
+      "id": "b01_sql_debug_check_allows_null",
+      "language": "sql",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_sql_debug_check_allows_null"
+    },
+    {
+      "id": "b01_sql_rating_table",
+      "language": "sql",
+      "category": "validation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_sql_rating_table"
+    },
+    {
+      "id": "b01_text_fail_fast_validation",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_text_fail_fast_validation"
+    },
+    {
+      "id": "b01_text_duplicate_key_policy",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b01_text_duplicate_key_policy"
+    },
+    {
+      "id": "b01_text_pure_transformation",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but too generic for the exact-validation/core-functions batch.",
+      "revision_required": false,
+      "final_id": null
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py",
+    "training_data_quality_old_eval": "passed with zero warnings",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings",
+    "python_ast_parse": "passed for 14 accepted Python answers",
+    "javascript_node_check": "passed for 6 accepted JavaScript answers with node --check",
+    "powershell_parser": "passed for 5 accepted PowerShell answers using Windows PowerShell Parser.ParseInput",
+    "typescript_check": "not rerun locally because tsc is unavailable; Ted reported strict tsc pass for candidate answers before handoff",
+    "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
+    "exact_instruction_overlap_with_existing_or_eval": [],
+    "max_instruction_trigram_jaccard_with_existing_or_eval": {
+      "candidate_id": "b01_py_tests_snake_identifier",
+      "source_text": "Write unittest tests for a function divide(a, b) that returns a / b and raises ZeroDivisionError when b is zero.",
+      "score": 0.09090909090909091
+    },
+    "unsafe_keyword_hits": [],
+    "repository_tests": "8 unittest tests passed"
+  }
+}

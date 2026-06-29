@@ -1,0 +1,1242 @@
+<instruction>
+Implement parse_iso_calendar_date(value: str) -> date that accepts exactly YYYY-MM-DD and returns datetime.date.
+</instruction>
+<constraints>
+- Use only the standard library.
+- Do not trim the input.
+- Reject impossible dates and every non-canonical spelling with ValueError.
+</constraints>
+<answer>
+import re
+from datetime import date
+
+
+def parse_iso_calendar_date(value: str) -> date:
+    if not isinstance(value, str) or re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) is None:
+        raise ValueError("value must use YYYY-MM-DD")
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise ValueError("value must be a valid calendar date") from exc
+</answer>
+<reasoning>
+Edge cases:
+- Leap day 2024-02-29 is valid.
+- 2023-02-29 is invalid.
+- Leading or trailing spaces are invalid.
+Quality notes:
+- Uses a shape check plus the standard-library calendar parser.
+- Keeps canonical-format policy explicit.
+</reasoning>
+
+<instruction>
+Implement require_trimmed_string_list(value: object) -> list[str] for an external configuration boundary. It must validate the container and each element, then return cleaned values without mutating the input.
+</instruction>
+<constraints>
+- Require a list, not another iterable.
+- Every element must be a string that is non-blank after trimming.
+- Return a new list of trimmed strings and include the failing index in ValueError messages.
+</constraints>
+<answer>
+def require_trimmed_string_list(value: object) -> list[str]:
+    if not isinstance(value, list):
+        raise TypeError("value must be a list")
+
+    result: list[str] = []
+    for index, item in enumerate(value):
+        if not isinstance(item, str):
+            raise TypeError(f"item {index} must be a string")
+        cleaned = item.strip()
+        if not cleaned:
+            raise ValueError(f"item {index} must not be blank")
+        result.append(cleaned)
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- An empty list is valid.
+- A tuple is rejected.
+- Whitespace-only elements are rejected.
+Quality notes:
+- Does not mutate the caller list.
+- Reports the exact failing position.
+</reasoning>
+
+<instruction>
+Implement parse_assignment(line: str) -> tuple[str, str] for text in the form key=value.
+</instruction>
+<constraints>
+- Split only at the first equals sign.
+- Trim the key and value.
+- Require a non-blank key; the value may be empty.
+- Raise ValueError when no equals sign is present.
+</constraints>
+<answer>
+def parse_assignment(line: str) -> tuple[str, str]:
+    if not isinstance(line, str):
+        raise TypeError("line must be a string")
+    if "=" not in line:
+        raise ValueError("assignment must contain =")
+
+    key, value = line.split("=", 1)
+    key = key.strip()
+    if not key:
+        raise ValueError("assignment key must not be blank")
+    return key, value.strip()
+</answer>
+<reasoning>
+Edge cases:
+- "token=a=b" returns value "a=b".
+- "name=" has an empty value.
+- " =x" is invalid.
+Quality notes:
+- Teaches first-delimiter parsing without discarding later delimiters.
+</reasoning>
+
+<instruction>
+Implement parse_hex_color(value: str) -> tuple[int, int, int]. Accept only a leading # followed by exactly six hexadecimal digits.
+</instruction>
+<constraints>
+- Do not trim the input.
+- Accept upper- or lowercase hexadecimal digits.
+- Raise ValueError for invalid input.
+</constraints>
+<answer>
+import re
+
+
+def parse_hex_color(value: str) -> tuple[int, int, int]:
+    if not isinstance(value, str) or re.fullmatch(r"#[0-9A-Fa-f]{6}", value) is None:
+        raise ValueError("color must be # followed by six hexadecimal digits")
+    return tuple(int(value[index:index + 2], 16) for index in (1, 3, 5))
+</answer>
+<reasoning>
+Edge cases:
+- #000000 and #FFFFFF are valid.
+- #fff and strings with spaces are invalid.
+Quality notes:
+- Compact, exact grammar with deterministic output.
+</reasoning>
+
+<instruction>
+Implement sum_nonnegative_cents(values: list[object]) -> int.
+</instruction>
+<constraints>
+- Every item must be an int but not bool.
+- Reject negative values.
+- Return the exact integer total without converting through float.
+</constraints>
+<answer>
+def sum_nonnegative_cents(values: list[object]) -> int:
+    total = 0
+    for index, value in enumerate(values):
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise TypeError(f"item {index} must be an integer")
+        if value < 0:
+            raise ValueError(f"item {index} must be non-negative")
+        total += value
+    return total
+</answer>
+<reasoning>
+Edge cases:
+- An empty list totals zero.
+- True is rejected even though bool subclasses int.
+- Very large integers remain exact.
+Quality notes:
+- Teaches a Python-specific boundary pitfall without unnecessary dependencies.
+</reasoning>
+
+<instruction>
+Implement require_snake_identifier(value: str) -> str for a small configuration language.
+</instruction>
+<constraints>
+- Accept lowercase ASCII letters, digits, and underscores.
+- The first character must be a lowercase letter.
+- Reject consecutive underscores and a trailing underscore.
+- Return the original value when valid.
+</constraints>
+<answer>
+import re
+
+
+def require_snake_identifier(value: str) -> str:
+    if not isinstance(value, str):
+        raise TypeError("value must be a string")
+    if re.fullmatch(r"[a-z](?:[a-z0-9]|_(?=[a-z0-9]))*", value) is None:
+        raise ValueError("value must be a canonical snake identifier")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- a and item2 are valid.
+- _name, two__parts, and name_ are invalid.
+Quality notes:
+- Defines a narrow canonical grammar rather than silently rewriting input.
+</reasoning>
+
+<instruction>
+Implement merge_nonnegative_counts(left: dict[str, int], right: dict[str, int]) -> dict[str, int].
+</instruction>
+<constraints>
+- Validate every key is a non-blank string.
+- Validate every count is an int but not bool and is non-negative.
+- Return a new dictionary; sum counts for keys present in both inputs.
+- Preserve left key order, then append new right keys in right order.
+</constraints>
+<answer>
+def merge_nonnegative_counts(
+    left: dict[str, int], right: dict[str, int]
+) -> dict[str, int]:
+    def checked(mapping: dict[str, int], name: str) -> None:
+        for key, count in mapping.items():
+            if not isinstance(key, str) or not key.strip():
+                raise ValueError(f"{name} contains an invalid key")
+            if isinstance(count, bool) or not isinstance(count, int):
+                raise TypeError(f"count for {key!r} must be an integer")
+            if count < 0:
+                raise ValueError(f"count for {key!r} must be non-negative")
+
+    checked(left, "left")
+    checked(right, "right")
+    result = dict(left)
+    for key, count in right.items():
+        result[key] = result.get(key, 0) + count
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- Empty mappings are valid.
+- A shared key keeps its left-side position.
+Quality notes:
+- Makes ordering and duplicate behavior explicit.
+</reasoning>
+
+<instruction>
+Implement parse_decimal_cents(value: str) -> int for canonical non-negative money text.
+</instruction>
+<constraints>
+- Accept digits with an optional decimal point followed by exactly two digits.
+- Reject signs, commas, whitespace, exponent notation, and more or fewer than two fractional digits.
+- Return integer cents without using float.
+</constraints>
+<answer>
+import re
+
+
+def parse_decimal_cents(value: str) -> int:
+    if not isinstance(value, str):
+        raise TypeError("value must be a string")
+    match = re.fullmatch(r"(0|[1-9]\d*)(?:\.(\d{2}))?", value)
+    if match is None:
+        raise ValueError("value must be canonical non-negative decimal money")
+    whole, fraction = match.groups()
+    return int(whole) * 100 + int(fraction or "00")
+</answer>
+<reasoning>
+Edge cases:
+- 0, 0.00, and 12.34 are valid.
+- 01.00, 1.2, +1.00, and 1e2 are invalid.
+Quality notes:
+- Avoids binary floating-point and ambiguous numeric spellings.
+</reasoning>
+
+<instruction>
+Implement transpose_rectangular(rows: list[list[int]]) -> list[list[int]].
+</instruction>
+<constraints>
+- Return an empty list for empty input.
+- Require every row to have the same length.
+- Do not mutate the input.
+- Raise ValueError for a ragged matrix.
+</constraints>
+<answer>
+def transpose_rectangular(rows: list[list[int]]) -> list[list[int]]:
+    if not rows:
+        return []
+    width = len(rows[0])
+    if any(len(row) != width for row in rows):
+        raise ValueError("rows must form a rectangular matrix")
+    return [[row[column] for row in rows] for column in range(width)]
+</answer>
+<reasoning>
+Edge cases:
+- [[]] transposes to an empty list.
+- A one-row matrix becomes one-item columns.
+Quality notes:
+- Checks shape once and creates independent result rows.
+</reasoning>
+
+<instruction>
+Implement build_query_string(params: dict[str, str]) -> str.
+</instruction>
+<constraints>
+- Require non-blank string keys and string values.
+- Sort keys for deterministic output.
+- Use standard URL encoding.
+- Return the query without a leading question mark.
+</constraints>
+<answer>
+from urllib.parse import urlencode
+
+
+def build_query_string(params: dict[str, str]) -> str:
+    items: list[tuple[str, str]] = []
+    for key, value in params.items():
+        if not isinstance(key, str) or not key.strip():
+            raise ValueError("query keys must be non-blank strings")
+        if not isinstance(value, str):
+            raise TypeError(f"query value for {key!r} must be a string")
+        items.append((key, value))
+
+    items.sort(key=lambda item: item[0])
+    return urlencode(items)
+</answer>
+<reasoning>
+Edge cases:
+- An empty mapping returns an empty string.
+- Spaces and ampersands are percent-encoded.
+Quality notes:
+- Deterministic ordering makes output easier to test and cache.
+</reasoning>
+
+<instruction>
+Fix the function so each row is an independent list, then explain the defect briefly.
+</instruction>
+<constraints>
+- Keep the same function signature.
+- Reject negative counts with ValueError.
+</constraints>
+<bad_code>
+def make_rows(count: int) -> list[list[str]]:
+    return [[]] * count
+</bad_code>
+<reasoning>
+List multiplication repeats references to the same inner list, so mutating one row mutates every row; a comprehension creates a distinct list each time.
+</reasoning>
+<answer>
+def make_rows(count: int) -> list[list[str]]:
+    if count < 0:
+        raise ValueError("count must be non-negative")
+    return [[] for _ in range(count)]
+</answer>
+<reasoning>
+Edge cases:
+- count=0 returns an empty list.
+- Appending to one returned row must not affect another.
+Quality notes:
+- One local bug with an observable aliasing test.
+</reasoning>
+
+<instruction>
+Fix require_option so a present key with the value None is returned, while a missing key raises KeyError.
+</instruction>
+<constraints>
+- Keep the same function signature.
+- Do not copy the dictionary.
+- Include the missing name in the exception message.
+</constraints>
+<bad_code>
+def require_option(options, name):
+    value = options.get(name)
+    if value is None:
+        raise KeyError(name)
+    return value
+</bad_code>
+<reasoning>
+dict.get returns None for both a missing key and a present key whose value is None; membership testing preserves that distinction.
+</reasoning>
+<answer>
+def require_option(options: dict[str, object], name: str) -> object:
+    if name not in options:
+        raise KeyError(f"missing option: {name}")
+    return options[name]
+</answer>
+<reasoning>
+Edge cases:
+- {"mode": None} returns None for mode.
+- An absent key raises KeyError.
+Quality notes:
+- Teaches explicit missing-key semantics instead of truthiness or sentinel confusion.
+</reasoning>
+
+<instruction>
+Write unittest tests for require_snake_identifier(value).
+</instruction>
+<constraints>
+- Cover the smallest valid name, digits after the first character, one underscore, an uppercase letter, a leading underscore, consecutive underscores, and a trailing underscore.
+- Assume the helper is importable from solution.
+</constraints>
+<answer>
+import unittest
+
+from solution import require_snake_identifier
+
+
+class SnakeIdentifierTests(unittest.TestCase):
+    def test_valid_values(self) -> None:
+        for value in ("a", "item2", "two_parts"):
+            with self.subTest(value=value):
+                self.assertEqual(require_snake_identifier(value), value)
+
+    def test_invalid_values(self) -> None:
+        for value in ("Name", "_name", "two__parts", "name_"):
+            with self.subTest(value=value):
+                with self.assertRaises(ValueError):
+                    require_snake_identifier(value)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+<reasoning>
+Edge cases:
+- Subtests identify the failing spelling.
+Quality notes:
+- Exercises every grammar boundary without redundant cases.
+</reasoning>
+
+<instruction>
+Implement select_columns(rows: list[dict[str, object]], columns: list[str]) -> list[dict[str, object]].
+</instruction>
+<constraints>
+- Require unique, non-blank column names.
+- Every row must contain every requested column.
+- Return new dictionaries with keys in the requested order.
+- Include the row index and missing column in the error.
+</constraints>
+<answer>
+def select_columns(
+    rows: list[dict[str, object]], columns: list[str]
+) -> list[dict[str, object]]:
+    if any(not isinstance(column, str) or not column.strip() for column in columns):
+        raise ValueError("columns must contain non-blank strings")
+    if len(set(columns)) != len(columns):
+        raise ValueError("columns must be unique")
+
+    result: list[dict[str, object]] = []
+    for row_index, row in enumerate(rows):
+        selected: dict[str, object] = {}
+        for column in columns:
+            if column not in row:
+                raise ValueError(f"row {row_index} is missing column {column!r}")
+            selected[column] = row[column]
+        result.append(selected)
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- No columns produces one empty dictionary per row.
+- No rows produces an empty list.
+Quality notes:
+- Explicit output ordering and missing-field behavior.
+</reasoning>
+
+<instruction>
+Implement requireTrimmedStringArray(value: unknown): string[].
+</instruction>
+<constraints>
+- Require an actual array.
+- Every element must be a non-blank string after trimming.
+- Return a new array and include the bad index in thrown errors.
+</constraints>
+<answer>
+function requireTrimmedStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    throw new TypeError("value must be an array");
+  }
+
+  return value.map((item, index) => {
+    if (typeof item !== "string") {
+      throw new TypeError(`item ${index} must be a string`);
+    }
+    const cleaned = item.trim();
+    if (cleaned.length === 0) {
+      throw new Error(`item ${index} must not be blank`);
+    }
+    return cleaned;
+  });
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array is valid.
+- Array-like objects are rejected.
+Quality notes:
+- Uses unknown at the boundary and narrows before use.
+</reasoning>
+
+<instruction>
+Implement the generic TypeScript helper requireEnumMember<const T extends readonly string[]>(value: unknown, allowed: T): T[number].
+</instruction>
+<constraints>
+- Accept only exact string members from allowed.
+- Do not lowercase or trim the input.
+- Throw a clear Error otherwise.
+</constraints>
+<answer>
+function requireEnumMember<const T extends readonly string[]>(
+  value: unknown,
+  allowed: T,
+): T[number] {
+  if (typeof value !== "string" || !allowed.includes(value)) {
+    throw new Error(`value must be one of: ${allowed.join(", ")}`);
+  }
+  return value as T[number];
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty allowed tuple rejects every value.
+- Case variants are rejected.
+Quality notes:
+- Preserves a useful literal-union return type.
+</reasoning>
+
+<instruction>
+Implement parseUtcOffset(value: unknown): number that returns the signed offset in minutes.
+</instruction>
+<constraints>
+- Accept Z or an exact sign plus HH:MM.
+- Allow offsets only from -14:00 through +14:00.
+- At an absolute hour of 14, minutes must be 00.
+- Do not trim or coerce.
+</constraints>
+<answer>
+function parseUtcOffset(value: unknown): number {
+  if (value === "Z") return 0;
+  if (typeof value !== "string") {
+    throw new TypeError("offset must be a string");
+  }
+  const match = /^([+-])(\d{2}):(\d{2})$/.exec(value);
+  if (!match) {
+    throw new Error("offset must be Z or sign followed by HH:MM");
+  }
+  const hours = Number(match[2]);
+  const minutes = Number(match[3]);
+  if (hours > 14 || minutes > 59 || (hours === 14 && minutes !== 0)) {
+    throw new Error("offset is outside the supported range");
+  }
+  const total = hours * 60 + minutes;
+  return match[1] === "-" ? -total : total;
+}
+</answer>
+<reasoning>
+Edge cases:
+- Z and +00:00 both return zero.
+- +14:00 is valid; +14:01 and +12:60 are invalid.
+Quality notes:
+- Exact grammar, bounded range, and no Date parser ambiguity.
+</reasoning>
+
+<instruction>
+Implement requireRgbTuple(value: unknown): readonly [number, number, number].
+</instruction>
+<constraints>
+- Require an array of exactly three finite integers.
+- Each number must be from 0 through 255.
+- Return a new tuple rather than the caller array.
+</constraints>
+<answer>
+function requireRgbTuple(value: unknown): readonly [number, number, number] {
+  if (!Array.isArray(value) || value.length !== 3) {
+    throw new Error("RGB value must contain exactly three items");
+  }
+  const checked = value.map((item, index) => {
+    if (!Number.isInteger(item) || item < 0 || item > 255) {
+      throw new Error(`RGB item ${index} must be an integer from 0 to 255`);
+    }
+    return item;
+  });
+  return [checked[0], checked[1], checked[2]];
+}
+</answer>
+<reasoning>
+Edge cases:
+- 0 and 255 are valid boundaries.
+- NaN, decimals, and numeric strings are rejected.
+Quality notes:
+- No coercion at an external-input boundary.
+</reasoning>
+
+<instruction>
+Implement parseCoreSemver(value: unknown): { major: number; minor: number; patch: number }.
+</instruction>
+<constraints>
+- Accept only three dot-separated non-negative decimal integers.
+- Reject leading zeroes except for the value zero.
+- Reject prerelease/build suffixes and whitespace.
+</constraints>
+<answer>
+function parseCoreSemver(
+  value: unknown,
+): { major: number; minor: number; patch: number } {
+  if (typeof value !== "string") {
+    throw new TypeError("version must be a string");
+  }
+  const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(value);
+  if (!match) {
+    throw new Error("version must be canonical major.minor.patch");
+  }
+  const [major, minor, patch] = match.slice(1).map(Number);
+  if (![major, minor, patch].every(Number.isSafeInteger)) {
+    throw new Error("version component exceeds the safe integer range");
+  }
+  return { major, minor, patch };
+}
+</answer>
+<reasoning>
+Edge cases:
+- 0.0.0 and 12.3.40 are valid.
+- 01.0.0 and 1.2.3-beta are invalid.
+Quality notes:
+- Separates grammar validation from numeric range validation.
+</reasoning>
+
+<instruction>
+Implement cumulativeFiniteTotals(values: readonly number[]): number[]. Return the running total after each input item.
+</instruction>
+<constraints>
+- Reject NaN and infinities.
+- Reject any running total that becomes non-finite.
+- Do not mutate the caller array.
+</constraints>
+<answer>
+function cumulativeFiniteTotals(values: readonly number[]): number[] {
+  const result: number[] = [];
+  let total = 0;
+  for (const [index, value] of values.entries()) {
+    if (!Number.isFinite(value)) {
+      throw new Error(`item ${index} must be finite`);
+    }
+    total += value;
+    if (!Number.isFinite(total)) {
+      throw new Error(`running total at item ${index} is not finite`);
+    }
+    result.push(total);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array returns an empty array.
+- Negative finite values are valid.
+Quality notes:
+- A small stateful transformation with explicit numeric safety.
+</reasoning>
+
+<instruction>
+Fix containsName so it returns true exactly when target is present in names.
+</instruction>
+<constraints>
+- Keep matching case-sensitive.
+- Do not mutate the input array.
+</constraints>
+<bad_code>
+function containsName(names: string[], target: string): boolean {
+  return Boolean(names.indexOf(target));
+}
+</bad_code>
+<reasoning>
+indexOf returns 0 for a match at the first position, which is falsy, and -1 for no match, which is truthy; includes returns the intended boolean directly.
+</reasoning>
+<answer>
+function containsName(names: readonly string[], target: string): boolean {
+  return names.includes(target);
+}
+</answer>
+<reasoning>
+Edge cases:
+- A match at index 0 returns true.
+- A missing value returns false.
+Quality notes:
+- One JavaScript/TypeScript numeric-truthiness defect with a direct API fix.
+</reasoning>
+
+<instruction>
+Implement mapUniqueNames(items: readonly { name: string; value: number }[]): Map<string, number>.
+</instruction>
+<constraints>
+- Trim names and reject blanks.
+- Treat names case-sensitively.
+- Reject duplicate cleaned names.
+- Reject non-finite values.
+</constraints>
+<answer>
+function mapUniqueNames(
+  items: readonly { name: string; value: number }[],
+): Map<string, number> {
+  const result = new Map<string, number>();
+  for (const [index, item] of items.entries()) {
+    const name = item.name.trim();
+    if (name.length === 0) {
+      throw new Error(`item ${index} has a blank name`);
+    }
+    if (!Number.isFinite(item.value)) {
+      throw new Error(`item ${index} has a non-finite value`);
+    }
+    if (result.has(name)) {
+      throw new Error(`duplicate name: ${name}`);
+    }
+    result.set(name, item.value);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- "A" and "a" are distinct.
+- Names that differ only by surrounding spaces collide after trimming.
+Quality notes:
+- Makes normalization and collision policy explicit.
+</reasoning>
+
+<instruction>
+Implement zipEqual(left, right) that pairs items by index.
+</instruction>
+<constraints>
+- Require both arguments to be arrays.
+- Throw when their lengths differ.
+- Return a new array of two-item arrays.
+</constraints>
+<answer>
+function zipEqual(left, right) {
+  if (!Array.isArray(left) || !Array.isArray(right)) {
+    throw new TypeError("left and right must be arrays");
+  }
+  if (left.length !== right.length) {
+    throw new Error("left and right must have equal length");
+  }
+  return left.map((value, index) => [value, right[index]]);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Two empty arrays return an empty array.
+- Input arrays are not modified.
+Quality notes:
+- Small deterministic transformation with explicit shape validation.
+</reasoning>
+
+<instruction>
+Implement requireDelimiter(value) for a small delimited-text reader.
+</instruction>
+<constraints>
+- Accept exactly one of comma, semicolon, pipe, or tab.
+- Do not trim or coerce.
+- Return the accepted character.
+</constraints>
+<answer>
+function requireDelimiter(value) {
+  const allowed = new Set([",", ";", "|", "\t"]);
+  if (typeof value !== "string" || !allowed.has(value)) {
+    throw new Error("delimiter must be comma, semicolon, pipe, or tab");
+  }
+  return value;
+}
+</answer>
+<reasoning>
+Edge cases:
+- A literal tab is valid.
+- Two-character strings and spaces are invalid.
+Quality notes:
+- Narrow allowlist avoids ambiguous multi-character delimiters.
+</reasoning>
+
+<instruction>
+Implement sumLineTotals(lines) that returns the total integer cents.
+</instruction>
+<constraints>
+- Require an array of objects with integer quantity and unitCents fields.
+- quantity and unitCents must be non-negative safe integers.
+- Reject a total that exceeds Number.MAX_SAFE_INTEGER.
+</constraints>
+<answer>
+function sumLineTotals(lines) {
+  if (!Array.isArray(lines)) {
+    throw new TypeError("lines must be an array");
+  }
+  let total = 0;
+  lines.forEach((line, index) => {
+    if (line === null || typeof line !== "object") {
+      throw new TypeError(`line ${index} must be an object`);
+    }
+    const { quantity, unitCents } = line;
+    if (!Number.isSafeInteger(quantity) || quantity < 0) {
+      throw new Error(`line ${index} quantity must be a non-negative safe integer`);
+    }
+    if (!Number.isSafeInteger(unitCents) || unitCents < 0) {
+      throw new Error(`line ${index} unitCents must be a non-negative safe integer`);
+    }
+    const lineTotal = quantity * unitCents;
+    if (!Number.isSafeInteger(lineTotal) || !Number.isSafeInteger(total + lineTotal)) {
+      throw new Error("total exceeds the safe integer range");
+    }
+    total += lineTotal;
+  });
+  return total;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array totals zero.
+- A zero quantity is valid.
+- Decimal and negative values are rejected.
+Quality notes:
+- Keeps money in integer cents and checks JavaScript numeric limits.
+</reasoning>
+
+<instruction>
+Implement parseSortDirection(value, fallback = "asc").
+</instruction>
+<constraints>
+- undefined selects the fallback.
+- Accept only the exact strings asc or desc.
+- Validate the fallback with the same rule.
+- Do not lowercase or trim.
+</constraints>
+<answer>
+function parseSortDirection(value, fallback = "asc") {
+  const allowed = new Set(["asc", "desc"]);
+  if (!allowed.has(fallback)) {
+    throw new Error("fallback must be asc or desc");
+  }
+  const selected = value === undefined ? fallback : value;
+  if (!allowed.has(selected)) {
+    throw new Error("sort direction must be asc or desc");
+  }
+  return selected;
+}
+</answer>
+<reasoning>
+Edge cases:
+- undefined with fallback desc returns desc.
+- ASC, null, and blank strings are rejected.
+Quality notes:
+- Distinguishes missing input from malformed input.
+</reasoning>
+
+<instruction>
+Fix totalValues so an empty array returns zero and every item must be a finite number.
+</instruction>
+<constraints>
+- Do not mutate the input.
+- Throw with the bad index for NaN, infinity, or non-number values.
+</constraints>
+<bad_code>
+function totalValues(values) {
+  return values.reduce((a, b) => a + b);
+}
+</bad_code>
+<reasoning>
+reduce without an initial value throws on an empty array and the original code does not validate numeric inputs; an initial zero defines the empty result and keeps validation in one pass.
+</reasoning>
+<answer>
+function totalValues(values) {
+  return values.reduce((total, value, index) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      throw new TypeError(`item ${index} must be a finite number`);
+    }
+    return total + value;
+  }, 0);
+}
+</answer>
+<reasoning>
+Edge cases:
+- [] returns 0.
+- [1, -2, 3] returns 2.
+- NaN and strings are rejected.
+Quality notes:
+- Correct empty-input identity and explicit runtime contract.
+</reasoning>
+
+<instruction>
+Implement normalizeLabelMap(entries) that builds an object from [label, value] pairs.
+</instruction>
+<constraints>
+- Require an array of two-item arrays.
+- Trim labels, lowercase them, and reject blanks.
+- Reject duplicates after normalization.
+- Return a null-prototype object.
+</constraints>
+<answer>
+function normalizeLabelMap(entries) {
+  if (!Array.isArray(entries)) {
+    throw new TypeError("entries must be an array");
+  }
+  const result = Object.create(null);
+  entries.forEach((entry, index) => {
+    if (!Array.isArray(entry) || entry.length !== 2) {
+      throw new Error(`entry ${index} must contain [label, value]`);
+    }
+    const [rawLabel, value] = entry;
+    if (typeof rawLabel !== "string") {
+      throw new TypeError(`entry ${index} label must be a string`);
+    }
+    const label = rawLabel.trim().toLowerCase();
+    if (label.length === 0) {
+      throw new Error(`entry ${index} label must not be blank`);
+    }
+    if (Object.hasOwn(result, label)) {
+      throw new Error(`duplicate normalized label: ${label}`);
+    }
+    result[label] = value;
+  });
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- " Name " and "name" collide.
+- An empty entry array returns an empty object.
+Quality notes:
+- Defines normalization before duplicate detection.
+</reasoning>
+
+<instruction>
+Implement ConvertTo-CanonicalLabel that normalizes one label.
+</instruction>
+<constraints>
+- Trim leading and trailing whitespace.
+- Collapse internal whitespace runs to one hyphen.
+- Convert to lowercase invariant.
+- Reject an empty result.
+</constraints>
+<answer>
+function ConvertTo-CanonicalLabel {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $Value
+    )
+
+    $trimmed = $Value.Trim()
+    if ($trimmed.Length -eq 0) {
+        throw 'Value must not be blank.'
+    }
+
+    return ([regex]::Replace($trimmed, '\s+', '-')).ToLowerInvariant()
+}
+</answer>
+<reasoning>
+Edge cases:
+- Multiple spaces and tabs become one hyphen.
+- Whitespace-only input is rejected.
+Quality notes:
+- Small deterministic normalization with invariant casing.
+</reasoning>
+
+<instruction>
+Implement Require-TrimmedStrings that accepts one object and returns an array of trimmed strings.
+</instruction>
+<constraints>
+- Require the value to be an array.
+- Every item must be a string and non-blank after trimming.
+- Include the failing index in the error.
+- Always return an array, including for zero or one item.
+</constraints>
+<answer>
+function Require-TrimmedStrings {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [object] $Value
+    )
+
+    if ($Value -isnot [array]) {
+        throw 'Value must be an array.'
+    }
+
+    $result = [System.Collections.Generic.List[string]]::new()
+    for ($index = 0; $index -lt $Value.Count; $index++) {
+        $item = $Value[$index]
+        if ($item -isnot [string]) {
+            throw "Item $index must be a string."
+        }
+        $cleaned = $item.Trim()
+        if ($cleaned.Length -eq 0) {
+            throw "Item $index must not be blank."
+        }
+        $result.Add($cleaned)
+    }
+    return ,$result.ToArray()
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty array returns an empty array.
+- A scalar string is rejected.
+Quality notes:
+- Explicit array contract and stable output shape.
+</reasoning>
+
+<instruction>
+Implement ConvertFrom-PercentText that accepts canonical whole-percent text and returns an integer.
+</instruction>
+<constraints>
+- Accept exactly 0% through 100%.
+- Reject leading zeroes except for 0%.
+- Do not trim or accept decimal percentages.
+</constraints>
+<answer>
+function ConvertFrom-PercentText {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [object] $Value
+    )
+
+    if ($Value -isnot [string] -or $Value -cnotmatch '^(0|[1-9][0-9]?|100)%$') {
+        throw 'Value must be a canonical whole percentage from 0% through 100%.'
+    }
+    return [int] $Value.Substring(0, $Value.Length - 1)
+}
+</answer>
+<reasoning>
+Edge cases:
+- 0%, 7%, and 100% are valid.
+- 07%, 1.5%, and strings with spaces are invalid.
+Quality notes:
+- Validates the complete textual grammar before conversion.
+</reasoning>
+
+<instruction>
+Implement ConvertTo-CanonicalGuid that accepts a GUID in exact D format and returns lowercase canonical text.
+</instruction>
+<constraints>
+- Require a string in 8-4-4-4-12 hexadecimal format.
+- Do not accept braces, parentheses, or surrounding whitespace.
+- Throw a clear error for invalid input.
+</constraints>
+<answer>
+function ConvertTo-CanonicalGuid {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [object] $Value
+    )
+
+    if ($Value -isnot [string] -or
+        $Value -cnotmatch '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$') {
+        throw 'Value must be a GUID in canonical D format.'
+    }
+    return ([guid] $Value).ToString('D').ToLowerInvariant()
+}
+</answer>
+<reasoning>
+Edge cases:
+- Uppercase hex is normalized to lowercase.
+- Brace-wrapped GUIDs are rejected.
+Quality notes:
+- Separates accepted input grammar from canonical output.
+</reasoning>
+
+<instruction>
+Fix Get-RetryCount so zero is preserved, null selects the default, and invalid values are rejected.
+</instruction>
+<constraints>
+- Default to 3.
+- Accept integers from 0 through 10 only.
+- Reject strings and booleans.
+</constraints>
+<bad_code>
+function Get-RetryCount($Value) {
+    if (-not $Value) { return 3 }
+    return [int] $Value
+}
+</bad_code>
+<reasoning>
+PowerShell truthiness treats the valid integer 0 as false, and the cast accepts strings; compare with null and validate the actual type and range.
+</reasoning>
+<answer>
+function Get-RetryCount {
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [object] $Value = $null
+    )
+
+    if ($null -eq $Value) {
+        return 3
+    }
+    if ($Value -isnot [int] -or $Value -is [bool] -or $Value -lt 0 -or $Value -gt 10) {
+        throw 'Retry count must be an integer from 0 through 10.'
+    }
+    return [int] $Value
+}
+</answer>
+<reasoning>
+Edge cases:
+- $null returns 3.
+- 0 returns 0.
+- "2" is rejected.
+Quality notes:
+- Teaches explicit null handling at a typed boundary.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create a coupons table with a text code, integer percent_off, optional expiry date, and creation timestamp.
+</instruction>
+<constraints>
+- Use code as the primary key.
+- Reject blank codes.
+- percent_off must be from 1 through 100.
+- Default created_at to the current timestamp.
+</constraints>
+<answer>
+CREATE TABLE coupons (
+    code text PRIMARY KEY,
+    percent_off integer NOT NULL CHECK (percent_off BETWEEN 1 AND 100),
+    expires_on date,
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (btrim(code) <> '')
+);
+</answer>
+<reasoning>
+Edge cases:
+- A 100 percent coupon is valid.
+- Blank or whitespace-only codes are rejected.
+Quality notes:
+- Dialect is explicit.
+- Constraints live in the database rather than only application code.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a query that counts non-blank ticket statuses after trimming and lowercasing them.
+</instruction>
+<constraints>
+- Return normalized_status and ticket_count.
+- Exclude NULL and whitespace-only statuses.
+- Order by normalized_status ascending.
+</constraints>
+<answer>
+SELECT
+    lower(btrim(status)) AS normalized_status,
+    COUNT(*) AS ticket_count
+FROM tickets
+WHERE status IS NOT NULL
+  AND btrim(status) <> ''
+GROUP BY lower(btrim(status))
+ORDER BY normalized_status ASC;
+</answer>
+<reasoning>
+Edge cases:
+- OPEN and " open " are counted together.
+- NULL and blank status rows are omitted.
+Quality notes:
+- Normalization expression is identical in SELECT and GROUP BY.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write one statement that inserts an application setting or updates its value and updated_at timestamp when the key already exists.
+</instruction>
+<constraints>
+- Use named parameters :setting_key and :setting_value.
+- Assume app_settings(setting_key PRIMARY KEY, setting_value, updated_at).
+- Set updated_at to the current timestamp in both cases.
+</constraints>
+<answer>
+INSERT INTO app_settings (setting_key, setting_value, updated_at)
+VALUES (:setting_key, :setting_value, CURRENT_TIMESTAMP)
+ON CONFLICT (setting_key) DO UPDATE
+SET setting_value = EXCLUDED.setting_value,
+    updated_at = CURRENT_TIMESTAMP;
+</answer>
+<reasoning>
+Edge cases:
+- Existing keys are updated atomically.
+- The statement does not build SQL through string concatenation.
+Quality notes:
+- Small idempotent persistence pattern.
+</reasoning>
+
+<instruction>
+Fix this PostgreSQL table so quantity is always present and never negative, then explain why the original CHECK was insufficient.
+</instruction>
+<constraints>
+- Keep quantity as integer.
+</constraints>
+<bad_code>
+CREATE TABLE stock_levels (
+    sku text PRIMARY KEY,
+    quantity integer CHECK (quantity >= 0)
+);
+</bad_code>
+<reasoning>
+A SQL CHECK constraint passes when its expression is unknown, so NULL quantity is not rejected; NOT NULL is required in addition to the non-negative check.
+</reasoning>
+<answer>
+CREATE TABLE stock_levels (
+    sku text PRIMARY KEY,
+    quantity integer NOT NULL CHECK (quantity >= 0)
+);
+</answer>
+<reasoning>
+Edge cases:
+- quantity=0 is valid.
+- NULL and -1 are rejected.
+Quality notes:
+- Teaches SQL three-valued logic with one concrete correction.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create a product_ratings table where each user can rate each product once.
+</instruction>
+<constraints>
+- Use user_id and product_id as foreign keys to users(id) and products(id).
+- rating must be an integer from 1 through 5.
+- Use a composite primary key.
+- Default created_at to the current timestamp.
+</constraints>
+<answer>
+CREATE TABLE product_ratings (
+    user_id bigint NOT NULL REFERENCES users(id),
+    product_id bigint NOT NULL REFERENCES products(id),
+    rating integer NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, product_id)
+);
+</answer>
+<reasoning>
+Edge cases:
+- Ratings 1 and 5 are valid boundaries.
+- A second rating by the same user for the same product conflicts.
+Quality notes:
+- Composite key expresses the exact uniqueness rule.
+</reasoning>
+
+<instruction>
+Explain why validating malformed input at the boundary is usually better than letting it fail deeper in a program.
+</instruction>
+<constraints>
+- Use four sentences or fewer.
+- Mention error locality and protection of internal assumptions.
+- Do not claim every validation belongs in every layer.
+</constraints>
+<answer>
+Boundary validation rejects bad data close to its source, so the error is easier to diagnose and report. It protects internal code that is written under stronger assumptions and prevents malformed values from spreading into storage or later computations. Deeper layers may still enforce their own invariants, but they should not have to rediscover every external-input rule.
+</answer>
+<reasoning>
+Edge cases:
+- Distinguishes boundary checks from internal invariants.
+Quality notes:
+- Concise conceptual target with no slogan-only answer.
+</reasoning>
+
+<instruction>
+Explain why a parser or indexing helper should define what happens when two inputs produce the same normalized key.
+</instruction>
+<constraints>
+- Use four sentences or fewer.
+- Compare rejection with last-write-wins.
+- Mention silent data loss.
+</constraints>
+<answer>
+Normalization can make distinct source spellings collide, so duplicate behavior must be part of the contract. Rejecting duplicates is safest when each key is expected to identify exactly one record because it exposes bad input. Last-write-wins can be valid for an explicit override format, but using it accidentally can silently discard earlier data.
+</answer>
+<reasoning>
+Edge cases:
+- Covers both strict and override-oriented policies.
+Quality notes:
+- Connects normalization to collision semantics.
+</reasoning>
