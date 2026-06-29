@@ -1,0 +1,1220 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_source_acquisition_results_v1",
+  "baseline": "8066b1f",
+  "packet_commit_pending": false,
+  "scope": "Stage A source acquisition and immutable hashing only",
+  "raw_artifacts_committed": false,
+  "generated_local_manifests_committed": false,
+  "training_allowed": false,
+  "all_sources_acquired": true,
+  "verify_require_all_ok": true,
+  "leo_corrections": [
+    {
+      "file": "data/foundation/manifests/stage_a_sources_v1_acquisition_plan.json",
+      "source_id": "node_24_18_0",
+      "change": "Raised max_download_bytes from 50000000 to 70000000 because the official archive declares 55425872 bytes; checksum remains pinned and enforced."
+    },
+    {
+      "file": "data/foundation/manifests/stage_a_sources_v1_acquisition_plan.json",
+      "source_id": "powershell_docs_2026",
+      "change": "Corrected license_paths to LICENSE.md, LICENSE-CODE.md, and ThirdPartyNotices.md so license hashing succeeds."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "cpython_3_14_6",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+      "artifact_size_bytes": 23921184,
+      "published_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+      "resolved_ref": null,
+      "resolved_commit": null,
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 11 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 5534,
+      "declared_uncompressed_bytes": 116094628,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 11,
+      "suspicious_files_sample": [
+        "Python-3.14.6/Lib/ensurepip/_bundled/pip-26.1.2-py3-none-any.whl",
+        "Python-3.14.6/Lib/test/archivetestdata/zip_cp437_header.zip",
+        "Python-3.14.6/Lib/test/archivetestdata/zipdir.zip",
+        "Python-3.14.6/Lib/test/archivetestdata/zipdir_backslash.zip",
+        "Python-3.14.6/Lib/test/test_importlib/metadata/data/example-21.12-py3-none-any.whl",
+        "Python-3.14.6/Lib/test/test_importlib/metadata/data/example2-1.0.0-py3-none-any.whl",
+        "Python-3.14.6/Lib/test/test_importlib/namespace_pkgs/missing_directory.zip",
+        "Python-3.14.6/Lib/test/test_importlib/namespace_pkgs/nested_portion1.zip",
+        "Python-3.14.6/Lib/test/test_importlib/namespace_pkgs/top_level_portion1.zip",
+        "Python-3.14.6/Lib/test/wheeldata/setuptools-79.0.1-py3-none-any.whl",
+        "Python-3.14.6/Mac/IDLE/IDLE.app"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "Python-3.14.6/LICENSE",
+          "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+          "size_bytes": 13804
+        }
+      ]
+    },
+    {
+      "source_id": "gptnl_english_2026",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "02c1372c98a9562e489bfdd743b632a9d92cc0484425bd199c32296815cafab2",
+      "artifact_size_bytes": 207326,
+      "published_sha256": null,
+      "resolved_ref": null,
+      "resolved_commit": null,
+      "resolved_revision": "1e17d21afa6518939523fbdcc1fbb3167b671725",
+      "security_hold": false,
+      "security_warnings": [],
+      "archive_member_count": null,
+      "declared_uncompressed_bytes": null,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 0,
+      "suspicious_files_sample": [],
+      "license_file_hashes": []
+    },
+    {
+      "source_id": "node_24_18_0",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "e94afde24db08e0c564ee7110a2d5aab51ee0059382c9fd8233c54eec47b28f9",
+      "artifact_size_bytes": 55425872,
+      "published_sha256": "e94afde24db08e0c564ee7110a2d5aab51ee0059382c9fd8233c54eec47b28f9",
+      "resolved_ref": null,
+      "resolved_commit": null,
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 30 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 35798,
+      "declared_uncompressed_bytes": 589488846,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 30,
+      "suspicious_files_sample": [
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_follow_own_link_dir.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Windows Special Names.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/test_nocompress.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Repeated File Name With Different Cases.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_follow_own_link.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/evil.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_too_large.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Different Encryptions.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Parent Dir Same Name As File.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Wrong CRC.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/evil_via_invalid_utf8.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_absolute_path.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Mixed Paths.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/unicode_path_extra_overflow.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/evil_via_absolute_file_name.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/unicode_path_extra.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Repeated Dir Name.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/SJIS Bug 846195.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_evil_relative_path.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/empty.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Empty Dir Same Name As File.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/Repeated File Name.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/test_posix_permissions.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/test_encrypted.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/test.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlink_duplicate_link.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/test_mismatch_size.zip",
+        "node-v24.18.0/deps/zlib/google/test/data/symlinks.zip",
+        "node-v24.18.0/test/fixtures/google_ssl_hello.bin",
+        "node-v24.18.0/test/fixtures/wpt/FileAPI/filelist-section/support/upload.zip"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "node-v24.18.0/LICENSE",
+          "sha256": "148eacf7863ef4329224a29398623077200a27194aa075569faf4a0a85566ca5",
+          "size_bytes": 157606
+        },
+        {
+          "path": "node-v24.18.0/deps/LIEF/LICENSE",
+          "sha256": "94a5b753e8d799c7aa0c0c4899c5d5f9be1a940cba73f61c6396f32db790a0be",
+          "size_bytes": 11381
+        },
+        {
+          "path": "node-v24.18.0/deps/LIEF/third-party/frozen/LICENSE",
+          "sha256": "f6099ed23682840ae60a76fce378faae9b5c75f7d162188883e13b790ca18b98",
+          "size_bytes": 11340
+        },
+        {
+          "path": "node-v24.18.0/deps/LIEF/third-party/mbedtls/LICENSE",
+          "sha256": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b",
+          "size_bytes": 29852
+        },
+        {
+          "path": "node-v24.18.0/deps/LIEF/third-party/spdlog/LICENSE",
+          "sha256": "4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7",
+          "size_bytes": 1354
+        },
+        {
+          "path": "node-v24.18.0/deps/LIEF/third-party/utfcpp/LICENSE",
+          "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+          "size_bytes": 1338
+        },
+        {
+          "path": "node-v24.18.0/deps/acorn/acorn-walk/LICENSE",
+          "sha256": "c2d8184ea9becd063aa40be243e8c6ec2c4f72828fdfe4b0752664ef73e96ed3",
+          "size_bytes": 1099
+        },
+        {
+          "path": "node-v24.18.0/deps/acorn/acorn/LICENSE",
+          "sha256": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7",
+          "size_bytes": 1099
+        },
+        {
+          "path": "node-v24.18.0/deps/amaro/dist/LICENSE",
+          "sha256": "d96eba1f1881334d50ffc144276dfa98e147a415e7c591ecdfcb81680361dc91",
+          "size_bytes": 10836
+        },
+        {
+          "path": "node-v24.18.0/deps/brotli/LICENSE",
+          "sha256": "3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94",
+          "size_bytes": 1084
+        },
+        {
+          "path": "node-v24.18.0/deps/googletest/LICENSE",
+          "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+          "size_bytes": 1475
+        },
+        {
+          "path": "node-v24.18.0/deps/icu-small/LICENSE",
+          "sha256": "e55522d81edc687a341a4411e0776e54ca654e90147f354a90458aaced4116af",
+          "size_bytes": 27718
+        },
+        {
+          "path": "node-v24.18.0/deps/inspector_protocol/LICENSE",
+          "sha256": "c3ed274b3ee226cd391aae43edd5ecccfb6e3cf39f0026d4df1200c1e9bbc097",
+          "size_bytes": 1538
+        },
+        {
+          "path": "node-v24.18.0/deps/llhttp/LICENSE",
+          "sha256": "628168d68bb5a8a17e0bbefb3bd74e326e1edc20583d76f52f457c82c921867d",
+          "size_bytes": 1069
+        },
+        {
+          "path": "node-v24.18.0/deps/nbytes/LICENSE",
+          "sha256": "782ab5b8ae1540c1a2b102fdd00990ed268d4a3a98e90ad7fe724b489d7bb0f2",
+          "size_bytes": 1064
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/LICENSE",
+          "sha256": "7610d223851f421d315df5e77974f1c68a04b97e02060e5bbbcf13d95e3ca257",
+          "size_bytes": 9742
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@gar/promise-retry/LICENSE",
+          "sha256": "1c66b5311fc6328ab70616d2cf8e20a8e0a787f534831cf8a311b20098b617a5",
+          "size_bytes": 1156
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@isaacs/fs-minipass/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@isaacs/string-locale-compare/LICENSE",
+          "sha256": "05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8",
+          "size_bytes": 748
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/config/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/fs/lib/cp/LICENSE",
+          "sha256": "1e76029602ae9b21cc4e612db2496d92febed882ba13ba745f8b3309e85f9d39",
+          "size_bytes": 1084
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/git/LICENSE",
+          "sha256": "565acf764f4583abe4cf4b02128f01b5d4d1b4c62c253e92df7ed6a8a8ad406b",
+          "size_bytes": 733
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/installed-package-contents/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/metavuln-calculator/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/name-from-folder/LICENSE",
+          "sha256": "802fae69bfe8fcb201f15b6a12505580028158679c3ed3254df5ea8f0912aed4",
+          "size_bytes": 721
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/node-gyp/LICENSE",
+          "sha256": "8da13c785af46eb3d0bf2ce4c34bdf191b8c57bf43e410e9359d5b5eab5f4b0f",
+          "size_bytes": 746
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/package-json/LICENSE",
+          "sha256": "65675229fc81818c9490a1942f361f7ef31cd525bef9111e62a6c84e9bd4769d",
+          "size_bytes": 719
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/promise-spawn/LICENSE",
+          "sha256": "565acf764f4583abe4cf4b02128f01b5d4d1b4c62c253e92df7ed6a8a8ad406b",
+          "size_bytes": 733
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/query/LICENSE",
+          "sha256": "27d998b503b18cdb16c49e93da04069a99ba8a1d7e18d67146de8e242f9a6d21",
+          "size_bytes": 798
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/redact/LICENSE",
+          "sha256": "d0b7cddf14a2005e05b397a950b9f69e1de412b8c6749e5b5d70610fb119e9ee",
+          "size_bytes": 1060
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@npmcli/run-script/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@sigstore/bundle/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@sigstore/core/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@sigstore/protobuf-specs/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@sigstore/sign/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@sigstore/tuf/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@tufjs/canonical-json/LICENSE",
+          "sha256": "564bcb001d6e131452a8e9fba0f0ccc59e8b881f84ce3e46e319a5a33e191e10",
+          "size_bytes": 1088
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/@tufjs/models/LICENSE",
+          "sha256": "564bcb001d6e131452a8e9fba0f0ccc59e8b881f84ce3e46e319a5a33e191e10",
+          "size_bytes": 1088
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/abbrev/LICENSE",
+          "sha256": "9e0d5c7989f7e9f07d7c4b158aceff270f235eb7464ace41c5e7b200834a43e0",
+          "size_bytes": 2011
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/agent-base/LICENSE",
+          "sha256": "8d8c55319c7729d57be811c747452636688d54f19701ee0752b6b15ad3771d9a",
+          "size_bytes": 1101
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/aproba/LICENSE",
+          "sha256": "0cef05dfff8b6aa7f35596984f5709f0d17c2582924a751efa471a76de7cdc11",
+          "size_bytes": 752
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/archy/LICENSE",
+          "sha256": "435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b",
+          "size_bytes": 1073
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/bin-links/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/binary-extensions/license",
+          "sha256": "96f0820026bd6dadc4af99c6dba7111d2e0190c092c376a746c13863e151d072",
+          "size_bytes": 1167
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/brace-expansion/LICENSE",
+          "sha256": "9c63a23124d68cd30cd316a94a1a0bca34f032786df6df69fc4b5f136bac8d2e",
+          "size_bytes": 1144
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/chalk/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "size_bytes": 1117
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/ci-info/LICENSE",
+          "sha256": "f58943cb354fb2707fea2f7b26b04e6014ddb56835cdfd414c9d2c6c59165b64",
+          "size_bytes": 1086
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/cidr-regex/LICENSE",
+          "sha256": "23e60503dc06abf04b9e535e17797b4e0f9224e6c5abf9207317d5a67c88c743",
+          "size_bytes": 1290
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/cmd-shim/LICENSE",
+          "sha256": "ec361617c0473d39347b020eaa6dceedaebab43879fa1cd8b8f0f97a8e80a475",
+          "size_bytes": 756
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/debug/LICENSE",
+          "sha256": "3a61c6c96caf5c1d9b623fb9b04c822b783dfcb78aa7e49c76a3f643e6ed7f95",
+          "size_bytes": 1139
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/diff/LICENSE",
+          "sha256": "eda81a415869e67809f6a9f3fd6056062cb83a462118e07eec5e92b2e0c40ce9",
+          "size_bytes": 1546
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/env-paths/license",
+          "sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+          "size_bytes": 1109
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/exponential-backoff/LICENSE",
+          "sha256": "f5afc95c69e116ea6b1755f91a8763f53eadb78b4f1582a08d2d18586a03a117",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/fs-minipass/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/graceful-fs/LICENSE",
+          "sha256": "f65c5d9f22a317b2a10803bd1868461ce6499c2ed7217bc80c0cc772a748789c",
+          "size_bytes": 791
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/hosted-git-info/LICENSE",
+          "sha256": "c1476ec53119cd4c8370f91f5152ac76312a29b4fae2d49b5e0e0970fe0fa5ee",
+          "size_bytes": 733
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/http-cache-semantics/LICENSE",
+          "sha256": "ab868ad5a2ef5068560d9cd3b2180ec63c140bb4c5cae1ba779d300a0ac74fa3",
+          "size_bytes": 1274
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/http-proxy-agent/LICENSE",
+          "sha256": "71368fd0f5b4129191e9afcd1e1ef2dc89a9090d3e4d80bbab92dafd032b3bef",
+          "size_bytes": 1102
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/https-proxy-agent/LICENSE",
+          "sha256": "8d8c55319c7729d57be811c747452636688d54f19701ee0752b6b15ad3771d9a",
+          "size_bytes": 1101
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/iconv-lite/LICENSE",
+          "sha256": "ac779f7314c74f232ef847ea86e714abe25cf6eeb5cc97b69451b74e2af6492d",
+          "size_bytes": 1064
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/ignore-walk/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/ini/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/ip-address/LICENSE",
+          "sha256": "f8d791359a50cbcac82c29cb7b0b1b889b28be76fdd35b8ee33f0f7c8704702a",
+          "size_bytes": 1061
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/is-cidr/LICENSE",
+          "sha256": "23e60503dc06abf04b9e535e17797b4e0f9224e6c5abf9207317d5a67c88c743",
+          "size_bytes": 1290
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/json-stringify-nice/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/jsonparse/LICENSE",
+          "sha256": "ed251dc3a48522399fffe95fe04d94fbcadcd9edd0e7689f3b71cf73403a6138",
+          "size_bytes": 1087
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/just-diff-apply/LICENSE",
+          "sha256": "ebb30d70f7ebd918f223ce6ed7621fa4cef3ec2d59d6707c23868b01def28ce2",
+          "size_bytes": 1078
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/just-diff/LICENSE",
+          "sha256": "ebb30d70f7ebd918f223ce6ed7621fa4cef3ec2d59d6707c23868b01def28ce2",
+          "size_bytes": 1078
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmaccess/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmdiff/LICENSE",
+          "sha256": "7967f87257c7d5f0ef29012d472a8b99a0fb1c5202b6d861a2c81671329a2ee4",
+          "size_bytes": 741
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmexec/LICENSE",
+          "sha256": "7967f87257c7d5f0ef29012d472a8b99a0fb1c5202b6d861a2c81671329a2ee4",
+          "size_bytes": 741
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmfund/LICENSE",
+          "sha256": "9dd1bc5666fd1e32f086518046532e993f5307749327aff37cecf98355f2b9a0",
+          "size_bytes": 738
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmorg/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmpack/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmpublish/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmsearch/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmteam/LICENSE",
+          "sha256": "77d72758faff2d3a086b1c77f66f4dcfa63a1ee1a9bab5df4ab3c2e8f3eb646d",
+          "size_bytes": 717
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/libnpmversion/LICENSE",
+          "sha256": "05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8",
+          "size_bytes": 748
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/make-fetch-happen/LICENSE",
+          "sha256": "a806e21000ee60cfd64a6f1416f29c7552b4834701974e86c0156f99c0cdd806",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-collect/LICENSE",
+          "sha256": "b630651f34d0e0284ea940601bbe0a58f306ad7e9819e351d9dfab812f8d0f38",
+          "size_bytes": 775
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-fetch/LICENSE",
+          "sha256": "1dedee6f84f5875ce4dc398d4d767274eb952a43cfd510a6ada856b2ed347472",
+          "size_bytes": 1308
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-pipeline/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-pipeline/node_modules/minipass/LICENSE",
+          "sha256": "a5a110eb524bf3217958e405b5e3411277e915a2f5902c330348877000337e53",
+          "size_bytes": 787
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-pipeline/node_modules/yallist/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minipass-sized/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/minizlib/LICENSE",
+          "sha256": "df05697a04b8997c79d423930534e59cc18828f6e22d0c8c2d62fcbea1c4f50b",
+          "size_bytes": 1339
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/mute-stream/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/negotiator/LICENSE",
+          "sha256": "553d4d20029a24e315b428a1a54a9e109eaa340f2e958a4f50a92362c2c4070b",
+          "size_bytes": 1177
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/node-gyp/LICENSE",
+          "sha256": "662a1b0115251cfb29c6aed0f221f8847bc49c6365d1c53a62c9f4bccc2489c3",
+          "size_bytes": 1102
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/node-gyp/gyp/LICENSE",
+          "sha256": "ca90abb6ed71de0774461ef9f928de33e748b617aeb79f9e52415cf08d69230e",
+          "size_bytes": 1537
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/node-gyp/gyp/pylib/packaging/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "size_bytes": 197
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/nopt/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-audit-report/LICENSE",
+          "sha256": "720836c9bdad386485a492ab41fe08007ecf85ca278ddd8f9333494dcac4949d",
+          "size_bytes": 755
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-bundled/LICENSE",
+          "sha256": "ec361617c0473d39347b020eaa6dceedaebab43879fa1cd8b8f0f97a8e80a475",
+          "size_bytes": 756
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-install-checks/LICENSE",
+          "sha256": "f674630c4d3e668dabac6d955fb5f74c75b4a63a707ac93a8833b74bdc57221e",
+          "size_bytes": 1333
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-normalize-package-bin/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-package-arg/LICENSE",
+          "sha256": "898c2bcff663681498ad1ca8235d45b6e70b10cdf1f869a5b5e69f6e46efedd3",
+          "size_bytes": 739
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-packlist/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/npm-user-validate/LICENSE",
+          "sha256": "8b8404b77ea2a20e045fbad73de1661091a852bfe1f4997e0b646c688f3d18e4",
+          "size_bytes": 1295
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/p-map/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "size_bytes": 1117
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/pacote/LICENSE",
+          "sha256": "36ec394cd0f976603cfec687c19175a703c1c0d9db717a76915391e756522c8e",
+          "size_bytes": 791
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/proc-log/LICENSE",
+          "sha256": "dc32a0dee275e0a9aeffbc974dbf4899a30dcdc2e5ffa8934aecb69261065864",
+          "size_bytes": 742
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/proggy/LICENSE",
+          "sha256": "dc32a0dee275e0a9aeffbc974dbf4899a30dcdc2e5ffa8934aecb69261065864",
+          "size_bytes": 742
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/promise-all-reject-late/LICENSE",
+          "sha256": "05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8",
+          "size_bytes": 748
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/promise-call-limit/LICENSE",
+          "sha256": "05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8",
+          "size_bytes": 748
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/promzard/LICENSE",
+          "sha256": "05dc4d785ac3a488676d3ed10e901b75ad89dafcc63f8e66610fd4a39cc5c7e8",
+          "size_bytes": 748
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/qrcode-terminal/LICENSE",
+          "sha256": "b3c7a2fadb2515b8106eae58439a4b9c0581a4eaa88d6a265701f8d4dd7dadb8",
+          "size_bytes": 11962
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/read-cmd-shim/LICENSE",
+          "sha256": "0cef05dfff8b6aa7f35596984f5709f0d17c2582924a751efa471a76de7cdc11",
+          "size_bytes": 752
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/read/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/safer-buffer/LICENSE",
+          "sha256": "4bc935e71be198c67ddf3c2b5fddb195f6edc182bfc155a96a6db61b44b494b9",
+          "size_bytes": 1094
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/semver/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/sigstore/LICENSE",
+          "sha256": "364a130d2ca340bd56eb1e6d045fc6929bb0f9d0aa018f2c1949b29517e1cdd0",
+          "size_bytes": 11351
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/smart-buffer/LICENSE",
+          "sha256": "c46e2c333e1c9e6fcfd130cf91b8e54bf67b60fabbc04996f7e199b990353ff3",
+          "size_bytes": 1087
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/socks-proxy-agent/LICENSE",
+          "sha256": "8d8c55319c7729d57be811c747452636688d54f19701ee0752b6b15ad3771d9a",
+          "size_bytes": 1101
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/socks/LICENSE",
+          "sha256": "4f4f28866154c8d758241a64296e8790d45d7d912ff7b029930778c06d8f2a72",
+          "size_bytes": 1082
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/spdx-expression-parse/LICENSE",
+          "sha256": "7edb57f7065309027de249642341292a5b21410d5773cc55bba73ff9cf01060e",
+          "size_bytes": 1111
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/supports-color/license",
+          "sha256": "5c932d88256b4ab958f64a856fa48e8bd1f55bc1d96b8149c65689e0c61789d3",
+          "size_bytes": 1117
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/text-table/LICENSE",
+          "sha256": "435a6722c786b0a56fbe7387028f1d9d3f3a2d0fb615bb8fee118727c3f59b7b",
+          "size_bytes": 1073
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/tinyglobby/LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f",
+          "size_bytes": 1076
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/tinyglobby/node_modules/fdir/LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86",
+          "size_bytes": 1053
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/tinyglobby/node_modules/picomatch/LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9",
+          "size_bytes": 1091
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/treeverse/LICENSE",
+          "sha256": "ec361617c0473d39347b020eaa6dceedaebab43879fa1cd8b8f0f97a8e80a475",
+          "size_bytes": 756
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/tuf-js/LICENSE",
+          "sha256": "564bcb001d6e131452a8e9fba0f0ccc59e8b881f84ce3e46e319a5a33e191e10",
+          "size_bytes": 1088
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/undici/LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+          "size_bytes": 1090
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/undici/lib/web/fetch/LICENSE",
+          "sha256": "a21d6c8d3fc631198b97e57584697f7f9c37805c71c6cf9a12e4442b40394b88",
+          "size_bytes": 1071
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/util-deprecate/LICENSE",
+          "sha256": "0154425673db15cdfa80ecba2c9b1f1a867f7197a006764712849bfc3a93cbb7",
+          "size_bytes": 1102
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/validate-npm-package-name/LICENSE",
+          "sha256": "f3e1645267f7dd77ee6545283cc1766e5883e8fb3b5088fe2cfb995defbb3dde",
+          "size_bytes": 728
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/walk-up-path/LICENSE",
+          "sha256": "825dacf686e3d026be4a5b3e4efb8ddd67a8676f9e96085a53cfa045a5bd0509",
+          "size_bytes": 758
+        },
+        {
+          "path": "node-v24.18.0/deps/npm/node_modules/which/LICENSE",
+          "sha256": "4ec3d4c66cd87f5c8d8ad911b10f99bf27cb00cdfcff82621956e379186b016b",
+          "size_bytes": 765
+        },
+        {
+          "path": "node-v24.18.0/deps/openssl/openssl/external/perl/Text-Template-1.56/LICENSE",
+          "sha256": "9837f05336ef3cbacb6a96e1672a0426d81ad01191f214b8d48e22ca62338181",
+          "size_bytes": 18412
+        },
+        {
+          "path": "node-v24.18.0/deps/postject/LICENSE",
+          "sha256": "6546657539feb5b454f400db317e71fa39ff5cd048fa5d78ae0ada2df72f1ea7",
+          "size_bytes": 13409
+        },
+        {
+          "path": "node-v24.18.0/deps/simdjson/LICENSE",
+          "sha256": "5fa8894e890bd77958f93b165433e0fb0dffa5bc982bfb147e4748e95bad24e5",
+          "size_bytes": 11355
+        },
+        {
+          "path": "node-v24.18.0/deps/undici/LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+          "size_bytes": 1090
+        },
+        {
+          "path": "node-v24.18.0/deps/undici/src/LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+          "size_bytes": 1090
+        },
+        {
+          "path": "node-v24.18.0/deps/undici/src/lib/web/fetch/LICENSE",
+          "sha256": "a21d6c8d3fc631198b97e57584697f7f9c37805c71c6cf9a12e4442b40394b88",
+          "size_bytes": 1071
+        },
+        {
+          "path": "node-v24.18.0/deps/uv/LICENSE",
+          "sha256": "16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c",
+          "size_bytes": 1079
+        },
+        {
+          "path": "node-v24.18.0/deps/uvwasi/LICENSE",
+          "sha256": "3a94b84af77767e64afdf5fc31d4196810c9717ce2ac2be089f06fec4bfc0e99",
+          "size_bytes": 1085
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/LICENSE",
+          "sha256": "6ab33af8774a0f396ee3aeeb761e3229057682d6f9fa7f572e390c2cb3a6e509",
+          "size_bytes": 3093
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/abseil-cpp/LICENSE",
+          "sha256": "c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747",
+          "size_bytes": 11361
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/colorama/LICENSE",
+          "sha256": "15137d6c822e3ab097093a33c3a39a9df699f373f6438867ad534ff60762a947",
+          "size_bytes": 1492
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/fp16/LICENSE",
+          "sha256": "c91377adafa2f498211a4fe017788e20c38892124673860f068f2919c289193d",
+          "size_bytes": 1158
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/glibc/LICENSE",
+          "sha256": "b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe",
+          "size_bytes": 26526
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/highway/LICENSE",
+          "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+          "size_bytes": 11356
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/inspector_protocol/LICENSE",
+          "sha256": "450ebb9e9e50c2809d9ca581931fc8946d8d5aa0c8c35aae9ac471342fe4a88e",
+          "size_bytes": 1537
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/jsoncpp/LICENSE",
+          "sha256": "76c45ece83a26117f86f4e349e7df118708e061e87225328fb478ce1e8b3eb86",
+          "size_bytes": 2665
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/markupsafe/LICENSE",
+          "sha256": "0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5",
+          "size_bytes": 1582
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/rapidhash-v8/LICENSE",
+          "sha256": "db672df7faf793fbe28b8074fdd10822363e1525816b45c9627754885de842b0",
+          "size_bytes": 1705
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/re2/LICENSE",
+          "sha256": "6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449",
+          "size_bytes": 1558
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/simdutf/LICENSE",
+          "sha256": "fc8dbc04e03ad4efc08a647ffe7f995b811a95bc04c0e85a56d5277c6593fa5f",
+          "size_bytes": 1059
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/siphash/LICENSE",
+          "sha256": "36ffd9dc085d529a7e60e1276d73ae5a030b020313e6c5408593a6ae2af39673",
+          "size_bytes": 6555
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/utf8-decoder/LICENSE",
+          "sha256": "3f712e5fbdfdbd5ee7d9b8c8152580220df55de47f4eba2f26c95c4de19ad096",
+          "size_bytes": 1087
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/v8/builtins/LICENSE",
+          "sha256": "b9a6d9320b8f2693e8d41e496ce56caadacaddcca9be2a64a61749278f425cf2",
+          "size_bytes": 12763
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/v8/codegen/LICENSE",
+          "sha256": "17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf",
+          "size_bytes": 1157
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/valgrind/LICENSE",
+          "sha256": "ebf25b8ce59c9e8883acd1ca75b6fc121937ca034f666c4077d2be739d2e1622",
+          "size_bytes": 2439
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/vtune/LICENSE",
+          "sha256": "02aea3ade0c02470335987f7d93ffaed877bcefc8414a416e2e548665bb0bfd0",
+          "size_bytes": 1925
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/wasm-api/LICENSE",
+          "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+          "size_bytes": 11358
+        },
+        {
+          "path": "node-v24.18.0/deps/v8/third_party/zlib/LICENSE",
+          "sha256": "e1cfcc55c325b3f78cf55df9664abaa066e2271dffe8213347d9fccdfbac8f2c",
+          "size_bytes": 910
+        },
+        {
+          "path": "node-v24.18.0/deps/zlib/LICENSE",
+          "sha256": "e1cfcc55c325b3f78cf55df9664abaa066e2271dffe8213347d9fccdfbac8f2c",
+          "size_bytes": 910
+        },
+        {
+          "path": "node-v24.18.0/deps/zstd/LICENSE",
+          "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+          "size_bytes": 1549
+        },
+        {
+          "path": "node-v24.18.0/test/fixtures/postject-copy/node_modules/commander/LICENSE",
+          "sha256": "04512a63dce4d2d506ad612dc0bd7681ccf6e3655f7b6eaef7dfac8323d1ec0b",
+          "size_bytes": 1098
+        },
+        {
+          "path": "node-v24.18.0/test/fixtures/postject-copy/node_modules/postject/LICENSE",
+          "sha256": "6546657539feb5b454f400db317e71fa39ff5cd048fa5d78ae0ada2df72f1ea7",
+          "size_bytes": 13409
+        },
+        {
+          "path": "node-v24.18.0/test/fixtures/wpt/compression/third_party/pako/LICENSE",
+          "sha256": "a04665b3b2de56c66730c1f720f528175739e4104f79073614aa611da1e85539",
+          "size_bytes": 1104
+        },
+        {
+          "path": "node-v24.18.0/tools/doc/LICENSE",
+          "sha256": "6239c6144c31e58cf925c34483606969c555574d64ffa96518ab5d7f45c75d43",
+          "size_bytes": 1096
+        },
+        {
+          "path": "node-v24.18.0/tools/gyp/LICENSE",
+          "sha256": "ca90abb6ed71de0774461ef9f928de33e748b617aeb79f9e52415cf08d69230e",
+          "size_bytes": 1537
+        },
+        {
+          "path": "node-v24.18.0/tools/gyp/pylib/packaging/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "size_bytes": 197
+        },
+        {
+          "path": "node-v24.18.0/tools/inspector_protocol/jinja2/LICENSE",
+          "sha256": "7975c0027cfa5d08253fbb6ff4676acc38248bd5e046d0dbab3d810971e97970",
+          "size_bytes": 1523
+        },
+        {
+          "path": "node-v24.18.0/tools/inspector_protocol/markupsafe/LICENSE",
+          "sha256": "0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5",
+          "size_bytes": 1582
+        }
+      ]
+    },
+    {
+      "source_id": "pester_5_7_1",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "b5245f94fcc1b1547428998f0ff0390672ef31564a93b51f7f7da80067be3ff4",
+      "artifact_size_bytes": 4091275,
+      "published_sha256": null,
+      "resolved_ref": "5.7.1",
+      "resolved_commit": "dc45b7481fffc4f6c2ff1a74edebaad03ce1efcb",
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 1 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 298,
+      "declared_uncompressed_bytes": 9603733,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 1,
+      "suspicious_files_sample": [
+        "Pester-dc45b7481fffc4f6c2ff1a74edebaad03ce1efcb/publish/vendor/tools/nuget.exe"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "Pester-dc45b7481fffc4f6c2ff1a74edebaad03ce1efcb/LICENSE",
+          "sha256": "407c9c98f67f9a3979d38fec858d564018e679aecb066cbadf325b61f0cfa57e",
+          "size_bytes": 592
+        }
+      ]
+    },
+    {
+      "source_id": "postgresql_18_4",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094",
+      "artifact_size_bytes": 22567173,
+      "published_sha256": "81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094",
+      "resolved_ref": null,
+      "resolved_commit": null,
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 1 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 7924,
+      "declared_uncompressed_bytes": 141082594,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 1,
+      "suspicious_files_sample": [
+        "postgresql-18.4/src/bin/pgevent/MSG00001.bin"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "postgresql-18.4/COPYRIGHT",
+          "sha256": "3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd",
+          "size_bytes": 1198
+        },
+        {
+          "path": "postgresql-18.4/src/backend/regex/COPYRIGHT",
+          "sha256": "5027cfe4f54842896b01ca6be28becc9a018623aaadc0f5b51350da71118cb0e",
+          "size_bytes": 4362
+        }
+      ]
+    },
+    {
+      "source_id": "powershell_7_6_3",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "e42dff39bf61e0ae349fb7099d01c70ae6363b43f686be1d394fc5d6f18c53bd",
+      "artifact_size_bytes": 10999188,
+      "published_sha256": null,
+      "resolved_ref": "v7.6.3",
+      "resolved_commit": "a1994c19a0badf524d714cacffe7986c5c8613c6",
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 12 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 3081,
+      "declared_uncompressed_bytes": 48329819,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 12,
+      "suspicious_files_sample": [
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/Modules/PackageManagement/assets/PowerShell.TestPackage.3.2.1.nupkg",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Archive_eb74e8da-9ae2-482a-a648-e96550fb8733_en-US_HelpContent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Core_00000000-0000-0000-0000-000000000000_en-US_HelpContent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Diagnostics_ca046f10-ca64-4740-8ff9-2565dba61a4f_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Host_56d66100-99a0-4ffc-a12d-eee9a6718aef_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Management_eefcb906-b326-4e99-9f54-8b4bb6ef3c6d_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Security_a94c8c7e-9810-47c0-b8af-65089c13a35a_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.PowerShell.Utility_1da87e53-152b-403e-98dc-74d7b4d63d59_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/Microsoft.WsMan.Management_766204A6-330E-4263-A7AB-46C87AFC366C_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/PackageManagement_4ae9fd46-338a-459c-8186-07f910774cb8_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Help/assets/PowershellGet_1d73a601-4a6c-43c5-ba3f-619b18bbb404_en-US_helpcontent.zip",
+        "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/test/powershell/engine/Module/assets/PowerShell.TestPackage.3.2.1.nupkg"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "PowerShell-a1994c19a0badf524d714cacffe7986c5c8613c6/LICENSE.txt",
+          "sha256": "7c77a44a8acd9b41fdc209864a8016b3d430b5d0e09309818d5b7444336df744",
+          "size_bytes": 1074
+        }
+      ]
+    },
+    {
+      "source_id": "powershell_docs_2026",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "cd5acc61366fdc130c3f5a5f8f6c9951fcd3843a60cdae18df40ef45d5a52858",
+      "artifact_size_bytes": 28537683,
+      "published_sha256": null,
+      "resolved_ref": "main",
+      "resolved_commit": "ad8750e032d1434dc26cc34c887d858f4ebd1703",
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [],
+      "archive_member_count": 3514,
+      "declared_uncompressed_bytes": 57659296,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 0,
+      "suspicious_files_sample": [],
+      "license_file_hashes": [
+        {
+          "path": "PowerShell-Docs-ad8750e032d1434dc26cc34c887d858f4ebd1703/LICENSE-CODE.md",
+          "sha256": "adbda6ffa243c17838b6391c5c19747d407053759dbacd1fc236767bda0f83b0",
+          "size_bytes": 1082
+        },
+        {
+          "path": "PowerShell-Docs-ad8750e032d1434dc26cc34c887d858f4ebd1703/LICENSE.md",
+          "sha256": "e09e0a96f6abe2e9acd2c611a97c8d5da5b88b924b08927c7515359e3107e26c",
+          "size_bytes": 17716
+        },
+        {
+          "path": "PowerShell-Docs-ad8750e032d1434dc26cc34c887d858f4ebd1703/ThirdPartyNotices.md",
+          "sha256": "91d33e2b778b36ae8188207b8a8352249c35d0da0115aba9461633f98a8c2ed9",
+          "size_bytes": 1287
+        }
+      ]
+    },
+    {
+      "source_id": "pytest_9_1_1",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313",
+      "artifact_size_bytes": 1636369,
+      "published_sha256": "1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313",
+      "resolved_ref": null,
+      "resolved_commit": null,
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [],
+      "archive_member_count": 719,
+      "declared_uncompressed_bytes": 6883886,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 0,
+      "suspicious_files_sample": [],
+      "license_file_hashes": [
+        {
+          "path": "pytest-9.1.1/LICENSE",
+          "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b",
+          "size_bytes": 1091
+        }
+      ]
+    },
+    {
+      "source_id": "typescript_6_0_3",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "43d388f7fc6511ae105f23f4779e1c8df96f6dfa003025b70249816089609f5b",
+      "artifact_size_bytes": 33864358,
+      "published_sha256": null,
+      "resolved_ref": "v6.0.3",
+      "resolved_commit": "050880ce59e30b356b686bd3144efe24f875ebc8",
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [],
+      "archive_member_count": 84334,
+      "declared_uncompressed_bytes": 402550462,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 0,
+      "suspicious_files_sample": [],
+      "license_file_hashes": [
+        {
+          "path": "TypeScript-050880ce59e30b356b686bd3144efe24f875ebc8/LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+          "size_bytes": 9197
+        }
+      ]
+    },
+    {
+      "source_id": "typescript_website_2026",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false,
+      "artifact_sha256": "7efc8c70289a662eb8e8143639b090a7107b503ecbf0b8bd0463cbd6a5bef07d",
+      "artifact_size_bytes": 14391175,
+      "published_sha256": null,
+      "resolved_ref": "v2",
+      "resolved_commit": "89b479f2b8d9b5b1d01b40091dcadd9223bcc088",
+      "resolved_revision": null,
+      "security_hold": false,
+      "security_warnings": [
+        "archive contains 2 suspicious/binary file names; review before extraction"
+      ],
+      "archive_member_count": 1234,
+      "declared_uncompressed_bytes": 19429560,
+      "unsafe_path_count": 0,
+      "special_member_count": 0,
+      "suspicious_file_count": 2,
+      "suspicious_files_sample": [
+        "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/packages/typescriptlang-org/static/assets/typescript-cheat-sheets.zip",
+        "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/packages/typescriptlang-org/static/branding/typescript-design-assets.zip"
+      ],
+      "license_file_hashes": [
+        {
+          "path": "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/LICENSE",
+          "sha256": "d6239afa918961b465b07bf7411cbe34ff6685854f58553db7966f4881a0211f",
+          "size_bytes": 19047
+        },
+        {
+          "path": "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/LICENSE-CODE",
+          "sha256": "a04ce89b33c2080214ef87d8f63a9076cb1d32e0481b728e0bdd1f7a08ab5c01",
+          "size_bytes": 1106
+        },
+        {
+          "path": "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/packages/ts-twoslasher/LICENSE",
+          "sha256": "5c124ba1707e9edeae4fa704df5c46b922a38b194b563c86650237bd172069ae",
+          "size_bytes": 1091
+        },
+        {
+          "path": "TypeScript-Website-89b479f2b8d9b5b1d01b40091dcadd9223bcc088/packages/typescript-vfs/LICENSE",
+          "sha256": "5c124ba1707e9edeae4fa704df5c46b922a38b194b563c86650237bd172069ae",
+          "size_bytes": 1091
+        }
+      ]
+    }
+  ],
+  "review_decision": {
+    "status": "acquisition_complete_quarantined_pending_content_inventory",
+    "reason": "All ten sources acquired or pinned as stream metadata, immutable hashes verify, no path traversal or special archive members were found, and no source has training permission. Suspicious binary-looking archive members remain review notes for later allowed-path extraction."
+  },
+  "next_step": "Work Packet 12 should inventory allowed paths and stage extracted records without training admission, tokenizer rebuild, dataset preparation, or training."
+}

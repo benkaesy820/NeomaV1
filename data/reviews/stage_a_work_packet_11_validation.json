@@ -1,0 +1,51 @@
+{
+  "packet": "Phase 3.5B Work Packet 11",
+  "baseline": "8066b1f",
+  "scope": "Stage A source acquisition and immutable hashing only",
+  "source_count": 10,
+  "fixed_official_checksum_sources": [
+    "cpython_3_14_6",
+    "pytest_9_1_1",
+    "node_24_18_0",
+    "postgresql_18_4"
+  ],
+  "git_tag_commit_sources": [
+    "typescript_6_0_3",
+    "powershell_7_6_3",
+    "pester_5_7_1"
+  ],
+  "rolling_commit_sources": [
+    "typescript_website_2026",
+    "powershell_docs_2026"
+  ],
+  "stream_manifest_sources": [
+    "gptnl_english_2026"
+  ],
+  "pinned_checksums": {
+    "Python-3.14.6.tar.xz": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "pytest-9.1.1.tar.gz": "1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313",
+    "node-v24.18.0.tar.xz": "e94afde24db08e0c564ee7110a2d5aab51ee0059382c9fd8233c54eec47b28f9",
+    "postgresql-18.4.tar.bz2": "81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094"
+  },
+  "validation": {
+    "acquisition_plan_schema_and_unique_ids": "passed",
+    "all_sources_training_allowed_false": "passed",
+    "powershell_version_v7_6_3": "passed",
+    "https_and_host_allowlist_policy": "passed",
+    "atomic_streaming_hash_design": "passed",
+    "official_checksum_verification_design": "passed",
+    "github_tag_and_head_commit_resolution_tests": "passed",
+    "archive_traversal_and_special_member_detection_tests": "passed",
+    "license_file_hashing_test": "passed",
+    "huggingface_unsafe_warning_quarantine_test": "passed",
+    "dry_run_all_sources": "passed",
+    "python_compile": "passed",
+    "full_unit_tests": "33 passed"
+  },
+  "network_execution": "not run in Ted sandbox because outbound DNS is unavailable; Leo must run --execute locally",
+  "raw_artifacts_in_overlay": 0,
+  "training_allowed": false,
+  "tokenizer_rebuilt": false,
+  "dataset_prepared": false,
+  "training_run": false
+}

@@ -1,0 +1,11 @@
+source_id,expected_version,resolved_ref_or_version,resolved_commit_or_revision,artifact_filename,artifact_sha256,published_checksum_verified,license_files_verified,archive_security_reviewed,security_hold,unsafe_warnings_reviewed,decision,review_notes,reviewer,reviewed_utc
+"gptnl_english_2026","2026 corpus exact revision","","","gptnl_selected_subsets_stream_manifest.json","","n/a","","","","","pending","","",""
+"cpython_3_14_6","3.14.6","","","Python-3.14.6.tar.xz","","","","","","","pending","","",""
+"pytest_9_1_1","9.1.1","","","pytest-9.1.1.tar.gz","","","","","","","pending","","",""
+"typescript_6_0_3","v6.0.3","","","TypeScript-v6.0.3-source.tar.gz","","n/a","","","","","pending","","",""
+"typescript_website_2026","2026 acquisition-day commit","","","TypeScript-Website-2026-snapshot.tar.gz","","n/a","","","","","pending","","",""
+"node_24_18_0","v24.18.0 LTS","","","node-v24.18.0.tar.xz","","","","","","","pending","","",""
+"powershell_7_6_3","v7.6.3","","","PowerShell-v7.6.3-source.tar.gz","","n/a","","","","","pending","","",""
+"powershell_docs_2026","2026 acquisition-day commit","","","PowerShell-Docs-2026-snapshot.tar.gz","","n/a","","","","","pending","","",""
+"pester_5_7_1","5.7.1","","","Pester-5.7.1-source.tar.gz","","n/a","","","","","pending","","",""
+"postgresql_18_4","18.4","","","postgresql-18.4.tar.bz2","","","","","","","pending","","",""
