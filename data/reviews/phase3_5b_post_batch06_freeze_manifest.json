@@ -1,0 +1,168 @@
+{
+  "phase": "Phase 3.5B post-Batch-06 freeze review",
+  "baseline_after_batch06": "pending commit",
+  "batch06_manifest": "data/reviews/phase3_5b_batch06_review_manifest.json",
+  "report_directory": "data/reports/post_batch06",
+  "instruction_records": 291,
+  "accepted_phase3_5b_records": 240,
+  "legacy_protocol_records": 51,
+  "audit_decision": {
+    "status": "targeted_gap_batch_recommended",
+    "reason": "The curriculum remains below the 300-example lower bound; add one measured gap batch, not another broad batch.",
+    "critical_leakage_flags": 0,
+    "exact_duplicate_flags": 0,
+    "expected_context": 256,
+    "records_over_expected_context": 112,
+    "underrepresented_languages": []
+  },
+  "duplicate_analysis": {
+    "total_flags": 14,
+    "exact_flags": 0,
+    "structural_flags": 5
+  },
+  "leakage_analysis": {
+    "critical": 0,
+    "review": 0,
+    "informational": 110
+  },
+  "language_counts": {
+    "javascript": 48,
+    "powershell": 41,
+    "python": 88,
+    "sql": 40,
+    "text": 18,
+    "typescript": 56
+  },
+  "curriculum_gaps": {
+    "language": [
+      {
+        "language": "text",
+        "count": 18,
+        "actual_share": 0.0619,
+        "target_share": 0.075,
+        "delta_examples_at_current_size": -3.82,
+        "status": "near_target"
+      },
+      {
+        "language": "javascript",
+        "count": 48,
+        "actual_share": 0.1649,
+        "target_share": 0.175,
+        "delta_examples_at_current_size": -2.92,
+        "status": "near_target"
+      },
+      {
+        "language": "typescript",
+        "count": 56,
+        "actual_share": 0.1924,
+        "target_share": 0.2,
+        "delta_examples_at_current_size": -2.2,
+        "status": "near_target"
+      },
+      {
+        "language": "python",
+        "count": 88,
+        "actual_share": 0.3024,
+        "target_share": 0.3,
+        "delta_examples_at_current_size": 0.7,
+        "status": "near_target"
+      },
+      {
+        "language": "sql",
+        "count": 40,
+        "actual_share": 0.1375,
+        "target_share": 0.125,
+        "delta_examples_at_current_size": 3.62,
+        "status": "near_target"
+      },
+      {
+        "language": "powershell",
+        "count": 41,
+        "actual_share": 0.1409,
+        "target_share": 0.125,
+        "delta_examples_at_current_size": 4.62,
+        "status": "near_target"
+      }
+    ],
+    "capability": [
+      {
+        "capability": "explanation",
+        "count": 29,
+        "target_for_400_reviewed_examples": 30,
+        "progress": 0.9667,
+        "remaining_to_target": 1
+      },
+      {
+        "capability": "functions_and_data",
+        "count": 106,
+        "target_for_400_reviewed_examples": 90,
+        "progress": 1.1778,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "sql_database",
+        "count": 53,
+        "target_for_400_reviewed_examples": 45,
+        "progress": 1.1778,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "efficiency",
+        "count": 44,
+        "target_for_400_reviewed_examples": 35,
+        "progress": 1.2571,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "tests",
+        "count": 76,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 1.3818,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "security",
+        "count": 50,
+        "target_for_400_reviewed_examples": 35,
+        "progress": 1.4286,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "files_apis_automation",
+        "count": 74,
+        "target_for_400_reviewed_examples": 50,
+        "progress": 1.48,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "debugging",
+        "count": 102,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 1.8545,
+        "remaining_to_target": 0
+      },
+      {
+        "capability": "validation",
+        "count": 157,
+        "target_for_400_reviewed_examples": 55,
+        "progress": 2.8545,
+        "remaining_to_target": 0
+      }
+    ]
+  },
+  "capability_status": {
+    "efficiency": 44,
+    "sql_database": 53,
+    "explanation": 29
+  },
+  "human_review_queue": {
+    "review_duplicate_flags": 14,
+    "review_context_or_supervision_flags": 43,
+    "notes": "No exact duplicate or critical/review leakage blockers remain. Remaining duplicate flags are structural/high-similarity review items, and proxy length flags should be rechecked with the final tokenizer before rewriting records."
+  },
+  "human_recommendation": {
+    "status": "freeze_instruction_corpus_v0_1_recommended",
+    "reason": "All languages are near target, the measured efficiency gap is closed, SQL/database is above target, explanation is within one slot, and adding filler solely to cross 300 records would reduce quality.",
+    "next_artifact": "Neoma English-and-Code Foundation Corpus plan for Stage A, followed by tokenizer measurement and only then dataset preparation/training decisions."
+  }
+}

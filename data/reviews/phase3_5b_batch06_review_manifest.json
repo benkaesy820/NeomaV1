@@ -1,0 +1,528 @@
+{
+  "packet": "Phase 3.5B Work Packet 08",
+  "batch": "06 - Efficiency and Operational Fundamentals",
+  "baseline_commit": "7eadf9c",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-08-Overlay.zip",
+  "source_overlay_sha256": "6C3CEA0A7631B5120A73C663198796B506267689CC8E892B9E7EE9C2E8972BD9",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 3,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch06_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch06_accepted.txt",
+  "language_counts": {
+    "javascript": 3,
+    "powershell": 15,
+    "python": 5,
+    "sql": 9,
+    "text": 4,
+    "typescript": 4
+  },
+  "category_counts": {
+    "database": 2,
+    "efficiency": 33,
+    "explanation": 4,
+    "files": 1
+  },
+  "difficulty_counts": {
+    "basic": 22,
+    "intermediate": 18
+  },
+  "decisions": [
+    {
+      "id": "b06_ps_emit_pipeline_without_array_growth",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_emit_pipeline_without_array_growth"
+    },
+    {
+      "id": "b06_ps_sum_length_single_pass",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as lower-value for this batch because Measure-Object can already stream; stronger PowerShell examples teach clearer allocation or repeated-work reductions.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_ps_compile_regex_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised to include RegexOptions.Compiled alongside CultureInvariant, matching the instruction to compile the regular expression once.",
+      "revision_required": true,
+      "final_id": "b06_ps_compile_regex_once"
+    },
+    {
+      "id": "b06_ps_sort_counts_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_sort_counts_once"
+    },
+    {
+      "id": "b06_ps_get_item_once",
+      "language": "powershell",
+      "category": "files",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_get_item_once"
+    },
+    {
+      "id": "b06_ps_find_first_over_limit",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_find_first_over_limit"
+    },
+    {
+      "id": "b06_ps_generic_list_for_array_result",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_generic_list_for_array_result"
+    },
+    {
+      "id": "b06_ps_read_json_once_for_keys",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_read_json_once_for_keys"
+    },
+    {
+      "id": "b06_ps_partition_one_pass",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_partition_one_pass"
+    },
+    {
+      "id": "b06_ps_join_lines_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_join_lines_once"
+    },
+    {
+      "id": "b06_ps_normalize_suffix_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_normalize_suffix_once"
+    },
+    {
+      "id": "b06_ps_return_objects_not_formatting",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_return_objects_not_formatting"
+    },
+    {
+      "id": "b06_ps_pipeline_sum_amount",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_pipeline_sum_amount"
+    },
+    {
+      "id": "b06_ps_min_max_one_pass",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_min_max_one_pass"
+    },
+    {
+      "id": "b06_ps_parse_cutoff_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_parse_cutoff_once"
+    },
+    {
+      "id": "b06_ps_count_two_predicates_once",
+      "language": "powershell",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ps_count_two_predicates_once"
+    },
+    {
+      "id": "b06_sql_exists_open_alert",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_exists_open_alert"
+    },
+    {
+      "id": "b06_sql_update_many_ids_once",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_update_many_ids_once"
+    },
+    {
+      "id": "b06_sql_fetch_ids_with_any",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but generic batching coverage; admitted SQL rows teach more specific query-shape, index, and aggregation decisions.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_sql_sargable_utc_day",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_sargable_utc_day"
+    },
+    {
+      "id": "b06_sql_conditional_counts_one_scan",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_conditional_counts_one_scan"
+    },
+    {
+      "id": "b06_sql_union_all_disjoint_tables",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_union_all_disjoint_tables"
+    },
+    {
+      "id": "b06_sql_exists_instead_of_distinct_join",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_exists_instead_of_distinct_join"
+    },
+    {
+      "id": "b06_sql_index_child_foreign_key",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_index_child_foreign_key"
+    },
+    {
+      "id": "b06_sql_preaggregate_task_counts",
+      "language": "sql",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_preaggregate_task_counts"
+    },
+    {
+      "id": "b06_sql_recent_inbox_index",
+      "language": "sql",
+      "category": "database",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_sql_recent_inbox_index"
+    },
+    {
+      "id": "b06_py_count_with_counter",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised to count directly into an insertion-ordered dict in one pass instead of building a cleaned list and then counting it.",
+      "revision_required": true,
+      "final_id": "b06_py_count_with_counter"
+    },
+    {
+      "id": "b06_py_fifo_with_deque",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_py_fifo_with_deque"
+    },
+    {
+      "id": "b06_py_join_rendered_lines",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_py_join_rendered_lines"
+    },
+    {
+      "id": "b06_py_any_stops_early",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with accepted EXISTS/some/early-exit examples across SQL, PowerShell, and TypeScript.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_py_parse_aliases_once",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_py_parse_aliases_once"
+    },
+    {
+      "id": "b06_py_sum_generator",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as correct but too small for the final targeted efficiency batch after stronger Python efficiency examples were admitted.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_py_compile_pattern_once",
+      "language": "python",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_py_compile_pattern_once"
+    },
+    {
+      "id": "b06_ts_partition_once",
+      "language": "typescript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ts_partition_once"
+    },
+    {
+      "id": "b06_ts_count_without_spread_reducer",
+      "language": "typescript",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ts_count_without_spread_reducer"
+    },
+    {
+      "id": "b06_ts_queue_head_index",
+      "language": "typescript",
+      "category": "efficiency",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ts_queue_head_index"
+    },
+    {
+      "id": "b06_ts_cache_collator",
+      "language": "typescript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_ts_cache_collator"
+    },
+    {
+      "id": "b06_ts_some_early_exit",
+      "language": "typescript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as redundant with accepted SQL EXISTS and PowerShell first-match examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_js_min_max_one_pass",
+      "language": "javascript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised to validate finite numbers during the extrema scan, avoiding a separate full-array pre-scan.",
+      "revision_required": true,
+      "final_id": "b06_js_min_max_one_pass"
+    },
+    {
+      "id": "b06_js_append_chunks_with_push",
+      "language": "javascript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because the spread-push form is not ideal for very large chunks and the batch already has stronger JavaScript efficiency examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_js_compile_regex_once",
+      "language": "javascript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_js_compile_regex_once"
+    },
+    {
+      "id": "b06_js_count_map_single_pass",
+      "language": "javascript",
+      "category": "efficiency",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_js_count_map_single_pass"
+    },
+    {
+      "id": "b06_text_big_o_not_stopwatch",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as useful but more generic than the admitted explanations about measurement, trade-offs, indexes, batching, and test evidence.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_text_measure_before_optimize",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as broadly useful but less specific than the admitted operational efficiency explanations.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b06_text_time_memory_tradeoff",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_text_time_memory_tradeoff"
+    },
+    {
+      "id": "b06_text_database_index_cost",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_text_database_index_cost"
+    },
+    {
+      "id": "b06_text_batching_tradeoffs",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_text_batching_tradeoffs"
+    },
+    {
+      "id": "b06_text_no_wall_clock_unit_assertion",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b06_text_no_wall_clock_unit_assertion"
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py; 40 examples imported",
+    "training_data_quality_old_eval": "passed with zero warnings; 11 raw files, 291 instruction examples, 12 eval prompts",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings; 11 raw files, 291 instruction examples, 80 eval prompts",
+    "python_ast_parse": "passed for 5 accepted Python answers and 5 Python bad_code snippets",
+    "javascript_node_check": "passed for 3 accepted JavaScript answers and 3 JavaScript bad_code snippets with node --check using Node 24.17.0",
+    "typescript_check": "passed locally for 4 accepted TypeScript answers and 4 TypeScript bad_code snippets with tsc 6.0.3",
+    "powershell_parser": "passed for 15 accepted PowerShell answers and 15 PowerShell bad_code snippets using Windows PowerShell Parser.ParseInput",
+    "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
+    "exact_instruction_overlap_with_existing_or_eval": [],
+    "unsafe_keyword_hits": [],
+    "python_py_compile": "passed for project scripts, src package, and tests",
+    "repository_tests": "18 unittest tests passed",
+    "post_batch06_audit": "passed with 291 records, zero exact duplicate flags, zero critical leakage flags, all languages near target, and efficiency/sql gaps closed"
+  }
+}
