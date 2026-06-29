@@ -1,5 +1,8 @@
 # Phase 3.5 Engineering Patch
 
+For the complete file-by-file engineering handoff, phase-label clarification,
+and remaining decision points, see `UPDATES.md`.
+
 This patch strengthens NeomaV1 before larger CPU training runs.
 
 It should be called Phase 3.5, not completed Phase 4. Phase 4 should begin only

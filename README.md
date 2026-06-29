@@ -7,6 +7,9 @@ and model sizes that can complete real experiments.
 The project does **not** load a pretrained model. The tokenizer, model weights,
 training data, checkpoints, and inference path are controlled by this project.
 
+For the complete file-by-file engineering handoff, phase-label clarification,
+and remaining decision points, read [`UPDATES.md`](UPDATES.md).
+
 ## Hardware target
 
 The default configurations are aimed at a 6-core CPU and 8–16 GB RAM. The main
