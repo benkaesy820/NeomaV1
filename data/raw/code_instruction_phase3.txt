@@ -1,0 +1,532 @@
+<instruction>
+Create a Python helper that normalizes a title for storage.
+</instruction>
+<constraints>
+- accept a string
+- trim surrounding whitespace
+- collapse internal whitespace to a single space
+- raise ValueError if the result is empty
+</constraints>
+<answer>
+import re
+
+
+def normalize_title(title: str) -> str:
+    normalized = re.sub(r"\s+", " ", title.strip())
+    if not normalized:
+        raise ValueError("title must not be empty")
+    return normalized
+</answer>
+
+<instruction>
+Write a Python function that safely reads a UTF-8 text file.
+</instruction>
+<constraints>
+- accept pathlib.Path
+- reject directories
+- return the file text
+- wrap decoding errors with a clear ValueError
+</constraints>
+<answer>
+from pathlib import Path
+
+
+def read_text_file(path: Path) -> str:
+    if not path.exists():
+        raise FileNotFoundError(f"file does not exist: {path}")
+    if not path.is_file():
+        raise ValueError(f"path is not a file: {path}")
+
+    try:
+        return path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"file is not valid UTF-8: {path}") from exc
+</answer>
+
+<instruction>
+Write Python tests for a title normalization helper.
+</instruction>
+<constraints>
+- use unittest
+- test trimming
+- test repeated whitespace
+- test empty input rejection
+</constraints>
+<answer>
+import unittest
+
+
+class NormalizeTitleTest(unittest.TestCase):
+    def test_trims_and_collapses_spaces(self) -> None:
+        self.assertEqual(normalize_title("  Ship   the feature  "), "Ship the feature")
+
+    def test_rejects_empty_title(self) -> None:
+        with self.assertRaises(ValueError):
+            normalize_title("   ")
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+
+<instruction>
+Fix the bug in this Python average function.
+</instruction>
+<bad_code>
+def average(values):
+    return sum(values) / len(values)
+</bad_code>
+<reasoning>
+The function crashes with ZeroDivisionError for an empty list. A clear ValueError
+explains the caller mistake better.
+</reasoning>
+<answer>
+def average(values: list[float]) -> float:
+    if not values:
+        raise ValueError("values must not be empty")
+    return sum(values) / len(values)
+</answer>
+
+<instruction>
+Improve this Python lookup code so repeated membership checks are efficient.
+</instruction>
+<bad_code>
+def filter_allowed(values, allowed):
+    result = []
+    for value in values:
+        if value in allowed:
+            result.append(value)
+    return result
+</bad_code>
+<reasoning>
+If allowed is a list, membership checks are repeated linear scans. Building a
+set once makes each lookup fast.
+</reasoning>
+<answer>
+def filter_allowed(values: list[str], allowed: list[str]) -> list[str]:
+    allowed_set = set(allowed)
+    return [value for value in values if value in allowed_set]
+</answer>
+
+<instruction>
+Write a Python function that groups rows by a string field.
+</instruction>
+<constraints>
+- accept list[dict]
+- accept the field name
+- use "unknown" when the field is missing or not a string
+- return dict[str, list[dict]]
+</constraints>
+<answer>
+def group_rows_by_field(rows: list[dict], field: str) -> dict[str, list[dict]]:
+    groups: dict[str, list[dict]] = {}
+    for row in rows:
+        value = row.get(field)
+        key = value if isinstance(value, str) and value else "unknown"
+        groups.setdefault(key, []).append(row)
+    return groups
+</answer>
+
+<instruction>
+Write a Python command line entry point that reports clear errors.
+</instruction>
+<constraints>
+- call a main_work function
+- catch Exception at the boundary only
+- print the error
+- exit with status 1 on failure
+</constraints>
+<answer>
+import sys
+
+
+def run_cli() -> None:
+    try:
+        main_work()
+    except Exception as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
+</answer>
+
+<instruction>
+Create a TypeScript parser for a task object.
+</instruction>
+<constraints>
+- input is unknown
+- require id and title strings
+- trim title
+- return Result<Task>
+</constraints>
+<answer>
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+type Task = {
+  id: string;
+  title: string;
+  completed: boolean;
+};
+
+function parseTask(input: unknown): Result<Task> {
+  if (!input || typeof input !== "object") {
+    return { ok: false, error: "task must be an object" };
+  }
+
+  const record = input as Record<string, unknown>;
+  if (typeof record.id !== "string" || record.id.trim() === "") {
+    return { ok: false, error: "task id is required" };
+  }
+  if (typeof record.title !== "string" || record.title.trim() === "") {
+    return { ok: false, error: "task title is required" };
+  }
+
+  return {
+    ok: true,
+    value: {
+      id: record.id.trim(),
+      title: record.title.trim(),
+      completed: record.completed === true,
+    },
+  };
+}
+</answer>
+
+<instruction>
+Write a TypeScript helper that returns JSON responses.
+</instruction>
+<constraints>
+- accept a status number
+- accept an unknown body
+- set content-type to application/json
+</constraints>
+<answer>
+function jsonResponse(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json" },
+  });
+}
+</answer>
+
+<instruction>
+Write a TypeScript function that requires a non-empty string field.
+</instruction>
+<constraints>
+- accept Record<string, unknown>
+- accept field name
+- trim the value
+- throw a clear Error when invalid
+</constraints>
+<answer>
+function requireStringField(body: Record<string, unknown>, key: string): string {
+  const value = body[key];
+  if (typeof value !== "string" || value.trim() === "") {
+    throw new Error(`${key} is required`);
+  }
+  return value.trim();
+}
+</answer>
+
+<instruction>
+Fix the TypeScript parser so it rejects "12abc" as an integer.
+</instruction>
+<bad_code>
+function parseInteger(value: string): number {
+  return Number.parseInt(value, 10);
+}
+</bad_code>
+<reasoning>
+Number.parseInt accepts prefixes such as "12abc". A validation regex should
+check the whole trimmed string before conversion.
+</reasoning>
+<answer>
+function parseInteger(value: string): number {
+  const trimmed = value.trim();
+  if (!/^-?[0-9]+$/.test(trimmed)) {
+    throw new Error("value must be an integer");
+  }
+  return Number(trimmed);
+}
+</answer>
+
+<instruction>
+Write a JavaScript function that builds an index by id.
+</instruction>
+<constraints>
+- accept an array of objects
+- ignore missing ids
+- use String(id)
+- return an object
+</constraints>
+<answer>
+function indexById(items) {
+  const indexed = {};
+  for (const item of items) {
+    if (item.id === undefined || item.id === null) {
+      continue;
+    }
+    indexed[String(item.id)] = item;
+  }
+  return indexed;
+}
+</answer>
+
+<instruction>
+Write a JavaScript function that retries an async operation.
+</instruction>
+<constraints>
+- accept operation and maxAttempts
+- retry only after failures
+- throw the last error when all attempts fail
+</constraints>
+<answer>
+async function retry(operation, maxAttempts) {
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
+</answer>
+
+<instruction>
+Fix this JavaScript bug where an async error is not awaited.
+</instruction>
+<bad_code>
+async function saveAll(items, save) {
+  items.forEach(async (item) => {
+    await save(item);
+  });
+}
+</bad_code>
+<reasoning>
+Array.forEach does not wait for async callbacks. A for-of loop waits for each
+save and correctly surfaces errors.
+</reasoning>
+<answer>
+async function saveAll(items, save) {
+  for (const item of items) {
+    await save(item);
+  }
+}
+</answer>
+
+<instruction>
+Write a Node HTTP handler for a readiness endpoint.
+</instruction>
+<constraints>
+- respond to GET /ready
+- return JSON
+- return 404 for other routes
+</constraints>
+<answer>
+function sendJson(response, statusCode, body) {
+  response.writeHead(statusCode, { "content-type": "application/json" });
+  response.end(JSON.stringify(body));
+}
+
+function handleRequest(request, response) {
+  if (request.method === "GET" && request.url === "/ready") {
+    sendJson(response, 200, { ready: true });
+    return;
+  }
+
+  sendJson(response, 404, { error: "not found" });
+}
+</answer>
+
+<instruction>
+Write a PowerShell function that requires an existing directory.
+</instruction>
+<constraints>
+- accept a path
+- use LiteralPath
+- throw when missing
+- throw when it is not a directory
+</constraints>
+<answer>
+function Require-Directory {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Path does not exist: $Path"
+    }
+
+    $Item = Get-Item -LiteralPath $Path
+    if (-not $Item.PSIsContainer) {
+        throw "Path is not a directory: $Path"
+    }
+
+    return $Item
+}
+</answer>
+
+<instruction>
+Write a PowerShell function that returns file counts by extension.
+</instruction>
+<constraints>
+- recurse through files
+- lowercase extensions
+- use "<none>" when there is no extension
+</constraints>
+<answer>
+function Get-ExtensionCounts {
+    param([string]$Path)
+
+    Get-ChildItem -LiteralPath $Path -Recurse -File |
+        Group-Object {
+            if ($_.Extension) { $_.Extension.ToLowerInvariant() } else { "<none>" }
+        } |
+        ForEach-Object {
+            [PSCustomObject]@{
+                Extension = $_.Name
+                Count = $_.Count
+            }
+        }
+}
+</answer>
+
+<instruction>
+Write SQL for a task table with an owner index.
+</instruction>
+<constraints>
+- id is primary key
+- owner_id is required
+- title is required
+- status is required
+- index owner_id and status
+</constraints>
+<answer>
+CREATE TABLE tasks (
+    id TEXT PRIMARY KEY,
+    owner_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX idx_tasks_owner_status
+ON tasks(owner_id, status);
+</answer>
+
+<instruction>
+Write SQL that finds open tickets for one customer.
+</instruction>
+<constraints>
+- join tickets to customers
+- filter by customer id
+- filter open status
+- newest first
+</constraints>
+<answer>
+SELECT
+    tickets.id,
+    tickets.title,
+    tickets.created_at,
+    customers.name AS customer_name
+FROM tickets
+JOIN customers ON customers.id = tickets.customer_id
+WHERE customers.id = :customer_id
+  AND tickets.status = 'open'
+ORDER BY tickets.created_at DESC;
+</answer>
+
+<instruction>
+Explain why input validation belongs at system boundaries.
+</instruction>
+<constraints>
+- keep it short
+- mention external input
+- mention internal code becoming simpler
+</constraints>
+<answer>
+External input can be missing, malformed, or hostile. Validating it at the
+boundary lets the rest of the program work with trusted shapes and clearer
+types. That keeps internal code simpler and reduces repeated defensive checks.
+</answer>
+
+<instruction>
+Explain why a database query may need an index.
+</instruction>
+<constraints>
+- keep it short
+- mention repeated filtering
+- mention write cost trade-off
+</constraints>
+<answer>
+An index helps the database find rows without scanning the whole table for
+common filters such as status or owner_id. It can make reads much faster, but it
+adds storage and write overhead, so indexes should match real query patterns.
+</answer>
+
+<instruction>
+Improve this Python code to avoid repeated sorting inside a loop.
+</instruction>
+<bad_code>
+def top_names(groups):
+    result = []
+    for group in groups:
+        result.append(sorted(group["names"])[0])
+    return sorted(result)
+</bad_code>
+<reasoning>
+The code sorts each full name list even though it only needs the smallest item.
+Using min avoids unnecessary work.
+</reasoning>
+<answer>
+def top_names(groups: list[dict]) -> list[str]:
+    result: list[str] = []
+    for group in groups:
+        names = group.get("names", [])
+        if names:
+            result.append(min(names))
+    return sorted(result)
+</answer>
+
+<instruction>
+Write a Python function that redacts sensitive keys before logging.
+</instruction>
+<constraints>
+- accept dict
+- redact password, token, secret, api_key
+- do not mutate the input
+</constraints>
+<answer>
+SENSITIVE_KEYS = {"password", "token", "secret", "api_key"}
+
+
+def redact_for_log(data: dict) -> dict:
+    redacted: dict = {}
+    for key, value in data.items():
+        if key.lower() in SENSITIVE_KEYS:
+            redacted[key] = "<redacted>"
+        else:
+            redacted[key] = value
+    return redacted
+</answer>
+
+<instruction>
+Write a TypeScript function that redacts sensitive fields before logging.
+</instruction>
+<constraints>
+- accept Record<string, unknown>
+- redact password, token, secret, apiKey
+- return a new object
+</constraints>
+<answer>
+function redactForLog(input: Record<string, unknown>): Record<string, unknown> {
+  const sensitive = new Set(["password", "token", "secret", "apiKey"]);
+  const output: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(input)) {
+    output[key] = sensitive.has(key) ? "<redacted>" : value;
+  }
+
+  return output;
+}
+</answer>

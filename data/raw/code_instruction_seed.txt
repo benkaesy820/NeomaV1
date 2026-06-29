@@ -1,0 +1,414 @@
+<instruction>
+Write a Python function that turns text into a URL slug.
+</instruction>
+<constraints>
+- lowercase the text
+- keep only letters and numbers
+- replace groups of punctuation or whitespace with one hyphen
+- strip leading and trailing hyphens
+</constraints>
+<answer>
+import re
+
+
+def slugify(text: str) -> str:
+    lowered = text.lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", lowered)
+    return slug.strip("-")
+</answer>
+
+<instruction>
+Write a Python function that loads a JSON config file.
+</instruction>
+<constraints>
+- accept a pathlib.Path
+- raise FileNotFoundError when the file is missing
+- raise ValueError when the JSON root is not an object
+- return dict
+</constraints>
+<answer>
+import json
+from json import JSONDecodeError
+from pathlib import Path
+from typing import Any
+
+
+def load_config(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(f"config file does not exist: {path}")
+
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            data = json.load(handle)
+    except JSONDecodeError as exc:
+        raise ValueError(f"invalid JSON in {path}") from exc
+
+    if not isinstance(data, dict):
+        raise ValueError("config root must be a JSON object")
+    return data
+</answer>
+
+<instruction>
+Write unit tests for a divide function.
+</instruction>
+<constraints>
+- use unittest
+- test normal division
+- test division by zero
+</constraints>
+<answer>
+import unittest
+
+
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        raise ZeroDivisionError("cannot divide by zero")
+    return a / b
+
+
+class DivideTest(unittest.TestCase):
+    def test_divide(self) -> None:
+        self.assertEqual(divide(10, 2), 5)
+
+    def test_divide_by_zero(self) -> None:
+        with self.assertRaises(ZeroDivisionError):
+            divide(10, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()
+</answer>
+
+<instruction>
+Fix this Python indentation bug.
+</instruction>
+<bad_code>
+def total(values):
+    result = 0
+    for value in values:
+    result += value
+    return result
+</bad_code>
+<reasoning>
+The loop body must be indented under the for statement. The return should run
+after the loop completes.
+</reasoning>
+<answer>
+def total(values):
+    result = 0
+    for value in values:
+        result += value
+    return result
+</answer>
+
+<instruction>
+Write a Python function that counts file extensions.
+</instruction>
+<constraints>
+- accept list[str]
+- count extensions case-insensitively
+- use "<none>" for paths without an extension
+</constraints>
+<answer>
+from pathlib import Path
+
+
+def count_extensions(paths: list[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for raw_path in paths:
+        suffix = Path(raw_path).suffix.lower()
+        key = suffix if suffix else "<none>"
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+</answer>
+
+<instruction>
+Write a TypeScript Result type and a parser for positive integers.
+</instruction>
+<constraints>
+- do not throw for invalid input
+- return an error message when parsing fails
+- reject zero and negative numbers
+</constraints>
+<answer>
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+function parsePositiveInteger(value: string): Result<number> {
+  const trimmed = value.trim();
+  if (!/^[1-9][0-9]*$/.test(trimmed)) {
+    return { ok: false, error: "value must be an integer" };
+  }
+  const parsed = Number(trimmed);
+  return { ok: true, value: parsed };
+}
+</answer>
+
+<instruction>
+Write a TypeScript function that fetches JSON with a timeout.
+</instruction>
+<constraints>
+- use AbortController
+- clear the timeout in a finally block
+- throw when response.ok is false
+</constraints>
+<answer>
+async function fetchJsonWithTimeout<T>(
+  url: string,
+  timeoutMs: number,
+): Promise<T> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`request failed with status ${response.status}`);
+    }
+    return (await response.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+</answer>
+
+<instruction>
+Write a JavaScript groupBy function.
+</instruction>
+<constraints>
+- accept an array of objects
+- accept the property name to group by
+- return an object whose values are arrays
+</constraints>
+<answer>
+function groupBy(items, key) {
+  const groups = {};
+  for (const item of items) {
+    const groupKey = String(item[key] ?? "undefined");
+    if (!groups[groupKey]) {
+      groups[groupKey] = [];
+    }
+    groups[groupKey].push(item);
+  }
+  return groups;
+}
+</answer>
+
+<instruction>
+Write a Node-style health handler.
+</instruction>
+<constraints>
+- return JSON { ok: true } for GET /health
+- return JSON 404 for other paths
+- use response.writeHead and response.end
+</constraints>
+<answer>
+function sendJson(response, statusCode, body) {
+  response.writeHead(statusCode, { "content-type": "application/json" });
+  response.end(JSON.stringify(body));
+}
+
+function handleRequest(request, response) {
+  if (request.method === "GET" && request.url === "/health") {
+    sendJson(response, 200, { ok: true });
+    return;
+  }
+
+  sendJson(response, 404, { error: "not found" });
+}
+</answer>
+
+<instruction>
+Write a PowerShell function that counts files by extension.
+</instruction>
+<constraints>
+- accept a path
+- throw if the path does not exist
+- recurse through files
+- return grouped counts
+</constraints>
+<answer>
+function Count-FilesByExtension {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Path does not exist: $Path"
+    }
+
+    Get-ChildItem -LiteralPath $Path -Recurse -File |
+        Group-Object Extension |
+        ForEach-Object {
+            [PSCustomObject]@{
+                Extension = if ($_.Name) { $_.Name.ToLowerInvariant() } else { "<none>" }
+                Count = $_.Count
+            }
+        }
+}
+</answer>
+
+<instruction>
+Write SQL tables for customers and tickets.
+</instruction>
+<constraints>
+- customers have id, name, email, created_at
+- tickets reference customers
+- add an index for open tickets by creation time
+</constraints>
+<answer>
+CREATE TABLE customers (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE tickets (
+    id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE INDEX idx_tickets_status_created_at
+ON tickets(status, created_at);
+</answer>
+
+<instruction>
+Explain why retryable background jobs should be idempotent.
+</instruction>
+<constraints>
+- use a short explanation
+- include a simple coding example idea
+</constraints>
+<answer>
+A retryable job may run more than once after a timeout, crash, or network
+failure. If the job is idempotent, running it twice has the same final effect as
+running it once. For example, a payment email job can store an email_sent flag
+before retrying, so a repeated run checks the flag and avoids sending duplicate
+emails.
+</answer>
+
+<instruction>
+Improve this Python function for efficient membership checks.
+</instruction>
+<bad_code>
+def contains_any(values, allowed):
+    for value in values:
+        if value in allowed:
+            return True
+    return False
+</bad_code>
+<reasoning>
+If allowed is a list, each membership check may scan the whole list. Converting
+allowed to a set makes repeated membership checks faster.
+</reasoning>
+<answer>
+def contains_any(values: list[str], allowed: list[str]) -> bool:
+    allowed_set = set(allowed)
+    return any(value in allowed_set for value in values)
+</answer>
+
+<instruction>
+Write a small Python function that validates a non-empty title.
+</instruction>
+<constraints>
+- trim whitespace
+- raise ValueError for empty titles
+- return the cleaned title
+</constraints>
+<answer>
+def clean_title(title: str) -> str:
+    cleaned = title.strip()
+    if not cleaned:
+        raise ValueError("title must not be empty")
+    return cleaned
+</answer>
+
+<instruction>
+Write a TypeScript function that requires an authenticated user id.
+</instruction>
+<constraints>
+- accept unknown session
+- validate nested user.id
+- throw a clear error if missing
+</constraints>
+<answer>
+function requireUserId(session: unknown): string {
+  if (!session || typeof session !== "object") {
+    throw new Error("authentication required");
+  }
+
+  const user = (session as { user?: { id?: unknown } }).user;
+  if (!user || typeof user.id !== "string" || user.id.trim() === "") {
+    throw new Error("authentication required");
+  }
+
+  return user.id;
+}
+</answer>
+
+<instruction>
+Improve this JavaScript handler so it does not trust missing authentication data.
+</instruction>
+<bad_code>
+async function createTicket(request, response) {
+  const ticket = await request.services.tickets.create({
+    title: request.body.title,
+    createdBy: request.user.id,
+  });
+  response.status(201).json({ ticket });
+}
+</bad_code>
+<reasoning>
+External request data should be validated at the boundary. Authentication data
+can be missing, so the handler should check it before using nested fields.
+</reasoning>
+<answer>
+function requireString(value, name) {
+  if (typeof value !== "string" || value.trim() === "") {
+    throw new Error(`${name} is required`);
+  }
+  return value.trim();
+}
+
+function requireUserId(request) {
+  const userId = request.user && request.user.id;
+  if (typeof userId !== "string" || userId.trim() === "") {
+    throw new Error("authentication required");
+  }
+  return userId;
+}
+
+async function createTicket(request, response) {
+  try {
+    const title = requireString(request.body.title, "title");
+    const createdBy = requireUserId(request);
+    const ticket = await request.services.tickets.create({ title, createdBy });
+    response.status(201).json({ ticket });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "invalid request";
+    response.status(400).json({ error: message });
+  }
+}
+</answer>
+
+<instruction>
+Write a Python function that indexes rows by id for fast repeated lookup.
+</instruction>
+<constraints>
+- accept list[dict]
+- ignore rows with missing or non-string id
+- return dict[str, dict]
+</constraints>
+<answer>
+def index_rows_by_id(rows: list[dict]) -> dict[str, dict]:
+    indexed: dict[str, dict] = {}
+    for row in rows:
+        row_id = row.get("id")
+        if isinstance(row_id, str) and row_id:
+            indexed[row_id] = row
+    return indexed
+</answer>

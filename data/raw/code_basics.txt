@@ -1,0 +1,322 @@
+<file path="lessons/python_basics.py">
+"""Small, clean Python examples for a beginner code model."""
+
+from __future__ import annotations
+
+import json
+import re
+from json import JSONDecodeError
+from pathlib import Path
+
+
+def greet(name: str) -> str:
+    clean_name = name.strip()
+    if not clean_name:
+        return "Hello, friend!"
+    return f"Hello, {clean_name}!"
+
+
+def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+
+def average(values: list[float]) -> float:
+    if not values:
+        raise ValueError("values must not be empty")
+    return sum(values) / len(values)
+
+
+def count_words(text: str) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for word in re.findall(r"[a-z0-9]+", text.lower()):
+        counts[word] = counts.get(word, 0) + 1
+    return counts
+
+
+def load_json_object(path: Path) -> dict:
+    if not path.exists():
+        raise FileNotFoundError(f"file does not exist: {path}")
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            data = json.load(handle)
+    except JSONDecodeError as exc:
+        raise ValueError(f"invalid JSON in {path}") from exc
+
+    if not isinstance(data, dict):
+        raise ValueError("expected a JSON object")
+    return data
+
+
+def save_json(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        json.dump(data, handle, indent=2)
+        handle.write("\n")
+
+
+def index_by_id(rows: list[dict]) -> dict[str, dict]:
+    indexed: dict[str, dict] = {}
+    for row in rows:
+        row_id = row.get("id")
+        if isinstance(row_id, str) and row_id:
+            indexed[row_id] = row
+    return indexed
+
+
+def main() -> None:
+    print(greet("Dawn"))
+    print(add_numbers(2, 3))
+    print(average([10, 20, 30]))
+    print(count_words("Code is clear. Clear code is kind."))
+
+
+if __name__ == "__main__":
+    main()
+</file>
+
+<file path="lessons/python_errors_and_tests.py">
+import unittest
+
+
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        raise ZeroDivisionError("cannot divide by zero")
+    return a / b
+
+
+def parse_positive_int(value: str) -> int:
+    number = int(value)
+    if number <= 0:
+        raise ValueError("number must be positive")
+    return number
+
+
+class MathTest(unittest.TestCase):
+    def test_divide(self) -> None:
+        self.assertEqual(divide(10, 2), 5)
+
+    def test_divide_by_zero(self) -> None:
+        with self.assertRaises(ZeroDivisionError):
+            divide(10, 0)
+
+    def test_parse_positive_int(self) -> None:
+        self.assertEqual(parse_positive_int("42"), 42)
+
+    def test_parse_rejects_zero(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_positive_int("0")
+
+
+if __name__ == "__main__":
+    unittest.main()
+</file>
+
+<file path="lessons/javascript_basics.js">
+function greet(name) {
+  const cleanName = name.trim();
+  if (cleanName.length === 0) {
+    return "Hello, friend!";
+  }
+  return `Hello, ${cleanName}!`;
+}
+
+function sum(numbers) {
+  let total = 0;
+  for (const number of numbers) {
+    total += number;
+  }
+  return total;
+}
+
+function groupByStatus(items) {
+  const groups = {};
+  for (const item of items) {
+    const status = item.status ?? "unknown";
+    if (!groups[status]) {
+      groups[status] = [];
+    }
+    groups[status].push(item);
+  }
+  return groups;
+}
+
+async function fetchJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+  return response.json();
+}
+
+function requireString(value, fieldName) {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`${fieldName} is required`);
+  }
+  return value.trim();
+}
+
+console.log(greet("Dawn"));
+console.log(sum([1, 2, 3, 4]));
+</file>
+
+<file path="lessons/typescript_basics.ts">
+type User = {
+  id: string;
+  name: string;
+  email?: string;
+};
+
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+function findUser(users: User[], id: string): Result<User> {
+  const user = users.find((item) => item.id === id);
+  if (!user) {
+    return { ok: false, error: "user not found" };
+  }
+  return { ok: true, value: user };
+}
+
+function requireEmail(user: User): string {
+  if (!user.email) {
+    throw new Error("email is required");
+  }
+  return user.email.toLowerCase();
+}
+
+function requireUserId(session: unknown): string {
+  if (!session || typeof session !== "object") {
+    throw new Error("authentication required");
+  }
+  const user = (session as { user?: { id?: unknown } }).user;
+  if (!user || typeof user.id !== "string" || user.id.trim() === "") {
+    throw new Error("authentication required");
+  }
+  return user.id;
+}
+
+const users: User[] = [
+  { id: "1", name: "Ama", email: "ama@example.com" },
+  { id: "2", name: "Kojo" },
+];
+
+const result = findUser(users, "1");
+if (result.ok) {
+  console.log(requireEmail(result.value));
+}
+</file>
+
+<file path="lessons/node_http_handler.js">
+import http from "node:http";
+
+function sendJson(response, statusCode, body) {
+  response.writeHead(statusCode, { "content-type": "application/json" });
+  response.end(JSON.stringify(body));
+}
+
+function handleHealth(request, response) {
+  sendJson(response, 200, { ok: true });
+}
+
+function handleNotFound(response) {
+  sendJson(response, 404, { error: "not found" });
+}
+
+const server = http.createServer((request, response) => {
+  if (request.method === "GET" && request.url === "/health") {
+    handleHealth(request, response);
+    return;
+  }
+
+  handleNotFound(response);
+});
+
+server.listen(3000, () => {
+  console.log("server listening on http://localhost:3000");
+});
+</file>
+
+<file path="lessons/powershell_basics.ps1">
+param(
+    [string]$Name = "friend"
+)
+
+function Say-Hello {
+    param([string]$Value)
+
+    $CleanValue = $Value.Trim()
+    if ([string]::IsNullOrWhiteSpace($CleanValue)) {
+        return "Hello, friend!"
+    }
+
+    return "Hello, $CleanValue!"
+}
+
+function Get-TextFileCount {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Path does not exist: $Path"
+    }
+
+    return (Get-ChildItem -LiteralPath $Path -Recurse -File -Filter *.txt).Count
+}
+
+function Assert-NonEmptyString {
+    param(
+        [string]$Value,
+        [string]$Name
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        throw "$Name must not be empty"
+    }
+
+    return $Value.Trim()
+}
+
+Say-Hello -Value $Name
+</file>
+
+<file path="lessons/sql_basics.sql">
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    completed INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+SELECT
+    users.name,
+    COUNT(tasks.id) AS task_count
+FROM users
+LEFT JOIN tasks ON tasks.user_id = users.id
+GROUP BY users.id, users.name
+ORDER BY task_count DESC;
+</file>
+
+<file path="lessons/readme.md">
+# Basic Coding Principles
+
+Write code that is clear, small, and easy to test.
+
+Prefer direct functions when the problem is simple.
+Validate inputs before using them.
+Return useful errors when something goes wrong.
+Keep file and network operations explicit.
+Use names that describe the purpose of a value.
+Write tests for important behavior and edge cases.
+Avoid copying the same logic into many places.
+Do not log passwords, tokens, or private data.
+Keep slow work away from hot request paths when possible.
+</file>

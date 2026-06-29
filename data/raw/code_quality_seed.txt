@@ -1,0 +1,376 @@
+<file path="quality/python_cli_tool.py">
+"""A small command line tool with validation, clear errors, and testable functions."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+
+def read_json_file(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(f"file does not exist: {path}")
+    if not path.is_file():
+        raise ValueError(f"path is not a file: {path}")
+
+    with path.open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
+
+    if not isinstance(data, dict):
+        raise ValueError("expected the JSON root to be an object")
+    return data
+
+
+def get_required_string(data: dict[str, Any], key: str) -> str:
+    value = data.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"missing required string field: {key}")
+    return value.strip()
+
+
+def build_summary(data: dict[str, Any]) -> str:
+    name = get_required_string(data, "name")
+    language = get_required_string(data, "language")
+    return f"{name} is written in {language}."
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Summarize a project metadata JSON file.")
+    parser.add_argument("path", type=Path, help="Path to metadata.json")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    data = read_json_file(args.path)
+    print(build_summary(data))
+
+
+if __name__ == "__main__":
+    main()
+</file>
+
+<file path="quality/python_service_layer.py">
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timezone
+
+
+@dataclass(frozen=True)
+class Task:
+    id: str
+    title: str
+    completed: bool
+    created_at: datetime
+
+
+def now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def create_task(task_id: str, title: str) -> Task:
+    clean_title = title.strip()
+    if not clean_title:
+        raise ValueError("title must not be empty")
+
+    return Task(
+        id=task_id,
+        title=clean_title,
+        completed=False,
+        created_at=now_utc(),
+    )
+
+
+def complete_task(task: Task) -> Task:
+    if task.completed:
+        return task
+    return Task(
+        id=task.id,
+        title=task.title,
+        completed=True,
+        created_at=task.created_at,
+    )
+
+
+def list_open_tasks(tasks: list[Task]) -> list[Task]:
+    return [task for task in tasks if not task.completed]
+</file>
+
+<file path="quality/python_service_tests.py">
+import unittest
+
+from python_service_layer import complete_task, create_task, list_open_tasks
+
+
+class TaskServiceTest(unittest.TestCase):
+    def test_create_task_trims_title(self) -> None:
+        task = create_task("task-1", "  Write tests  ")
+
+        self.assertEqual(task.id, "task-1")
+        self.assertEqual(task.title, "Write tests")
+        self.assertFalse(task.completed)
+
+    def test_create_task_rejects_empty_title(self) -> None:
+        with self.assertRaises(ValueError):
+            create_task("task-1", "   ")
+
+    def test_complete_task_is_idempotent(self) -> None:
+        task = create_task("task-1", "Ship feature")
+
+        completed = complete_task(task)
+        completed_again = complete_task(completed)
+
+        self.assertTrue(completed.completed)
+        self.assertEqual(completed, completed_again)
+
+    def test_list_open_tasks_filters_completed_items(self) -> None:
+        open_task = create_task("task-1", "Open")
+        closed_task = complete_task(create_task("task-2", "Closed"))
+
+        self.assertEqual(list_open_tasks([open_task, closed_task]), [open_task])
+
+
+if __name__ == "__main__":
+    unittest.main()
+</file>
+
+<file path="quality/typescript_result_api.ts">
+export type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+export type Customer = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+export function parseCustomer(input: unknown): Result<Customer> {
+  if (!input || typeof input !== "object") {
+    return { ok: false, error: "customer must be an object" };
+  }
+
+  const record = input as Record<string, unknown>;
+  if (typeof record.id !== "string" || record.id.trim() === "") {
+    return { ok: false, error: "customer id is required" };
+  }
+  if (typeof record.name !== "string" || record.name.trim() === "") {
+    return { ok: false, error: "customer name is required" };
+  }
+  if (typeof record.email !== "string" || !record.email.includes("@")) {
+    return { ok: false, error: "valid customer email is required" };
+  }
+
+  return {
+    ok: true,
+    value: {
+      id: record.id.trim(),
+      name: record.name.trim(),
+      email: record.email.trim().toLowerCase(),
+    },
+  };
+}
+
+export function requireCustomer(input: unknown): Customer {
+  const result = parseCustomer(input);
+  if (!result.ok) {
+    throw new Error(result.error);
+  }
+  return result.value;
+}
+</file>
+
+<file path="quality/typescript_fetch_with_timeout.ts">
+export async function fetchJsonWithTimeout<T>(
+  url: string,
+  timeoutMs: number,
+): Promise<T> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`request failed with status ${response.status}`);
+    }
+    return (await response.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+</file>
+
+<file path="quality/javascript_express_handler.js">
+function requireString(body, key) {
+  const value = body[key];
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`${key} is required`);
+  }
+  return value.trim();
+}
+
+function requireAuthenticatedUserId(request) {
+  const userId = request.user && request.user.id;
+  if (typeof userId !== "string" || userId.trim().length === 0) {
+    throw new Error("authentication required");
+  }
+  return userId;
+}
+
+export async function createTicketHandler(request, response) {
+  try {
+    const title = requireString(request.body, "title");
+    const customerId = requireString(request.body, "customerId");
+    const createdBy = requireAuthenticatedUserId(request);
+
+    const ticket = await request.services.tickets.create({
+      title,
+      customerId,
+      createdBy,
+    });
+
+    response.status(201).json({ ticket });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "request failed";
+    response.status(400).json({ error: message });
+  }
+}
+</file>
+
+<file path="quality/powershell_project_check.ps1">
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$ProjectPath
+)
+
+if (-not (Test-Path -LiteralPath $ProjectPath)) {
+    throw "Project path does not exist: $ProjectPath"
+}
+
+$PackageJson = Join-Path $ProjectPath "package.json"
+if (Test-Path -LiteralPath $PackageJson) {
+    Write-Host "Node project detected"
+}
+
+$Files = Get-ChildItem -LiteralPath $ProjectPath -Recurse -File
+$PythonFiles = $Files | Where-Object { $_.Extension -eq ".py" }
+$TypeScriptFiles = $Files | Where-Object { $_.Extension -in @(".ts", ".tsx") }
+
+[PSCustomObject]@{
+    Path = $ProjectPath
+    PythonFiles = $PythonFiles.Count
+    TypeScriptFiles = $TypeScriptFiles.Count
+}
+</file>
+
+<file path="quality/python_efficiency_helpers.py">
+from __future__ import annotations
+
+
+def unique_preserving_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
+
+
+def has_overlap(left: list[str], right: list[str]) -> bool:
+    right_set = set(right)
+    return any(value in right_set for value in left)
+
+
+def group_by_owner(rows: list[dict]) -> dict[str, list[dict]]:
+    groups: dict[str, list[dict]] = {}
+    for row in rows:
+        owner = row.get("owner")
+        key = owner if isinstance(owner, str) and owner else "unknown"
+        groups.setdefault(key, []).append(row)
+    return groups
+</file>
+
+<file path="quality/typescript_safe_api.ts">
+type ApiError = {
+  error: string;
+};
+
+function jsonResponse(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json" },
+  });
+}
+
+function requireStringField(body: Record<string, unknown>, key: string): string {
+  const value = body[key];
+  if (typeof value !== "string" || value.trim() === "") {
+    throw new Error(`${key} is required`);
+  }
+  return value.trim();
+}
+
+export async function createTask(request: Request): Promise<Response> {
+  try {
+    const body = (await request.json()) as Record<string, unknown>;
+    const title = requireStringField(body, "title");
+    return jsonResponse(201, { task: { title, completed: false } });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "invalid request";
+    const body: ApiError = { error: message };
+    return jsonResponse(400, body);
+  }
+}
+</file>
+
+<file path="quality/sql_indexes_and_queries.sql">
+CREATE TABLE customers (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE tickets (
+    id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE INDEX idx_tickets_customer_id ON tickets(customer_id);
+CREATE INDEX idx_tickets_status_created_at ON tickets(status, created_at);
+
+SELECT
+    tickets.id,
+    tickets.title,
+    tickets.status,
+    customers.name AS customer_name
+FROM tickets
+JOIN customers ON customers.id = tickets.customer_id
+WHERE tickets.status = 'open'
+ORDER BY tickets.created_at DESC
+LIMIT 50;
+</file>
+
+<file path="quality/code_review_notes.md">
+# Coding Quality Notes
+
+Prefer small functions that do one thing clearly.
+Validate external input at the boundary of the system.
+Keep authorization and ownership checks on the backend.
+Make repeated operations idempotent when retries are possible.
+Use explicit error messages that explain what failed.
+Avoid swallowing exceptions without recording or returning a useful failure.
+Do not log secrets, passwords, tokens, cookies, or private customer data.
+Use tests for edge cases, permissions, and failure paths.
+Avoid global mutable state unless there is a clear reason.
+Keep network calls bounded with timeouts when possible.
+</file>

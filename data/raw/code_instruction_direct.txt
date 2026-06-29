@@ -1,0 +1,240 @@
+<instruction>
+Create a Python function that makes a lowercase dash-separated slug from a title.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+import re
+
+
+def make_slug(title: str) -> str:
+    lowered = title.lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", lowered)
+    return slug.strip("-")
+</answer>
+
+<instruction>
+Create a Python helper that reads a JSON object from disk.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+import json
+from pathlib import Path
+from typing import Any
+
+
+def read_json_object(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        raise FileNotFoundError(f"file does not exist: {path}")
+
+    with path.open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
+
+    if not isinstance(data, dict):
+        raise ValueError("expected a JSON object")
+    return data
+</answer>
+
+<instruction>
+Create unittest coverage for a safe division helper.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+import unittest
+
+
+class SafeDivideTest(unittest.TestCase):
+    def test_divides_numbers(self) -> None:
+        self.assertEqual(safe_divide(12, 3), 4)
+
+    def test_rejects_zero_denominator(self) -> None:
+        with self.assertRaises(ZeroDivisionError):
+            safe_divide(12, 0)
+</answer>
+
+<instruction>
+Create a Python helper that counts suffixes for a list of filenames.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+from pathlib import Path
+
+
+def count_suffixes(paths: list[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for raw_path in paths:
+        suffix = Path(raw_path).suffix.lower() or "<none>"
+        counts[suffix] = counts.get(suffix, 0) + 1
+    return counts
+</answer>
+
+<instruction>
+Create a TypeScript result type and a parser for a required positive number.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+function parseRequiredPositiveNumber(value: string): Result<number> {
+  const trimmed = value.trim();
+  if (!/^[1-9][0-9]*$/.test(trimmed)) {
+    return { ok: false, error: "value must be a positive integer" };
+  }
+  return { ok: true, value: Number(trimmed) };
+}
+</answer>
+
+<instruction>
+Create a TypeScript helper that requests JSON and aborts after a timeout.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+async function requestJson<T>(url: string, timeoutMs: number): Promise<T> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`request failed with status ${response.status}`);
+    }
+    return (await response.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+</answer>
+
+<instruction>
+Create a JavaScript utility that groups records by one property.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+function groupRecordsBy(records, propertyName) {
+  const groups = {};
+  for (const record of records) {
+    const key = String(record[propertyName] ?? "undefined");
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(record);
+  }
+  return groups;
+}
+</answer>
+
+<instruction>
+Create a Node request handler for a simple health check.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+function sendJson(response, statusCode, body) {
+  response.writeHead(statusCode, { "content-type": "application/json" });
+  response.end(JSON.stringify(body));
+}
+
+function handleRequest(request, response) {
+  if (request.method === "GET" && request.url === "/health") {
+    sendJson(response, 200, { ok: true });
+    return;
+  }
+
+  sendJson(response, 404, { error: "not found" });
+}
+</answer>
+
+<instruction>
+Create a PowerShell function that summarizes file extensions in a folder.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+function Get-FileExtensionSummary {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        throw "Path does not exist: $Path"
+    }
+
+    Get-ChildItem -LiteralPath $Path -Recurse -File |
+        Group-Object {
+            if ($_.Extension) { $_.Extension.ToLowerInvariant() } else { "<none>" }
+        } |
+        ForEach-Object {
+            [PSCustomObject]@{
+                Extension = $_.Name
+                Count = $_.Count
+            }
+        }
+}
+</answer>
+
+<instruction>
+Create SQL tables for accounts and issues with an index for open issues.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+CREATE TABLE accounts (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE issues (
+    id TEXT PRIMARY KEY,
+    account_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts(id)
+);
+
+CREATE INDEX idx_issues_status_created_at
+ON issues(status, created_at);
+</answer>
+
+<instruction>
+Correct this Python loop so the accumulation happens inside the loop.
+</instruction>
+<constraints>
+</constraints>
+<bad_code>
+def total(values):
+    result = 0
+    for value in values:
+    result += value
+    return result
+</bad_code>
+<reasoning>
+The statement that updates result must be indented under the for loop.
+</reasoning>
+<answer>
+def total(values):
+    result = 0
+    for value in values:
+        result += value
+    return result
+</answer>
+
+<instruction>
+Explain why retry-safe jobs should avoid duplicate side effects.
+</instruction>
+<constraints>
+</constraints>
+<answer>
+A retry-safe job may run again after a crash or timeout. It should check whether
+the side effect already happened before doing it again. For example, an email
+job can record email_sent before retrying so the second run does not send a
+duplicate message.
+</answer>
