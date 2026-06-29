@@ -1,0 +1,528 @@
+{
+  "packet": "Phase 3.5B Work Packet 06",
+  "batch": "05 - Security and Input-Boundary Fundamentals",
+  "packet_baseline_commit": "b771d01",
+  "admission_baseline_commit": "15b5cb9",
+  "source_overlay": "NeomaV1-Phase3.5B-Work-Packet-06-Overlay.zip",
+  "source_overlay_sha256": "0B6C85C3915D52E8EF333D17C6FF8A76877C73DE5F5BF8583F22232EC59D7FDE",
+  "candidate_count": 48,
+  "accepted_count": 40,
+  "revised_and_accepted_count": 4,
+  "rejected_count": 8,
+  "accepted_jsonl": "data/incoming/phase3_5b_batch05_accepted.jsonl",
+  "imported_raw": "data/raw/phase3_5b_batch05_accepted.txt",
+  "language_counts": {
+    "javascript": 7,
+    "powershell": 5,
+    "python": 11,
+    "sql": 6,
+    "text": 3,
+    "typescript": 8
+  },
+  "category_counts": {
+    "debugging": 3,
+    "explanation": 3,
+    "security": 34
+  },
+  "difficulty_counts": {
+    "basic": 16,
+    "intermediate": 24
+  },
+  "decisions": [
+    {
+      "id": "b05_py_parse_bounded_json_object",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_parse_bounded_json_object"
+    },
+    {
+      "id": "b05_py_require_local_redirect",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_require_local_redirect"
+    },
+    {
+      "id": "b05_py_redact_log_fields",
+      "language": "python",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised to validate record keys as strings before calling casefold, preserving the dict[str, object] contract at runtime.",
+      "revision_required": true,
+      "final_id": "b05_py_redact_log_fields"
+    },
+    {
+      "id": "b05_py_validate_upload_metadata",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_validate_upload_metadata"
+    },
+    {
+      "id": "b05_py_require_authorized_owner",
+      "language": "python",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as correct but too simple and redundant with stronger accepted authorization examples in TypeScript, JavaScript, and SQL.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_py_parse_bearer_token",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_parse_bearer_token"
+    },
+    {
+      "id": "b05_py_token_digest_matches",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_token_digest_matches"
+    },
+    {
+      "id": "b05_py_validate_archive_member_names",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised to reject trailing slashes and any empty path component instead of allowing directory-style archive entries.",
+      "revision_required": true,
+      "final_id": "b05_py_validate_archive_member_names"
+    },
+    {
+      "id": "b05_py_parse_retry_policy",
+      "language": "python",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as useful validation coverage but less central to the security/input-boundary goal than the admitted examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_py_require_bounded_text_list",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_require_bounded_text_list"
+    },
+    {
+      "id": "b05_py_report_order_by_fragment",
+      "language": "python",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected because the SQL allowlisted-sort candidate teaches the same injection-prevention concept closer to the database boundary.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_py_debug_validate_before_enqueue",
+      "language": "python",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_debug_validate_before_enqueue"
+    },
+    {
+      "id": "b05_py_require_single_line_header_value",
+      "language": "python",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_require_single_line_header_value"
+    },
+    {
+      "id": "b05_py_require_allowed_origin",
+      "language": "python",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_py_require_allowed_origin"
+    },
+    {
+      "id": "b05_ts_parse_content_length",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_parse_content_length"
+    },
+    {
+      "id": "b05_ts_parse_profile_patch",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "revise_accept",
+      "notes": "Revised to explicitly reject inherited enumerable fields before validating the allowed own keys.",
+      "revision_required": true,
+      "final_id": "b05_ts_parse_profile_patch"
+    },
+    {
+      "id": "b05_ts_require_single_line_header",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as redundant with accepted Python and PowerShell single-line header boundary examples.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_ts_require_tenant_access",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_require_tenant_access"
+    },
+    {
+      "id": "b05_ts_validate_webhook_timestamp",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_validate_webhook_timestamp"
+    },
+    {
+      "id": "b05_ts_parse_bounded_metadata",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_parse_bounded_metadata"
+    },
+    {
+      "id": "b05_ts_require_requested_fields",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_require_requested_fields"
+    },
+    {
+      "id": "b05_ts_redact_header_map",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with accepted Python/JavaScript logging-redaction examples and the logging explanation row.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_ts_debug_authorize_before_read",
+      "language": "typescript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "revise_accept",
+      "notes": "Revised to include minimal local type aliases and a canRead declaration so the security-ordering fix compiles as a self-contained strict TypeScript example without DOM type-name collisions.",
+      "revision_required": true,
+      "final_id": "b05_ts_debug_authorize_before_read"
+    },
+    {
+      "id": "b05_ts_require_csrf_token_pair",
+      "language": "typescript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ts_require_csrf_token_pair"
+    },
+    {
+      "id": "b05_js_require_single_header",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with accepted single-line/header-boundary examples; this batch keeps more diverse security topics.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_js_decode_base64url_payload",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_decode_base64url_payload"
+    },
+    {
+      "id": "b05_js_build_session_cookie",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_build_session_cookie"
+    },
+    {
+      "id": "b05_js_redact_log_object",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_redact_log_object"
+    },
+    {
+      "id": "b05_js_require_workspace_permission",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_require_workspace_permission"
+    },
+    {
+      "id": "b05_js_parse_upload_chunk_descriptor",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_parse_upload_chunk_descriptor"
+    },
+    {
+      "id": "b05_js_literal_search_regex",
+      "language": "javascript",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_literal_search_regex"
+    },
+    {
+      "id": "b05_js_debug_validate_before_persist",
+      "language": "javascript",
+      "category": "debugging",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_js_debug_validate_before_persist"
+    },
+    {
+      "id": "b05_js_parse_rate_limit_config",
+      "language": "javascript",
+      "category": "validation",
+      "difficulty": "intermediate",
+      "decision": "reject",
+      "notes": "Rejected as useful but mostly generic bounded-configuration validation after stronger security-boundary examples were admitted.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_ps_convertfrom_bounded_json_object",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ps_convertfrom_bounded_json_object"
+    },
+    {
+      "id": "b05_ps_protect_log_record",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "reject",
+      "notes": "Rejected as valid but redundant with accepted redaction examples in Python/JavaScript plus the allowlisted-logging explanation.",
+      "revision_required": false,
+      "final_id": null
+    },
+    {
+      "id": "b05_ps_assert_authorized_owner",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ps_assert_authorized_owner"
+    },
+    {
+      "id": "b05_ps_convert_single_line_header",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ps_convert_single_line_header"
+    },
+    {
+      "id": "b05_ps_convert_upload_metadata",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ps_convert_upload_metadata"
+    },
+    {
+      "id": "b05_ps_test_allowed_callback_uri",
+      "language": "powershell",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_ps_test_allowed_callback_uri"
+    },
+    {
+      "id": "b05_sql_authorized_document_update",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_authorized_document_update"
+    },
+    {
+      "id": "b05_sql_idempotency_key_table",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_idempotency_key_table"
+    },
+    {
+      "id": "b05_sql_hashed_session_table",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_hashed_session_table"
+    },
+    {
+      "id": "b05_sql_audit_event_table",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_audit_event_table"
+    },
+    {
+      "id": "b05_sql_allowlisted_report_sort",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_allowlisted_report_sort"
+    },
+    {
+      "id": "b05_sql_tenant_composite_foreign_key",
+      "language": "sql",
+      "category": "security",
+      "difficulty": "intermediate",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_sql_tenant_composite_foreign_key"
+    },
+    {
+      "id": "b05_text_authentication_vs_authorization",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_text_authentication_vs_authorization"
+    },
+    {
+      "id": "b05_text_validate_before_mutation",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_text_validate_before_mutation"
+    },
+    {
+      "id": "b05_text_allowlisted_logging",
+      "language": "text",
+      "category": "explanation",
+      "difficulty": "basic",
+      "decision": "accept",
+      "notes": "Accepted after Leo review.",
+      "revision_required": false,
+      "final_id": "b05_text_allowlisted_logging"
+    }
+  ],
+  "verification": {
+    "import_schema_check": "passed via scripts/import_instruction_jsonl.py; 40 examples imported",
+    "training_data_quality_old_eval": "passed with zero warnings; 10 raw files, 251 instruction examples, 12 eval prompts",
+    "training_data_quality_phase3_5b_heldout": "passed with zero warnings; 10 raw files, 251 instruction examples, 80 eval prompts",
+    "python_ast_parse": "passed for 11 accepted Python answers and 1 Python bad_code snippet",
+    "javascript_node_check": "passed for 7 accepted JavaScript answers and 1 JavaScript bad_code snippet with node --check using Node 24.17.0",
+    "typescript_check": "passed locally for 8 accepted TypeScript answers and 1 TypeScript bad_code snippet with tsc 6.0.3",
+    "powershell_parser": "passed for 5 accepted PowerShell answers using Windows PowerShell Parser.ParseInput",
+    "sql_check": "manual PostgreSQL review only; no local SQL parser configured",
+    "exact_instruction_overlap_with_existing_or_eval": [],
+    "unsafe_keyword_hits": [],
+    "python_py_compile": "passed for project scripts, src package, and tests",
+    "repository_tests": "18 unittest tests passed",
+    "post_batch05_audit": "passed with 251 records, zero exact duplicate flags, zero critical leakage flags, and targeted_gap_batch_recommended"
+  }
+}

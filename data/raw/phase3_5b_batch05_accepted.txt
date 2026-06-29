@@ -1,0 +1,1450 @@
+<instruction>
+Implement parse_bounded_json_object(data: bytes, max_bytes: int = 16384) -> dict[str, object] for an untrusted request body.
+</instruction>
+<constraints>
+- Use only the standard library.
+- Reject non-bytes input, invalid limits, oversized bodies, invalid UTF-8, invalid JSON, non-object roots, and JSON NaN/Infinity values.
+- Do not silently truncate input.
+</constraints>
+<answer>
+import json
+
+
+def parse_bounded_json_object(data: bytes, max_bytes: int = 16384) -> dict[str, object]:
+    if not isinstance(data, bytes):
+        raise TypeError("data must be bytes")
+    if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
+        raise ValueError("max_bytes must be a positive integer")
+    if len(data) > max_bytes:
+        raise ValueError("request body is too large")
+
+    try:
+        text = data.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as exc:
+        raise ValueError("request body is not valid UTF-8") from exc
+
+    def reject_constant(value: str) -> object:
+        raise ValueError(f"non-finite JSON number is not allowed: {value}")
+
+    try:
+        value = json.loads(text, parse_constant=reject_constant)
+    except json.JSONDecodeError as exc:
+        raise ValueError("request body is not valid JSON") from exc
+
+    if not isinstance(value, dict):
+        raise ValueError("request body must be a JSON object")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- A body exactly max_bytes long is allowed.
+- The JSON literals NaN, Infinity, and -Infinity are rejected.
+Quality notes:
+- Places the byte limit before decoding or parsing.
+- Keeps transport validation separate from business validation.
+</reasoning>
+
+<instruction>
+Implement require_local_redirect(value: str) -> str for a post-login redirect target.
+</instruction>
+<constraints>
+- Accept only a local absolute path beginning with one slash.
+- Allow a query string and fragment.
+- Reject schemes, network locations, backslashes, control characters, surrounding whitespace, and protocol-relative paths.
+</constraints>
+<answer>
+from urllib.parse import urlsplit
+
+
+def require_local_redirect(value: str) -> str:
+    if not isinstance(value, str):
+        raise TypeError("redirect target must be a string")
+    if value != value.strip() or not value:
+        raise ValueError("redirect target must not contain surrounding whitespace")
+    if any(ord(char) < 32 or ord(char) == 127 for char in value):
+        raise ValueError("redirect target contains a control character")
+    if "\\" in value or not value.startswith("/") or value.startswith("//"):
+        raise ValueError("redirect target must be a local absolute path")
+
+    parts = urlsplit(value)
+    if parts.scheme or parts.netloc or not parts.path.startswith("/"):
+        raise ValueError("redirect target must not contain an origin")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- Reject //example.test/path and /\example.test.
+- Accept /account?tab=security#devices.
+Quality notes:
+- Prevents an untrusted redirect target from selecting another origin.
+</reasoning>
+
+<instruction>
+Implement redact_log_fields(record: dict[str, object], sensitive_names: set[str]) -> dict[str, object].
+</instruction>
+<constraints>
+- Match sensitive field names case-insensitively.
+- Replace sensitive values with the exact string [REDACTED].
+- Preserve key order and do not mutate either input.
+- Require every sensitive name to be a non-blank string.
+</constraints>
+<answer>
+def redact_log_fields(
+    record: dict[str, object], sensitive_names: set[str]
+) -> dict[str, object]:
+    if not isinstance(record, dict):
+        raise TypeError("record must be a dict")
+    if not isinstance(sensitive_names, set):
+        raise TypeError("sensitive_names must be a set")
+
+    normalized: set[str] = set()
+    for name in sensitive_names:
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("sensitive names must be non-blank strings")
+        normalized.add(name.casefold())
+
+    result: dict[str, object] = {}
+    for key, value in record.items():
+        if not isinstance(key, str):
+            raise TypeError("record keys must be strings")
+        result[key] = "[REDACTED]" if key.casefold() in normalized else value
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- A key named Authorization matches authorization.
+- An empty sensitive-name set returns a shallow copy.
+Quality notes:
+- Uses explicit field redaction rather than serializing an entire request object blindly.
+</reasoning>
+
+<instruction>
+Implement validate_upload_metadata(name: str, content_type: str, size: int, allowed_types: set[str], max_bytes: int) -> tuple[str, str, int].
+</instruction>
+<constraints>
+- Do not access the filesystem.
+- Require a plain filename with no slash, backslash, NUL, control character, or surrounding whitespace.
+- Reject . and .. and names longer than 128 characters.
+- Require an allowed lowercase media type and a non-negative size no greater than max_bytes.
+</constraints>
+<answer>
+def validate_upload_metadata(
+    name: str,
+    content_type: str,
+    size: int,
+    allowed_types: set[str],
+    max_bytes: int,
+) -> tuple[str, str, int]:
+    if not isinstance(name, str) or name != name.strip() or not name:
+        raise ValueError("name must be a non-blank trimmed string")
+    if len(name) > 128 or name in {".", ".."}:
+        raise ValueError("invalid upload name")
+    if "/" in name or "\\" in name or any(ord(c) < 32 or ord(c) == 127 for c in name):
+        raise ValueError("upload name contains a forbidden character")
+
+    if not isinstance(content_type, str) or content_type != content_type.strip().lower():
+        raise ValueError("content_type must be canonical lowercase text")
+    if not isinstance(allowed_types, set) or any(
+        not isinstance(item, str) or item != item.strip().lower() or not item
+        for item in allowed_types
+    ):
+        raise ValueError("allowed_types must contain canonical lowercase strings")
+    if content_type not in allowed_types:
+        raise ValueError("content type is not allowed")
+
+    if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 0:
+        raise ValueError("max_bytes must be a non-negative integer")
+    if isinstance(size, bool) or not isinstance(size, int) or not 0 <= size <= max_bytes:
+        raise ValueError("upload size is outside the allowed range")
+    return name, content_type, size
+</answer>
+<reasoning>
+Edge cases:
+- A zero-byte upload is valid when max_bytes permits it.
+- A filename containing a tab is rejected.
+Quality notes:
+- Validates metadata before any storage action.
+</reasoning>
+
+<instruction>
+Implement parse_bearer_token(header: str, min_length: int = 16, max_length: int = 512) -> str.
+</instruction>
+<constraints>
+- Require the exact case-sensitive prefix Bearer followed by one ASCII space.
+- Reject empty tokens, whitespace inside the token, control characters, non-ASCII characters, and lengths outside the configured bounds.
+- Do not trim or log the token.
+</constraints>
+<answer>
+def parse_bearer_token(
+    header: str, min_length: int = 16, max_length: int = 512
+) -> str:
+    if not isinstance(header, str):
+        raise TypeError("authorization header must be a string")
+    if any(
+        isinstance(value, bool) or not isinstance(value, int)
+        for value in (min_length, max_length)
+    ):
+        raise TypeError("token length bounds must be integers")
+    if min_length < 1 or max_length < min_length:
+        raise ValueError("invalid token length bounds")
+    if not header.startswith("Bearer "):
+        raise ValueError("authorization scheme must be Bearer")
+
+    token = header[7:]
+    if not min_length <= len(token) <= max_length:
+        raise ValueError("bearer token length is outside the allowed range")
+    if any(not 33 <= ord(char) <= 126 for char in token):
+        raise ValueError("bearer token must contain visible ASCII without spaces")
+    return token
+</answer>
+<reasoning>
+Edge cases:
+- Bearer followed by two spaces is rejected because the token begins with a space.
+- Lowercase bearer is rejected by this explicit protocol contract.
+Quality notes:
+- Parses only the transport shape; token verification belongs elsewhere.
+</reasoning>
+
+<instruction>
+Implement token_digest_matches(presented: str, expected_sha256_hex: str) -> bool for comparing a presented opaque token with a stored SHA-256 digest.
+</instruction>
+<constraints>
+- Require expected_sha256_hex to be exactly 64 lowercase hexadecimal characters.
+- Hash the UTF-8 token and compare digest bytes with hmac.compare_digest.
+- Do not return or log either token value.
+</constraints>
+<answer>
+import hashlib
+import hmac
+import re
+
+
+def token_digest_matches(presented: str, expected_sha256_hex: str) -> bool:
+    if not isinstance(presented, str):
+        raise TypeError("presented token must be a string")
+    if not isinstance(expected_sha256_hex, str) or re.fullmatch(
+        r"[0-9a-f]{64}", expected_sha256_hex
+    ) is None:
+        raise ValueError("expected digest must be 64 lowercase hexadecimal characters")
+
+    actual = hashlib.sha256(presented.encode("utf-8")).digest()
+    expected = bytes.fromhex(expected_sha256_hex)
+    return hmac.compare_digest(actual, expected)
+</answer>
+<reasoning>
+Edge cases:
+- An empty presented token is still hashed and compared.
+- Uppercase digest text is rejected to keep storage canonical.
+Quality notes:
+- Compares fixed-size digest bytes instead of plaintext tokens.
+</reasoning>
+
+<instruction>
+Implement validate_archive_member_names(names: list[str]) -> list[str] before extracting a ZIP-like archive.
+</instruction>
+<constraints>
+- Do not open or extract an archive.
+- Reject empty names, absolute paths, backslashes, NUL/control characters, drive-like first components, and any . or .. path component.
+- Return a new list preserving input order.
+</constraints>
+<answer>
+from pathlib import PurePosixPath
+
+
+def validate_archive_member_names(names: list[str]) -> list[str]:
+    if not isinstance(names, list):
+        raise TypeError("names must be a list")
+
+    result: list[str] = []
+    for name in names:
+        if not isinstance(name, str) or not name:
+            raise ValueError("archive member names must be non-empty strings")
+        if "\\" in name or any(ord(c) < 32 or ord(c) == 127 for c in name):
+            raise ValueError("archive member name contains a forbidden character")
+        path = PurePosixPath(name)
+        if path.is_absolute():
+            raise ValueError("archive member name must be relative")
+        raw_parts = name.split("/")
+        if any(part in {"", ".", ".."} for part in raw_parts):
+            raise ValueError("archive member name has an unsafe path component")
+        if ":" in raw_parts[0]:
+            raise ValueError("archive member name contains a drive-like prefix")
+        result.append(name)
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- Reject ../config.json and C:/temp/file.txt.
+- A trailing slash directory entry such as assets/ is allowed.
+Quality notes:
+- Checks archive entry names before any filesystem mutation.
+</reasoning>
+
+<instruction>
+Implement require_bounded_text_list(value: object, max_items: int, max_chars_each: int, max_total_chars: int) -> list[str].
+</instruction>
+<constraints>
+- Require a list of non-blank strings.
+- Trim each item into a new list.
+- Enforce all three limits before returning and reject booleans as integer limits.
+- Do not mutate the input.
+</constraints>
+<answer>
+def require_bounded_text_list(
+    value: object,
+    max_items: int,
+    max_chars_each: int,
+    max_total_chars: int,
+) -> list[str]:
+    limits = (max_items, max_chars_each, max_total_chars)
+    if any(isinstance(limit, bool) or not isinstance(limit, int) for limit in limits):
+        raise TypeError("limits must be integers")
+    if any(limit < 0 for limit in limits):
+        raise ValueError("limits must be non-negative")
+    if not isinstance(value, list):
+        raise TypeError("value must be a list")
+    if len(value) > max_items:
+        raise ValueError("too many items")
+
+    result: list[str] = []
+    total = 0
+    for item in value:
+        if not isinstance(item, str):
+            raise TypeError("every item must be a string")
+        cleaned = item.strip()
+        if not cleaned:
+            raise ValueError("items must not be blank")
+        if len(cleaned) > max_chars_each:
+            raise ValueError("an item exceeds the per-item limit")
+        total += len(cleaned)
+        if total > max_total_chars:
+            raise ValueError("items exceed the total character limit")
+        result.append(cleaned)
+    return result
+</answer>
+<reasoning>
+Edge cases:
+- An empty list is valid when max_items is zero or greater.
+- Whitespace removed by trimming does not count toward the returned total.
+Quality notes:
+- Bounds both collection size and aggregate content size.
+</reasoning>
+
+<instruction>
+Fix submit_job so invalid jobs are never enqueued, then explain the ordering bug briefly.
+</instruction>
+<constraints>
+- Keep the existing validate_job and queue.put interfaces.
+- Return the job id after successful enqueue.
+- Do not catch validation errors.
+</constraints>
+<bad_code>
+def submit_job(job, queue):
+    queue.put(job)
+    validate_job(job)
+    return job["id"]
+</bad_code>
+<reasoning>
+The original changed external state before validation, so a validation failure could leave an invalid job in the queue.
+</reasoning>
+<answer>
+def submit_job(job, queue):
+    validate_job(job)
+    queue.put(job)
+    return job["id"]
+</answer>
+<reasoning>
+Edge cases:
+- A validation exception must occur before queue.put is called.
+Quality notes:
+- Teaches validate-before-mutate with a minimal local repair.
+</reasoning>
+
+<instruction>
+Implement require_single_line_header_value(value: object, max_length: int = 1024) -> str.
+</instruction>
+<constraints>
+- Require a non-empty string no longer than max_length.
+- Reject carriage return, line feed, NUL, other ASCII control characters, and DEL.
+- Preserve valid text exactly rather than trimming it.
+</constraints>
+<answer>
+def require_single_line_header_value(
+    value: object, max_length: int = 1024
+) -> str:
+    if isinstance(max_length, bool) or not isinstance(max_length, int) or max_length < 1:
+        raise ValueError("max_length must be a positive integer")
+    if not isinstance(value, str):
+        raise TypeError("header value must be a string")
+    if not value or len(value) > max_length:
+        raise ValueError("header value length is outside the allowed range")
+    if any(ord(char) < 32 or ord(char) == 127 for char in value):
+        raise ValueError("header value contains a control character")
+    return value
+</answer>
+<reasoning>
+Edge cases:
+- A space inside a value is allowed.
+- A trailing newline is rejected rather than stripped.
+Quality notes:
+- Prevents response-splitting characters from passing through silently.
+</reasoning>
+
+<instruction>
+Implement require_allowed_origin(value: str, allowed_origins: set[str]) -> str.
+</instruction>
+<constraints>
+- Accept only canonical http or https origins with no credentials, path, query, or fragment.
+- Lowercase the scheme and host, preserve an explicit port, and compare the canonical origin with the allowlist.
+- Reject surrounding whitespace and malformed ports.
+</constraints>
+<answer>
+from urllib.parse import urlsplit
+
+
+def require_allowed_origin(value: str, allowed_origins: set[str]) -> str:
+    if not isinstance(value, str) or value != value.strip() or not value:
+        raise ValueError("origin must be non-blank canonical text")
+    if not isinstance(allowed_origins, set) or any(
+        not isinstance(item, str) or not item for item in allowed_origins
+    ):
+        raise TypeError("allowed_origins must be a set of strings")
+
+    parts = urlsplit(value)
+    if parts.scheme not in {"http", "https"} or not parts.hostname:
+        raise ValueError("origin must use http or https")
+    if parts.username is not None or parts.password is not None:
+        raise ValueError("origin must not contain credentials")
+    if parts.path or parts.query or parts.fragment:
+        raise ValueError("origin must not contain a path, query, or fragment")
+    try:
+        port = parts.port
+    except ValueError as exc:
+        raise ValueError("origin contains an invalid port") from exc
+
+    host = parts.hostname.lower()
+    if any(ord(char) > 127 for char in host):
+        raise ValueError("origin host must be ASCII")
+    display_host = f"[{host}]" if ":" in host else host
+    canonical = f"{parts.scheme.lower()}://{display_host}"
+    if port is not None:
+        canonical += f":{port}"
+    if canonical not in allowed_origins:
+        raise PermissionError("origin is not allowed")
+    return canonical
+</answer>
+<reasoning>
+Edge cases:
+- Reject https://user@example.test.
+- An explicit default port remains explicit and must match the allowlist.
+Quality notes:
+- Uses exact canonical-origin matching rather than suffix matching.
+</reasoning>
+
+<instruction>
+Implement parseContentLength(value: unknown, maximum: number): number.
+</instruction>
+<constraints>
+- Accept only a canonical decimal digit string with no sign or whitespace.
+- Require a safe integer from 0 through maximum.
+- Require maximum to be a non-negative safe integer.
+</constraints>
+<answer>
+function parseContentLength(value: unknown, maximum: number): number {
+  if (!Number.isSafeInteger(maximum) || maximum < 0) {
+    throw new RangeError("maximum must be a non-negative safe integer");
+  }
+  if (typeof value !== "string" || !/^(0|[1-9]\d*)$/.test(value)) {
+    throw new TypeError("content length must be canonical decimal text");
+  }
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed) || parsed > maximum) {
+    throw new RangeError("content length is outside the allowed range");
+  }
+  return parsed;
+}
+</answer>
+<reasoning>
+Edge cases:
+- Accept "0".
+- Reject "00", "+1", and a value above Number.MAX_SAFE_INTEGER.
+Quality notes:
+- Places a hard body-size bound before allocation or parsing.
+</reasoning>
+
+<instruction>
+Implement parseProfilePatch(value: unknown): { displayName?: string; timezone?: string }.
+</instruction>
+<constraints>
+- Require a plain object.
+- Allow only displayName and timezone as own keys; reject unexpected or inherited keys.
+- Validate present values as trimmed non-blank strings with maximum lengths 80 and 64.
+- Return a new object.
+</constraints>
+<answer>
+type ProfilePatch = { displayName?: string; timezone?: string };
+
+function parseProfilePatch(value: unknown): ProfilePatch {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new TypeError("profile patch must be an object");
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new TypeError("profile patch must be a plain object");
+  }
+
+  const source = value as Record<string, unknown>;
+  const allowed = new Set(["displayName", "timezone"]);
+  for (const key in source) {
+    if (!Object.hasOwn(source, key)) throw new Error(`inherited field is not allowed: ${key}`);
+  }
+  for (const key of Object.keys(source)) {
+    if (!allowed.has(key)) throw new Error(`unexpected field: ${key}`);
+  }
+
+  const result: ProfilePatch = {};
+  const read = (key: "displayName" | "timezone", maximum: number): string | undefined => {
+    if (!Object.hasOwn(source, key)) return undefined;
+    const item = source[key];
+    if (typeof item !== "string" || !item.trim() || item !== item.trim()) {
+      throw new TypeError(`${key} must be a trimmed non-blank string`);
+    }
+    if (item.length > maximum) throw new RangeError(`${key} is too long`);
+    return item;
+  };
+
+  const displayName = read("displayName", 80);
+  const timezone = read("timezone", 64);
+  if (displayName !== undefined) result.displayName = displayName;
+  if (timezone !== undefined) result.timezone = timezone;
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty object is valid.
+- An object with a custom class prototype is rejected.
+Quality notes:
+- Uses an explicit patch allowlist so unknown input cannot change hidden fields.
+</reasoning>
+
+<instruction>
+Implement requireTenantAccess(actor: { tenantId: string; system: boolean }, resource: { tenantId: string }): void.
+</instruction>
+<constraints>
+- Require non-blank trimmed tenant ids.
+- Allow access only for the same tenant or an actor whose system flag is exactly true.
+- Throw an authorization error without including resource contents.
+</constraints>
+<answer>
+function requireTenantAccess(
+  actor: { tenantId: string; system: boolean },
+  resource: { tenantId: string },
+): void {
+  for (const [field, value] of [
+    ["actor.tenantId", actor.tenantId],
+    ["resource.tenantId", resource.tenantId],
+  ] as const) {
+    if (typeof value !== "string" || value !== value.trim() || value.length === 0) {
+      throw new TypeError(`${field} must be a trimmed non-blank string`);
+    }
+  }
+  if (typeof actor.system !== "boolean") throw new TypeError("actor.system must be boolean");
+  if (!actor.system && actor.tenantId !== resource.tenantId) {
+    throw new Error("actor is not authorized for this tenant resource");
+  }
+}
+</answer>
+<reasoning>
+Edge cases:
+- Equal-looking ids with surrounding spaces are rejected, not normalized.
+Quality notes:
+- Makes tenant authorization a separate explicit step.
+</reasoning>
+
+<instruction>
+Implement validateWebhookTimestamp(value: unknown, nowSeconds: number, maxAgeSeconds = 300, maxFutureSkewSeconds = 30): number.
+</instruction>
+<constraints>
+- Accept only integer epoch seconds.
+- Reject timestamps older than maxAgeSeconds or farther in the future than maxFutureSkewSeconds.
+- Validate all numeric configuration values as non-negative safe integers.
+</constraints>
+<answer>
+function validateWebhookTimestamp(
+  value: unknown,
+  nowSeconds: number,
+  maxAgeSeconds = 300,
+  maxFutureSkewSeconds = 30,
+): number {
+  for (const [name, item] of [
+    ["nowSeconds", nowSeconds],
+    ["maxAgeSeconds", maxAgeSeconds],
+    ["maxFutureSkewSeconds", maxFutureSkewSeconds],
+  ] as const) {
+    if (!Number.isSafeInteger(item) || item < 0) {
+      throw new RangeError(`${name} must be a non-negative safe integer`);
+    }
+  }
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) {
+    throw new TypeError("timestamp must be a non-negative integer number");
+  }
+  if (value < nowSeconds - maxAgeSeconds) throw new Error("timestamp is too old");
+  if (value > nowSeconds + maxFutureSkewSeconds) throw new Error("timestamp is too far in the future");
+  return value;
+}
+</answer>
+<reasoning>
+Edge cases:
+- Both age and future-skew boundaries are inclusive.
+Quality notes:
+- Provides a replay-window boundary without performing any network request.
+</reasoning>
+
+<instruction>
+Implement parseBoundedMetadata(value: unknown, maxEntries = 20, maxValueLength = 200): Map<string, string>.
+</instruction>
+<constraints>
+- Require a plain object with string values.
+- Reject __proto__, prototype, and constructor keys.
+- Require keys to match lowercase letters, digits, and underscores, with length 1 through 40.
+- Enforce entry and value limits and return a new Map.
+</constraints>
+<answer>
+function parseBoundedMetadata(
+  value: unknown,
+  maxEntries = 20,
+  maxValueLength = 200,
+): Map<string, string> {
+  if (!Number.isSafeInteger(maxEntries) || maxEntries < 0) throw new RangeError("invalid maxEntries");
+  if (!Number.isSafeInteger(maxValueLength) || maxValueLength < 0) throw new RangeError("invalid maxValueLength");
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new TypeError("metadata must be an object");
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new TypeError("metadata must be a plain object");
+  }
+
+  const entries = Object.entries(value as Record<string, unknown>);
+  if (entries.length > maxEntries) throw new RangeError("too many metadata entries");
+  const forbidden = new Set(["__proto__", "prototype", "constructor"]);
+  const result = new Map<string, string>();
+  for (const [key, item] of entries) {
+    if (forbidden.has(key) || !/^[a-z0-9_]{1,40}$/.test(key)) {
+      throw new Error(`invalid metadata key: ${key}`);
+    }
+    if (typeof item !== "string" || item.length > maxValueLength) {
+      throw new TypeError(`invalid metadata value for ${key}`);
+    }
+    result.set(key, item);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- A null-prototype object is accepted.
+- An empty object is valid when maxEntries is zero.
+Quality notes:
+- Bounds attacker-controlled metadata and avoids an ordinary output object.
+</reasoning>
+
+<instruction>
+Implement requireRequestedFields(value: unknown, allowed: readonly string[], maximum = 10): string[].
+</instruction>
+<constraints>
+- Require an array of unique strings.
+- Reject unknown fields instead of silently exposing them.
+- Preserve request order and do not mutate inputs.
+- Validate the allowlist itself for duplicates and non-blank values.
+</constraints>
+<answer>
+function requireRequestedFields(
+  value: unknown,
+  allowed: readonly string[],
+  maximum = 10,
+): string[] {
+  if (!Number.isSafeInteger(maximum) || maximum < 0) throw new RangeError("invalid maximum");
+  const allowedSet = new Set<string>();
+  for (const field of allowed) {
+    if (typeof field !== "string" || !field.trim() || field !== field.trim()) {
+      throw new TypeError("allowed fields must be trimmed non-blank strings");
+    }
+    if (allowedSet.has(field)) throw new Error(`duplicate allowed field: ${field}`);
+    allowedSet.add(field);
+  }
+  if (!Array.isArray(value) || value.length > maximum) throw new TypeError("invalid requested field list");
+
+  const seen = new Set<string>();
+  const result: string[] = [];
+  for (const field of value) {
+    if (typeof field !== "string" || !allowedSet.has(field)) throw new Error("unknown requested field");
+    if (seen.has(field)) throw new Error(`duplicate requested field: ${field}`);
+    seen.add(field);
+    result.push(field);
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty requested list is valid.
+- The allowlist is checked even when the requested list is empty.
+Quality notes:
+- Prevents a caller from selecting internal fields merely by naming them.
+</reasoning>
+
+<instruction>
+Fix loadPrivateDocument so authorization happens before the private document body is loaded, then explain the defect briefly.
+</instruction>
+<constraints>
+- Keep the canRead and repository.get interfaces.
+- Throw when access is denied.
+- Do not fetch the document for an unauthorized actor.
+</constraints>
+<bad_code>
+async function loadPrivateDocument(actor: Actor, metadata: DocumentMetadata, repository: Repository) {
+  const document = await repository.get(metadata.id);
+  if (!canRead(actor, metadata)) throw new Error("not authorized");
+  return document;
+}
+</bad_code>
+<reasoning>
+The original loaded sensitive content before checking permission, creating unnecessary exposure and work for denied requests.
+</reasoning>
+<answer>
+type Actor = { id: string };
+type DocumentMetadata = { id: string };
+type PrivateDocument = { id: string; body: string };
+type Repository = { get(id: string): Promise<PrivateDocument> };
+
+declare function canRead(actor: Actor, metadata: DocumentMetadata): boolean;
+
+async function loadPrivateDocument(
+  actor: Actor,
+  metadata: DocumentMetadata,
+  repository: Repository,
+): Promise<PrivateDocument> {
+  if (!canRead(actor, metadata)) throw new Error("not authorized");
+  return repository.get(metadata.id);
+}
+</answer>
+<reasoning>
+Edge cases:
+- repository.get must not be called when canRead returns false.
+Quality notes:
+- Teaches authorization before sensitive data access.
+</reasoning>
+
+<instruction>
+Implement requireCsrfTokenPair(cookieToken: unknown, headerToken: unknown): void for a double-submit token check.
+</instruction>
+<constraints>
+- Require both values to be strings 16 through 256 characters long.
+- Allow visible ASCII characters only, with no whitespace.
+- Throw when the two tokens differ.
+- Do not return either token.
+</constraints>
+<answer>
+function requireCsrfTokenPair(cookieToken: unknown, headerToken: unknown): void {
+  const read = (name: string, value: unknown): string => {
+    if (typeof value !== "string" || value.length < 16 || value.length > 256) {
+      throw new TypeError(`${name} has an invalid length`);
+    }
+    for (const character of value) {
+      const code = character.charCodeAt(0);
+      if (code < 33 || code > 126) throw new TypeError(`${name} contains an invalid character`);
+    }
+    return value;
+  };
+  const cookie = read("cookie token", cookieToken);
+  const header = read("header token", headerToken);
+  if (cookie !== header) throw new Error("CSRF token mismatch");
+}
+</answer>
+<reasoning>
+Edge cases:
+- Two separately allocated but equal strings are accepted.
+- Whitespace-containing values are rejected before comparison.
+Quality notes:
+- Covers input shape and equality only; token issuance and cookie settings remain separate concerns.
+</reasoning>
+
+<instruction>
+Implement decodeBase64UrlPayload(value, maxBytes) that returns a Buffer.
+</instruction>
+<constraints>
+- Require canonical unpadded base64url text using only letters, digits, hyphen, and underscore.
+- Reject invalid maxBytes, malformed encoding, and decoded output above the limit.
+- Verify canonical round-trip encoding.
+</constraints>
+<answer>
+function decodeBase64UrlPayload(value, maxBytes) {
+  if (!Number.isSafeInteger(maxBytes) || maxBytes < 0) throw new RangeError("invalid maxBytes");
+  if (typeof value !== "string" || !/^[A-Za-z0-9_-]*$/.test(value)) {
+    throw new TypeError("payload must be unpadded base64url text");
+  }
+  const decoded = Buffer.from(value, "base64url");
+  if (decoded.length > maxBytes) throw new RangeError("decoded payload is too large");
+  if (decoded.toString("base64url") !== value) throw new Error("payload is not canonical base64url");
+  return decoded;
+}
+</answer>
+<reasoning>
+Edge cases:
+- The empty payload is valid when maxBytes is non-negative.
+- Padded text ending in = is rejected.
+Quality notes:
+- Bounds decoded size and rejects permissive-decoder ambiguities.
+</reasoning>
+
+<instruction>
+Implement buildSessionCookie(name, value, secure = true) that returns one Set-Cookie value.
+</instruction>
+<constraints>
+- Require name to match token characters and value to contain visible ASCII except semicolon and comma.
+- Always include Path=/, HttpOnly, and SameSite=Strict.
+- Include Secure only when secure is exactly true; require secure to be boolean.
+- Do not URL-decode or trim inputs.
+</constraints>
+<answer>
+function buildSessionCookie(name, value, secure = true) {
+  if (typeof name !== "string" || !/^[A-Za-z0-9!#$%&'*+.^_`|~-]+$/.test(name)) {
+    throw new TypeError("invalid cookie name");
+  }
+  if (typeof value !== "string" || !/^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]+$/.test(value)) {
+    throw new TypeError("invalid cookie value");
+  }
+  if (typeof secure !== "boolean") throw new TypeError("secure must be boolean");
+  const attributes = [`${name}=${value}`, "Path=/", "HttpOnly", "SameSite=Strict"];
+  if (secure) attributes.push("Secure");
+  return attributes.join("; ");
+}
+</answer>
+<reasoning>
+Edge cases:
+- Whitespace in the value is rejected.
+- secure=false is explicit and omits only Secure.
+Quality notes:
+- Produces a narrow session-cookie shape without framework dependencies.
+</reasoning>
+
+<instruction>
+Implement redactLogObject(record, sensitiveNames) that returns a null-prototype object.
+</instruction>
+<constraints>
+- Require record to be a plain or null-prototype object.
+- Match sensitive names case-insensitively and replace values with [REDACTED].
+- Copy own enumerable string keys only and do not mutate inputs.
+</constraints>
+<answer>
+function redactLogObject(record, sensitiveNames) {
+  if (record === null || typeof record !== "object" || Array.isArray(record)) {
+    throw new TypeError("record must be an object");
+  }
+  const prototype = Object.getPrototypeOf(record);
+  if (prototype !== Object.prototype && prototype !== null) throw new TypeError("record must be plain");
+  if (!Array.isArray(sensitiveNames)) throw new TypeError("sensitiveNames must be an array");
+  const sensitive = new Set(sensitiveNames.map((name) => {
+    if (typeof name !== "string" || !name.trim()) throw new TypeError("invalid sensitive name");
+    return name.toLowerCase();
+  }));
+  const result = Object.create(null);
+  for (const [key, value] of Object.entries(record)) {
+    result[key] = sensitive.has(key.toLowerCase()) ? "[REDACTED]" : value;
+  }
+  return result;
+}
+</answer>
+<reasoning>
+Edge cases:
+- A null-prototype source is accepted.
+- Symbol keys are outside this string-key logging contract.
+Quality notes:
+- Avoids inheriting object properties in the returned logging dictionary.
+</reasoning>
+
+<instruction>
+Implement requireWorkspacePermission(actor, workspace, permission) for a small authorization boundary.
+</instruction>
+<constraints>
+- Require non-blank actor.id and workspace.id.
+- Require workspace.members to be a Map from actor id to a Set of permission strings.
+- Allow only when the actor has the requested permission; throw otherwise.
+- Do not treat mere membership as permission.
+</constraints>
+<answer>
+function requireWorkspacePermission(actor, workspace, permission) {
+  if (!actor || typeof actor.id !== "string" || !actor.id.trim()) throw new TypeError("invalid actor");
+  if (!workspace || typeof workspace.id !== "string" || !workspace.id.trim()) throw new TypeError("invalid workspace");
+  if (!(workspace.members instanceof Map)) throw new TypeError("workspace.members must be a Map");
+  if (typeof permission !== "string" || !permission.trim()) throw new TypeError("invalid permission");
+  const permissions = workspace.members.get(actor.id);
+  if (!(permissions instanceof Set) || !permissions.has(permission)) {
+    throw new Error("actor is not authorized for this workspace action");
+  }
+}
+</answer>
+<reasoning>
+Edge cases:
+- A member with an empty permission set is denied.
+- Permissions are exact and case-sensitive.
+Quality notes:
+- Distinguishes membership from action-specific authorization.
+</reasoning>
+
+<instruction>
+Implement parseUploadChunkDescriptor(value, maxChunks, maxChunkBytes) returning { index, total, size }.
+</instruction>
+<constraints>
+- Require a plain object with exactly index, total, and size.
+- Accept safe integer numbers only.
+- Require total from 1 through maxChunks, index from 0 through total - 1, and size from 0 through maxChunkBytes.
+</constraints>
+<answer>
+function parseUploadChunkDescriptor(value, maxChunks, maxChunkBytes) {
+  if (!Number.isSafeInteger(maxChunks) || maxChunks < 1) throw new RangeError("maxChunks is invalid");
+  if (!Number.isSafeInteger(maxChunkBytes) || maxChunkBytes < 0) throw new RangeError("maxChunkBytes is invalid");
+  if (value === null || typeof value !== "object" || Array.isArray(value)) throw new TypeError("descriptor must be an object");
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) throw new TypeError("descriptor must be plain");
+  const keys = Object.keys(value).sort();
+  if (keys.join(",") !== "index,size,total") throw new Error("descriptor fields are invalid");
+  const { index, total, size } = value;
+  if (![index, total, size].every(Number.isSafeInteger)) throw new TypeError("descriptor values must be safe integers");
+  if (total < 1 || total > maxChunks || index < 0 || index >= total || size < 0 || size > maxChunkBytes) {
+    throw new RangeError("descriptor values are outside the allowed range");
+  }
+  return { index, total, size };
+}
+</answer>
+<reasoning>
+Edge cases:
+- The final chunk may have size zero if the protocol permits it.
+- index equal to total is rejected.
+Quality notes:
+- Bounds per-chunk and total-count metadata before storage.
+</reasoning>
+
+<instruction>
+Implement literalSearchRegex(text, flags = "u") that returns a RegExp matching text literally.
+</instruction>
+<constraints>
+- Require text and flags to be strings.
+- Allow only the unique flags d, g, i, m, s, u, v, and y.
+- Escape every regular-expression metacharacter in text.
+</constraints>
+<answer>
+function literalSearchRegex(text, flags = "u") {
+  if (typeof text !== "string" || typeof flags !== "string") throw new TypeError("text and flags must be strings");
+  if (!/^[dgimsuvy]*$/.test(flags) || new Set(flags).size !== flags.length) {
+    throw new TypeError("invalid or duplicate regular-expression flags");
+  }
+  const escaped = text.replace(/[\\^$.*+?()[\]{}|/]/g, "\\$&");
+  return new RegExp(escaped, flags);
+}
+</answer>
+<reasoning>
+Edge cases:
+- Text containing .* is matched literally.
+- Duplicate flags such as ii are rejected before RegExp construction.
+Quality notes:
+- Avoids treating an untrusted search term as a regular-expression program.
+</reasoning>
+
+<instruction>
+Fix savePreferences so validation completes before persistence, then explain the defect briefly.
+</instruction>
+<constraints>
+- Keep validatePreferences and repository.save interfaces.
+- Await validation if it is asynchronous.
+- Do not call save after validation rejects.
+</constraints>
+<bad_code>
+async function savePreferences(userId, preferences, repository) {
+  const saved = repository.save(userId, preferences);
+  await validatePreferences(preferences);
+  return saved;
+}
+</bad_code>
+<reasoning>
+The original started persistence before validation finished, so rejected input could already be written.
+</reasoning>
+<answer>
+async function savePreferences(userId, preferences, repository) {
+  await validatePreferences(preferences);
+  return repository.save(userId, preferences);
+}
+</answer>
+<reasoning>
+Edge cases:
+- repository.save must not be called when validation rejects.
+Quality notes:
+- Shows ordering across asynchronous validation and mutation.
+</reasoning>
+
+<instruction>
+Implement ConvertFrom-BoundedJsonObject that accepts JSON text and a MaxCharacters limit.
+</instruction>
+<constraints>
+- Reject text over the limit before parsing.
+- Require a JSON object root, not an array or scalar.
+- Use -ErrorAction Stop and return the parsed object.
+- Do not read files or access the network.
+</constraints>
+<answer>
+function ConvertFrom-BoundedJsonObject {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $Text,
+
+        [ValidateRange(1, 1048576)]
+        [int] $MaxCharacters = 16384
+    )
+
+    if ($Text.Length -gt $MaxCharacters) {
+        throw 'JSON text exceeds the allowed size.'
+    }
+
+    try {
+        $Value = $Text | ConvertFrom-Json -ErrorAction Stop
+    }
+    catch {
+        throw [System.ArgumentException]::new('Invalid JSON text.', $_.Exception)
+    }
+
+    if ($null -eq $Value -or $Value -is [System.Array] -or $Value -isnot [pscustomobject]) {
+        throw 'JSON root must be an object.'
+    }
+    return $Value
+}
+</answer>
+<reasoning>
+Edge cases:
+- An empty JSON object is accepted.
+- A JSON array is rejected.
+Quality notes:
+- Applies the size boundary before parser work.
+</reasoning>
+
+<instruction>
+Implement Assert-AuthorizedOwner for ActorId, OwnerId, and an optional IsAdministrator switch.
+</instruction>
+<constraints>
+- Reject blank identifiers.
+- Return no value when actor and owner match or IsAdministrator is present.
+- Throw UnauthorizedAccessException otherwise.
+</constraints>
+<answer>
+function Assert-AuthorizedOwner {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $ActorId,
+
+        [Parameter(Mandatory)]
+        [string] $OwnerId,
+
+        [switch] $IsAdministrator
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ActorId) -or $ActorId -ne $ActorId.Trim()) {
+        throw 'ActorId must be trimmed non-blank text.'
+    }
+    if ([string]::IsNullOrWhiteSpace($OwnerId) -or $OwnerId -ne $OwnerId.Trim()) {
+        throw 'OwnerId must be trimmed non-blank text.'
+    }
+    if ($ActorId -ne $OwnerId -and -not $IsAdministrator.IsPresent) {
+        throw [System.UnauthorizedAccessException]::new('Actor is not authorized for this resource.')
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- The literal string 0 is a valid identifier.
+Quality notes:
+- Uses a terminating exception for an authorization failure.
+</reasoning>
+
+<instruction>
+Implement ConvertTo-SingleLineHeaderValue.
+</instruction>
+<constraints>
+- Require a non-empty string no longer than MaxLength.
+- Reject every character below U+0020 and U+007F.
+- Return valid text unchanged.
+</constraints>
+<answer>
+function ConvertTo-SingleLineHeaderValue {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string] $Value,
+
+        [ValidateRange(1, 8192)]
+        [int] $MaxLength = 1024
+    )
+
+    if ($Value.Length -eq 0 -or $Value.Length -gt $MaxLength) {
+        throw 'Header value length is outside the allowed range.'
+    }
+    foreach ($Character in $Value.ToCharArray()) {
+        $Code = [int] $Character
+        if ($Code -lt 32 -or $Code -eq 127) {
+            throw 'Header value contains a control character.'
+        }
+    }
+    return $Value
+}
+</answer>
+<reasoning>
+Edge cases:
+- Spaces are permitted.
+- A newline is rejected rather than removed.
+Quality notes:
+- Prevents multiline header values.
+</reasoning>
+
+<instruction>
+Implement ConvertTo-UploadMetadata for Name, ContentType, Length, AllowedContentType, and MaxBytes.
+</instruction>
+<constraints>
+- Do not access the filesystem.
+- Reject path separators, control characters, . and .., and names over 128 characters.
+- Require an allowlisted lowercase content type and length from zero through MaxBytes.
+- Return a PSCustomObject.
+</constraints>
+<answer>
+function ConvertTo-UploadMetadata {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] [string] $Name,
+        [Parameter(Mandatory)] [string] $ContentType,
+        [Parameter(Mandatory)] [long] $Length,
+        [Parameter(Mandatory)] [string[]] $AllowedContentType,
+        [Parameter(Mandatory)] [long] $MaxBytes
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Name) -or $Name -ne $Name.Trim() -or $Name.Length -gt 128) {
+        throw 'Invalid upload name.'
+    }
+    if ($Name -in @('.', '..') -or $Name.Contains('/') -or $Name.Contains('\')) {
+        throw 'Upload name must not contain path syntax.'
+    }
+    if ($Name.ToCharArray() | Where-Object { [int] $_ -lt 32 -or [int] $_ -eq 127 }) {
+        throw 'Upload name contains a control character.'
+    }
+    if ($MaxBytes -lt 0) {
+        throw 'MaxBytes must be non-negative.'
+    }
+    if ($ContentType -ne $ContentType.Trim().ToLowerInvariant()) {
+        throw 'ContentType must be canonical lowercase text.'
+    }
+    foreach ($Allowed in $AllowedContentType) {
+        if ([string]::IsNullOrWhiteSpace($Allowed) -or $Allowed -ne $Allowed.Trim().ToLowerInvariant()) {
+            throw 'AllowedContentType must contain canonical lowercase values.'
+        }
+    }
+    if ($ContentType -notin $AllowedContentType) {
+        throw 'Content type is not allowed.'
+    }
+    if ($Length -lt 0 -or $Length -gt $MaxBytes) {
+        throw 'Upload length is outside the allowed range.'
+    }
+
+    [pscustomobject] @{
+        Name        = $Name
+        ContentType = $ContentType
+        Length      = $Length
+    }
+}
+</answer>
+<reasoning>
+Edge cases:
+- A zero-byte upload can be valid.
+- The helper validates metadata only.
+Quality notes:
+- Keeps upload validation ahead of storage.
+</reasoning>
+
+<instruction>
+Implement Test-AllowedCallbackUri that returns a Boolean for an HTTPS callback URL.
+</instruction>
+<constraints>
+- Require an absolute HTTPS URI on the default port with no user information or fragment.
+- Require the path to be exactly /callback and the query to be empty.
+- Match the host against AllowedHost case-insensitively.
+- Do not perform a request.
+</constraints>
+<answer>
+function Test-AllowedCallbackUri {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] [string] $Value,
+        [Parameter(Mandatory)] [string[]] $AllowedHost
+    )
+
+    foreach ($HostName in $AllowedHost) {
+        if ([string]::IsNullOrWhiteSpace($HostName) -or $HostName -ne $HostName.Trim()) {
+            throw 'AllowedHost must contain trimmed non-blank host names.'
+        }
+    }
+
+    $Uri = $null
+    if (-not [uri]::TryCreate($Value, [System.UriKind]::Absolute, [ref] $Uri)) {
+        return $false
+    }
+    if ($Uri.Scheme -ne 'https' -or -not $Uri.IsDefaultPort -or -not [string]::IsNullOrEmpty($Uri.UserInfo)) {
+        return $false
+    }
+    if ($Uri.AbsolutePath -ne '/callback' -or -not [string]::IsNullOrEmpty($Uri.Query) -or -not [string]::IsNullOrEmpty($Uri.Fragment)) {
+        return $false
+    }
+    return $Uri.Host -in $AllowedHost
+}
+</answer>
+<reasoning>
+Edge cases:
+- HTTP is rejected.
+- A permitted host with a different path is rejected.
+Quality notes:
+- Uses exact host and callback-shape checks without network access.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write one parameterized statement that updates a document title only when the document belongs to the supplied tenant and the actor is either its owner or has an admin flag.
+</instruction>
+<constraints>
+- Use named parameters :document_id, :tenant_id, :actor_id, :is_admin, and :title.
+- Reject a blank title in SQL.
+- Return the updated id, and return no row when authorization fails.
+</constraints>
+<answer>
+UPDATE documents
+SET title = btrim(:title),
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = :document_id
+  AND tenant_id = :tenant_id
+  AND (:is_admin::boolean OR owner_id = :actor_id)
+  AND btrim(:title) <> ''
+RETURNING id;
+</answer>
+<reasoning>
+Edge cases:
+- An authenticated actor from another tenant receives no updated row.
+- A whitespace-only title changes nothing.
+Quality notes:
+- Scopes authorization and mutation in the same statement.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create an idempotency_keys table for safely recognizing retried write requests.
+</instruction>
+<constraints>
+- Use a generated bigint primary key.
+- Scope each idempotency key to one tenant.
+- Store a fixed-length request hash, response status, optional response body, creation time, and expiry time.
+- Require expiry after creation and make tenant_id plus key unique.
+</constraints>
+<answer>
+CREATE TABLE idempotency_keys (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tenant_id bigint NOT NULL,
+    key text NOT NULL CHECK (btrim(key) <> '' AND length(key) <= 200),
+    request_hash bytea NOT NULL CHECK (octet_length(request_hash) = 32),
+    response_status integer CHECK (response_status BETWEEN 100 AND 599),
+    response_body jsonb,
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at timestamptz NOT NULL,
+    CONSTRAINT idempotency_keys_expiry_check CHECK (expires_at > created_at),
+    CONSTRAINT idempotency_keys_tenant_key_unique UNIQUE (tenant_id, key)
+);
+</answer>
+<reasoning>
+Edge cases:
+- The same key may be used by different tenants.
+- A response may be absent while a request is still processing.
+Quality notes:
+- Stores a request digest so accidental key reuse with different input can be detected.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create a user_sessions table that stores only a fixed-length token digest rather than a plaintext session token.
+</instruction>
+<constraints>
+- Use a generated bigint primary key and a foreign key to users(id).
+- Require a unique 32-byte digest, created_at, expires_at, and optional revoked_at.
+- Require expiry after creation and revoked_at not earlier than creation.
+</constraints>
+<answer>
+CREATE TABLE user_sessions (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_digest bytea NOT NULL UNIQUE CHECK (octet_length(token_digest) = 32),
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at timestamptz NOT NULL,
+    revoked_at timestamptz,
+    CONSTRAINT user_sessions_expiry_check CHECK (expires_at > created_at),
+    CONSTRAINT user_sessions_revoked_check CHECK (
+        revoked_at IS NULL OR revoked_at >= created_at
+    )
+);
+
+CREATE INDEX user_sessions_user_active_idx
+    ON user_sessions (user_id, expires_at)
+    WHERE revoked_at IS NULL;
+</answer>
+<reasoning>
+Edge cases:
+- Revocation may occur after expiry.
+- Plaintext token material is intentionally absent.
+Quality notes:
+- Uses a fixed-size digest as the database lookup value.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create an audit_events table for small structured security events.
+</instruction>
+<constraints>
+- Use a generated bigint primary key.
+- Require tenant_id, actor_id, event_type, target_type, target_id, occurred_at, and JSON object metadata.
+- Limit text lengths and require metadata to be a JSON object.
+- Do not include a column intended for raw secrets or request bodies.
+</constraints>
+<answer>
+CREATE TABLE audit_events (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tenant_id bigint NOT NULL,
+    actor_id bigint NOT NULL,
+    event_type text NOT NULL CHECK (btrim(event_type) <> '' AND length(event_type) <= 80),
+    target_type text NOT NULL CHECK (btrim(target_type) <> '' AND length(target_type) <= 80),
+    target_id text NOT NULL CHECK (btrim(target_id) <> '' AND length(target_id) <= 200),
+    metadata jsonb NOT NULL DEFAULT '{}'::jsonb
+        CHECK (jsonb_typeof(metadata) = 'object'),
+    occurred_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX audit_events_tenant_time_idx
+    ON audit_events (tenant_id, occurred_at DESC, id DESC);
+</answer>
+<reasoning>
+Edge cases:
+- Empty metadata is valid.
+- Array metadata is rejected.
+Quality notes:
+- Keeps the audit schema narrow and queryable without storing whole request payloads.
+</reasoning>
+
+<instruction>
+For PostgreSQL, write a query that supports three allowlisted sort modes without interpolating an ORDER BY identifier.
+</instruction>
+<constraints>
+- Use the parameter :sort_mode with created_desc, created_asc, or name_asc.
+- Reject unsupported modes by returning no rows.
+- Use id as a deterministic tie-breaker.
+</constraints>
+<answer>
+SELECT id, name, created_at
+FROM reports
+WHERE :sort_mode IN ('created_desc', 'created_asc', 'name_asc')
+ORDER BY
+    CASE WHEN :sort_mode = 'created_asc' THEN created_at END ASC,
+    CASE WHEN :sort_mode = 'created_desc' THEN created_at END DESC,
+    CASE WHEN :sort_mode = 'name_asc' THEN name END ASC,
+    id ASC;
+</answer>
+<reasoning>
+Edge cases:
+- An unsupported sort mode produces an empty result rather than dynamic SQL.
+Quality notes:
+- Uses a value parameter to select among fixed order expressions.
+</reasoning>
+
+<instruction>
+For PostgreSQL, create projects and project_notes tables so a note cannot reference a project from another tenant.
+</instruction>
+<constraints>
+- Use generated bigint ids.
+- Give projects a unique constraint on tenant_id and id.
+- Make project_notes reference the composite tenant_id and project_id pair.
+- Require non-blank note text.
+</constraints>
+<answer>
+CREATE TABLE projects (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tenant_id bigint NOT NULL,
+    name text NOT NULL CHECK (btrim(name) <> ''),
+    CONSTRAINT projects_tenant_id_id_unique UNIQUE (tenant_id, id)
+);
+
+CREATE TABLE project_notes (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    tenant_id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    body text NOT NULL CHECK (btrim(body) <> ''),
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT project_notes_project_tenant_fk
+        FOREIGN KEY (tenant_id, project_id)
+        REFERENCES projects (tenant_id, id)
+        ON DELETE CASCADE
+);
+</answer>
+<reasoning>
+Edge cases:
+- The same numeric project id cannot be paired with a different tenant id.
+Quality notes:
+- Enforces a tenant boundary at the relational-integrity layer.
+</reasoning>
+
+<instruction>
+Explain the difference between authentication and authorization using a small document-editing example.
+</instruction>
+<constraints>
+- Use no more than five sentences.
+- Make clear that a valid login does not grant access to every document.
+</constraints>
+<answer>
+Authentication establishes who the caller is, such as verifying that the caller is user 42. Authorization decides whether that identified caller may perform a specific action on a specific resource. A logged-in user may read their own document but still be forbidden from editing another user's private document. Code should perform the authorization check before loading or changing sensitive resource data.
+</answer>
+<reasoning>
+Edge cases:
+- An administrator may have an explicit broader permission, but it should still be checked.
+Quality notes:
+- States the two concepts separately and ties them to operation order.
+</reasoning>
+
+<instruction>
+Explain why untrusted input should normally be parsed, validated, and authorized before a database write, file write, or queue submission.
+</instruction>
+<constraints>
+- Use no more than five sentences.
+- Mention the risk of partial or invalid state.
+</constraints>
+<answer>
+Parsing first establishes the input's structure, validation enforces its contract, and authorization confirms that the caller may request the change. If mutation happens earlier, a later failure can leave invalid data, an unwanted file, or a queued job behind. Performing checks before the side effect makes failure easier to reason about and reduces cleanup work. A transaction or atomic operation is still useful when several validated mutations must succeed together.
+</answer>
+<reasoning>
+Edge cases:
+- Some systems reserve resources atomically during validation; that combined operation still needs a clear rollback rule.
+Quality notes:
+- Explains ordering without pretending every workflow is identical.
+</reasoning>
+
+<instruction>
+Explain why logging an allowlisted set of fields is usually safer than serializing an entire request or user object.
+</instruction>
+<constraints>
+- Use no more than five sentences.
+- Mention both secret exposure and future schema changes.
+</constraints>
+<answer>
+An entire request or user object may contain credentials, session values, personal data, or large nested payloads that were never meant for logs. An allowlist records only the fields needed for diagnosis, such as a request id, operation name, and outcome. This also stays safer when future code adds a new sensitive field to the object, because the logger does not include it automatically. Values that are still sensitive should be redacted or replaced with a non-secret identifier.
+</answer>
+<reasoning>
+Edge cases:
+- Even allowlisted fields need length limits when they come from external input.
+Quality notes:
+- Promotes safe defaults and change-resistant logging.
+</reasoning>

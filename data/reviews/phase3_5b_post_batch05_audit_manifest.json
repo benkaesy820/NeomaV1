@@ -1,0 +1,57 @@
+{
+  "phase": "Phase 3.5B post-Batch-05 corpus audit",
+  "baseline_after_duplicate_cleanup": "15b5cb9",
+  "batch05_manifest": "data/reviews/phase3_5b_batch05_review_manifest.json",
+  "report_directory": "data/reports/post_batch05",
+  "instruction_records": 251,
+  "accepted_phase3_5b_records": 200,
+  "legacy_protocol_records": 51,
+  "duplicate_cleanup": {
+    "removed_records": [
+      "legacy:code_instruction_direct:008",
+      "legacy:code_instruction_direct:011"
+    ],
+    "kept_records": [
+      "legacy:code_instruction_seed:009",
+      "legacy:code_instruction_seed:004"
+    ],
+    "reason": "Kept the richer seed records and removed weaker exact-answer duplicates from code_instruction_direct.txt."
+  },
+  "audit_decision": {
+    "status": "targeted_gap_batch_recommended",
+    "reason": "The curriculum remains below the 300-example lower bound; add one measured gap batch, not another broad batch.",
+    "critical_leakage_flags": 0,
+    "exact_duplicate_flags": 0,
+    "expected_context": 256,
+    "records_over_expected_context": 104,
+    "underrepresented_languages": [
+      "powershell"
+    ]
+  },
+  "duplicate_analysis": {
+    "total_flags": 14,
+    "exact_flags": 0,
+    "structural_flags": 5
+  },
+  "leakage_analysis": {
+    "critical": 0,
+    "review": 0,
+    "informational": 98
+  },
+  "human_review_queue": {
+    "review_duplicate_flags": 14,
+    "review_context_or_supervision_flags": 42,
+    "notes": "No exact duplicate or critical/review leakage blockers remain. Proxy length/supervision rows should be rechecked with a final tokenizer before rewriting records."
+  },
+  "measured_next_gap": {
+    "primary_capability_gap": "efficiency",
+    "remaining_efficiency_slots": 27,
+    "secondary_language_gap": "powershell",
+    "powershell_delta_at_current_size": -5.38,
+    "near_target_supporting_gaps": [
+      "text explanations",
+      "sql_database"
+    ],
+    "recommendation": "One targeted efficiency batch, biased toward PowerShell plus some SQL/database and concise explanation examples; avoid more broad validation/security/function batches."
+  }
+}
