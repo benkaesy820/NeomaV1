@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "packet": "Phase 3.5B Work Packet 13F",
+  "baseline": "bf70cfb",
+  "scope": "Safe English source alternatives and internal English seed planning only",
+  "checks": {
+    "python_compile": "passed",
+    "plan_validator": "passed",
+    "new_unit_tests": "6 passed",
+    "available_project_tests": "64 passed",
+    "unavailable_project_tests": "3 test_prepare_dataset tests not executed in Ted sandbox because the tokenizers dependency is not installed",
+    "external_source_candidates": 3,
+    "external_replacement_target_tokens": 12000000,
+    "internal_components": 6,
+    "internal_seed_target_tokens": 60000,
+    "gptnl_remains_blocked": true,
+    "training_allowed_false": true
+  },
+  "explicitly_not_done": [
+    "external English download",
+    "internal English generation",
+    "training admission",
+    "tokenizer rebuild or comparison",
+    "dataset preparation",
+    "model training"
+  ],
+  "local_follow_up": "Leo should run the complete project suite in the normal Neoma environment where requirements.txt is installed; the expected total after this packet is 67 tests.",
+  "training_allowed": false
+}

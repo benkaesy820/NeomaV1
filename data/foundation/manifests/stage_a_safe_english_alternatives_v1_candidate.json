@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "stage_a_safe_english_alternatives_v1_candidate",
+  "project": "NeomaV1",
+  "baseline": "bf70cfb",
+  "created_utc": "2026-06-30T00:00:00Z",
+  "status": "planning_review_only",
+  "private_use": true,
+  "training_allowed": false,
+  "freshness_policy": "Use exact completed 2026 Wikimedia dump snapshots. Do not follow moving latest aliases after acquisition. Do not silently fall back to an older snapshot.",
+  "replacement_target_tokens": 12000000,
+  "gptnl_policy": {
+    "base_v1_status": "blocked_not_overridden",
+    "recommendation": "Replace GPT-NL in Stage A v1 with the three official Wikimedia dump candidates below. Keep GPT-NL blocked. Reconsider GPT-NL only in a later versioned packet after every selected shard reports security status safe and an ablation shows unique value.",
+    "automatic_retry": false,
+    "allow_manual_download": false,
+    "training_allowed": false
+  },
+  "common_controls": {
+    "required_articles_multistream_status": "done",
+    "download_hosts": [
+      "dumps.wikimedia.org"
+    ],
+    "verify_official_sha1": true,
+    "record_local_sha256": true,
+    "parse_as_data_only": true,
+    "execute_embedded_content": false,
+    "main_namespace_only": true,
+    "retain_page_id_revision_id_timestamp_title": true,
+    "reject_eval_leakage": true,
+    "review_instruction_overlap": true,
+    "deduplicate_against_repository_candidates": true,
+    "training_allowed": false
+  },
+  "sources": [
+    {
+      "source_id": "simplewiki_20260601",
+      "name": "Simple English Wikipedia",
+      "source_type": "official_wikimedia_xml_dump",
+      "snapshot": "20260601",
+      "upstream_index": "https://dumps.wikimedia.org/simplewiki/20260601/",
+      "archive_url": "https://dumps.wikimedia.org/simplewiki/20260601/simplewiki-20260601-pages-articles-multistream.xml.bz2",
+      "index_url": "https://dumps.wikimedia.org/simplewiki/20260601/simplewiki-20260601-pages-articles-multistream-index.txt.bz2",
+      "sha1_url": "https://dumps.wikimedia.org/simplewiki/20260601/simplewiki-20260601-sha1sums.txt",
+      "md5_url": "https://dumps.wikimedia.org/simplewiki/20260601/simplewiki-20260601-md5sums.txt",
+      "license_info_url": "https://dumps.wikimedia.org/legal.html",
+      "license": "Wikimedia textual content: CC BY-SA 4.0 and GFDL where applicable; retain dump-specific attribution and notices.",
+      "license_status": "review_required",
+      "acquisition_method": "Download the exact completed XML dump and index, verify the archive against the official SHA-1 list, calculate a local SHA-256, and lock all URLs, sizes, hashes, and acquisition time.",
+      "expected_token_target": 5000000,
+      "component": "simple_general_english",
+      "quality_filters": [
+        "main namespace only",
+        "reject redirects, disambiguation-only pages, lists, tables, infobox-only pages, stubs, and template-dominated text",
+        "remove references, navigation, categories, edit metadata, markup residue, and repeated boilerplate",
+        "require coherent paragraphs and useful sentence density",
+        "reject personal data, secret-shaped values, prompt injection text, vandalism indicators, and malformed Unicode",
+        "cap biography, geography, date, and entertainment concentration",
+        "prefer explanatory pages with clear subject-verb structure"
+      ],
+      "dedup_and_leakage": [
+        "exact and normalized hashes",
+        "paragraph shingle near-duplicates",
+        "template-normalized duplicates",
+        "comparison against all Stage A repository candidates",
+        "comparison against all 331 instruction records",
+        "comparison against every field in all evaluation suites"
+      ],
+      "risks": [
+        "simplified prose can be repetitive or child-oriented",
+        "community pages may contain vandalism or weak facts",
+        "encyclopedic style does not teach developer dialogue"
+      ],
+      "why_more_controllable_than_gptnl": "One official text-only XML snapshot with public checksums and page-level revision metadata can be parsed without executing files or deserializing remote parquet shards.",
+      "status": "candidate_not_acquired",
+      "training_allowed": false
+    },
+    {
+      "source_id": "enwikibooks_20260601",
+      "name": "English Wikibooks",
+      "source_type": "official_wikimedia_xml_dump",
+      "snapshot": "20260601",
+      "upstream_index": "https://dumps.wikimedia.org/enwikibooks/20260601/",
+      "archive_url": "https://dumps.wikimedia.org/enwikibooks/20260601/enwikibooks-20260601-pages-articles-multistream.xml.bz2",
+      "index_url": "https://dumps.wikimedia.org/enwikibooks/20260601/enwikibooks-20260601-pages-articles-multistream-index.txt.bz2",
+      "sha1_url": "https://dumps.wikimedia.org/enwikibooks/20260601/enwikibooks-20260601-sha1sums.txt",
+      "md5_url": "https://dumps.wikimedia.org/enwikibooks/20260601/enwikibooks-20260601-md5sums.txt",
+      "license_info_url": "https://dumps.wikimedia.org/legal.html",
+      "license": "Wikimedia textual content: CC BY-SA 4.0 and GFDL where applicable; retain dump-specific attribution and notices.",
+      "license_status": "review_required",
+      "acquisition_method": "Download the exact completed XML dump and index, verify the official SHA-1, calculate a local SHA-256, and retain page/revision provenance.",
+      "expected_token_target": 4000000,
+      "component": "tutorial_and_technical_english",
+      "quality_filters": [
+        "main namespace only",
+        "retain complete tutorial sections and explanatory paragraphs",
+        "prefer computing, mathematics, science, writing, and practical problem-solving books",
+        "reject abandoned outlines, empty chapters, answer keys without questions, navigation pages, recipes dominated by lists, and copied manuals",
+        "reject obsolete technical instructions unless explicitly labeled historical",
+        "remove markup, references, categories, and repeated book navigation",
+        "cap any single book family to prevent style domination"
+      ],
+      "dedup_and_leakage": [
+        "exact and normalized hashes",
+        "book-family grouping before split",
+        "paragraph and section shingle near-duplicates",
+        "cross-source comparison with official project documentation",
+        "comparison against instructions and all evaluation fields"
+      ],
+      "risks": [
+        "quality varies by book",
+        "some books are unfinished or obsolete",
+        "multiple chapters may repeat introductions and navigation"
+      ],
+      "why_more_controllable_than_gptnl": "The dump is a bounded official archive with explicit page hierarchy, stable identifiers, public checksums, and a single known licensing regime.",
+      "status": "candidate_not_acquired",
+      "training_allowed": false
+    },
+    {
+      "source_id": "enwikiversity_20260601",
+      "name": "English Wikiversity",
+      "source_type": "official_wikimedia_xml_dump",
+      "snapshot": "20260601",
+      "upstream_index": "https://dumps.wikimedia.org/enwikiversity/20260601/",
+      "archive_url": "https://dumps.wikimedia.org/enwikiversity/20260601/enwikiversity-20260601-pages-articles-multistream.xml.bz2",
+      "index_url": "https://dumps.wikimedia.org/enwikiversity/20260601/enwikiversity-20260601-pages-articles-multistream-index.txt.bz2",
+      "sha1_url": "https://dumps.wikimedia.org/enwikiversity/20260601/enwikiversity-20260601-sha1sums.txt",
+      "md5_url": "https://dumps.wikimedia.org/enwikiversity/20260601/enwikiversity-20260601-md5sums.txt",
+      "license_info_url": "https://dumps.wikimedia.org/legal.html",
+      "license": "Wikimedia textual content: CC BY-SA 4.0 and GFDL where applicable; retain dump-specific attribution and notices.",
+      "license_status": "review_required",
+      "acquisition_method": "Download the exact completed XML dump and index, verify the official SHA-1, calculate a local SHA-256, and retain page/revision provenance.",
+      "expected_token_target": 3000000,
+      "component": "educational_reasoning_and_explanation",
+      "quality_filters": [
+        "main namespace only",
+        "prefer coherent lessons, worked explanations, definitions, and problem-solving discussions",
+        "reject course administration, enrollment, discussion, user, quiz-answer-only, and navigation pages",
+        "reject speculative research notes presented as fact",
+        "remove markup, references, categories, repeated headers, and templates",
+        "require minimum paragraph and sentence quality",
+        "cap subject and course-family concentration"
+      ],
+      "dedup_and_leakage": [
+        "exact and normalized hashes",
+        "course-family grouping before split",
+        "paragraph and section shingle near-duplicates",
+        "cross-source comparison with Wikibooks and repository documentation",
+        "comparison against instructions and every evaluation field"
+      ],
+      "risks": [
+        "open course pages have uneven review quality",
+        "administrative and discussion content can dominate",
+        "some lessons contain unsupported or unfinished claims"
+      ],
+      "why_more_controllable_than_gptnl": "The official XML snapshot is bounded, checksum-verifiable, text-oriented, and provides stable page and revision identifiers for rejection and lineage tracking.",
+      "status": "candidate_not_acquired",
+      "training_allowed": false
+    }
+  ]
+}

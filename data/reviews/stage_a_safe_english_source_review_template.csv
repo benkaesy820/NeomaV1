@@ -1,0 +1,4 @@
+source_id,snapshot,articles_multistream_status_done,archive_sha1_verified,local_sha256_recorded,license_reviewed,provenance_complete,quality_sample_reviewed,dedup_plan_reviewed,leakage_plan_reviewed,decision,reviewer,notes
+simplewiki_20260601,20260601,false,false,false,false,false,false,false,false,pending,,
+enwikibooks_20260601,20260601,false,false,false,false,false,false,false,false,pending,,
+enwikiversity_20260601,20260601,false,false,false,false,false,false,false,false,pending,,

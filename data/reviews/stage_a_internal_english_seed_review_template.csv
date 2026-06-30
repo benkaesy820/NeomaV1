@@ -1,0 +1,7 @@
+component_id,target_tokens,target_documents,schema_reviewed,verification_reviewed,diversity_reviewed,self_knowledge_grounded,eval_exclusion_reviewed,decision,reviewer,notes
+developer_dialogue,18000,90,false,false,false,n/a,false,pending,,
+constraint_english,12000,120,false,false,false,n/a,false,pending,,
+bug_review_commit_language,12000,90,false,false,false,n/a,false,pending,,
+cli_config_errors,8000,70,false,false,false,n/a,false,pending,,
+neoma_self_knowledge,6000,50,false,false,false,false,false,pending,,
+verified_transformations,4000,40,false,false,false,n/a,false,pending,,

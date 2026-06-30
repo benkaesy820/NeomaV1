@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "stage_a_internal_english_seed_v1_plan",
+  "project": "NeomaV1",
+  "baseline": "bf70cfb",
+  "status": "planning_only_not_generated",
+  "training_allowed": false,
+  "seed_target_tokens": 60000,
+  "purpose": "Create a small, high-information internal English seed that establishes schemas, verification, style, and diversity before any large-scale internal authoring.",
+  "record_schema": {
+    "required_fields": [
+      "id",
+      "family_id",
+      "component_id",
+      "document_type",
+      "text",
+      "creation_method",
+      "semantic_labels",
+      "factual_basis",
+      "parent_source_ids",
+      "review_status",
+      "content_sha256",
+      "training_allowed"
+    ],
+    "training_allowed_required_value": false
+  },
+  "global_rules": [
+    "No hidden chain-of-thought or private reasoning traces.",
+    "Do not copy, lightly paraphrase, or answer any development or locked evaluation item.",
+    "Use short explicit reasoning summaries only when the document type naturally calls for an explanation.",
+    "No unsupported current facts, fake commands, fake APIs, secret-shaped values, or personal data.",
+    "Keep families semantically coherent but lexically diverse; do not create rename-only variants.",
+    "Prefer documents that teach a distinction, dependency, consequence, or decision.",
+    "All candidates remain local/review-only until a later admission manifest.",
+    "Split by family before segmentation in any later dataset.",
+    "Every factual self-knowledge statement must be generated from a versioned model card or build manifest."
+  ],
+  "components": [
+    {
+      "component_id": "developer_dialogue",
+      "target_tokens": 18000,
+      "target_documents": 90,
+      "document_types": [
+        "two_turn_request_and_response",
+        "three_turn_correction",
+        "clarification_then_resolution",
+        "assumption_then_confirmation",
+        "evidence_request_then_debug_step"
+      ],
+      "capabilities": [
+        "preserve earlier constraints",
+        "ask only material clarifications",
+        "state harmless assumptions briefly",
+        "respond to corrections without restarting",
+        "separate known facts from inferences"
+      ],
+      "verification": [
+        "turn-reference consistency",
+        "constraint ledger check",
+        "no generic clarification reflex",
+        "human review of every seed family"
+      ],
+      "training_allowed": false
+    },
+    {
+      "component_id": "constraint_english",
+      "target_tokens": 12000,
+      "target_documents": 120,
+      "document_types": [
+        "paired_paraphrases",
+        "contrast_examples",
+        "short_requirement_sets",
+        "conflict_identification",
+        "reference_resolution"
+      ],
+      "capabilities": [
+        "negation",
+        "missing versus empty",
+        "zero as valid",
+        "exactly, at least, and at most",
+        "before, after, unless, and only when",
+        "preserve versus replace",
+        "stable order and non-mutation",
+        "conflicting constraints"
+      ],
+      "verification": [
+        "semantic equivalence labels",
+        "counterexample checks",
+        "template concentration limit",
+        "near-duplicate review"
+      ],
+      "training_allowed": false
+    },
+    {
+      "component_id": "bug_review_commit_language",
+      "target_tokens": 12000,
+      "target_documents": 90,
+      "document_types": [
+        "bug_report",
+        "expected_actual_reproduction",
+        "review_finding",
+        "severity_rationale",
+        "commit_summary",
+        "no_change_review"
+      ],
+      "capabilities": [
+        "symptom versus cause",
+        "evidence-based debugging",
+        "severity calibration",
+        "smallest correct fix",
+        "regression description",
+        "clear change summary"
+      ],
+      "verification": [
+        "linked code or scenario consistency",
+        "severity rubric",
+        "reproduction sufficiency",
+        "no invented test result"
+      ],
+      "training_allowed": false
+    },
+    {
+      "component_id": "cli_config_errors",
+      "target_tokens": 8000,
+      "target_documents": 70,
+      "document_types": [
+        "usage_text",
+        "option_description",
+        "validation_error",
+        "configuration_comment",
+        "dry_run_summary",
+        "safe_warning",
+        "troubleshooting_note"
+      ],
+      "capabilities": [
+        "concise diagnostics",
+        "actionable recovery",
+        "safe defaults",
+        "exit-status meaning",
+        "destructive-action preview"
+      ],
+      "verification": [
+        "command and option consistency",
+        "error-condition match",
+        "no executable destructive example",
+        "secret and path scan"
+      ],
+      "training_allowed": false
+    },
+    {
+      "component_id": "neoma_self_knowledge",
+      "target_tokens": 6000,
+      "target_documents": 50,
+      "document_types": [
+        "model_card_fragment",
+        "capability_boundary",
+        "tool_access_statement",
+        "uncertainty_statement",
+        "version_lineage",
+        "self_training_role"
+      ],
+      "capabilities": [
+        "accurate model identity",
+        "known context and architecture limits",
+        "no false internet, file, memory, or tool claims",
+        "honest uncertainty",
+        "distinguish Stage A and Stage B",
+        "describe candidate-generation role without claiming autonomous approval"
+      ],
+      "verification": [
+        "render from versioned model-card facts",
+        "fail on unknown or stale fields",
+        "capability inflation scan",
+        "regenerate after any model release change"
+      ],
+      "training_allowed": false
+    },
+    {
+      "component_id": "verified_transformations",
+      "target_tokens": 4000,
+      "target_documents": 40,
+      "document_types": [
+        "function_summary",
+        "docstring",
+        "test_name",
+        "error_explanation",
+        "commit_description",
+        "comment_to_requirement"
+      ],
+      "capabilities": [
+        "connect code and English",
+        "state behavior precisely",
+        "avoid unsupported details",
+        "preserve source meaning"
+      ],
+      "verification": [
+        "parent source required",
+        "behavioral consistency check",
+        "syntax or test execution where applicable",
+        "human review of every seed transformation"
+      ],
+      "training_allowed": false
+    }
+  ],
+  "seed_exit_criteria": [
+    "All 60000 target tokens are represented by reviewed candidate documents.",
+    "Every record passes schema, secret, PII, leakage, and exact-dedup checks.",
+    "No component exceeds its template concentration threshold.",
+    "All self-knowledge facts match the current versioned model card.",
+    "A human review sample finds no systematic unsupported claims or artificial phrasing.",
+    "A later packet explicitly admits selected records; this plan grants no admission."
+  ]
+}

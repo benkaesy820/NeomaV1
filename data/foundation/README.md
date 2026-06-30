@@ -31,4 +31,6 @@ Packet boundaries:
 - Work Packet 13 decodes, quality-filters, deduplicates, checks protected-data overlap, and constructs document families.
 - Work Packet 13E inspects GPT-NL shard security and defines bounded row streaming, but blocks by default while selected shards report Hugging Face security status `queued`.
 
-None of these packets grants training permission, prepares a dataset, trains a tokenizer, or starts a model run. GPT-NL rows remain deferred while shard security is not `safe` unless a future explicit override is approved.
+None of these packets grants training permission, prepares a dataset, trains a tokenizer, or starts a model run. GPT-NL rows remain deferred while shard security is not `safe`; Work Packet 13F keeps manual download and override paths blocked for Stage A v1.
+
+- Work Packet 13F keeps GPT-NL blocked, proposes exact official Wikimedia English alternatives, and defines a 60K-token internal-authored seed plan. It performs no source download or content generation and grants no training permission.

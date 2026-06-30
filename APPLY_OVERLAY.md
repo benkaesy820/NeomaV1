@@ -1,40 +1,22 @@
-# Apply Work Packet 13 Overlay
+# Apply Work Packet 13F Overlay
 
-Apply this overlay at repository root on baseline `2c74c34`.
+Apply this overlay at repository root on baseline `bf70cfb`.
 
-## Files added or updated
-
-- `PHASE3_5B_WORK_PACKET_13.md`
-- `scripts/stage_a_filtering_common.py`
-- `scripts/filter_stage_a_sources.py`
-- `scripts/verify_stage_a_filtering.py`
-- `tests/test_stage_a_source_filtering.py`
-- `data/foundation/manifests/stage_a_sources_v1_filtering_plan.json`
-- `data/reviews/stage_a_source_filtering_review_template.csv`
-- `data/reviews/stage_a_work_packet_13_validation.json`
-- `data/foundation/README.md`
-- `.gitignore`
-
-## Validate before using local staged sources
+## Validate
 
 ```powershell
-.\p -m py_compile scripts\stage_a_filtering_common.py scripts\filter_stage_a_sources.py scripts\verify_stage_a_filtering.py tests\test_stage_a_source_filtering.py
+.\p -m py_compile scripts\validate_stage_a_english_alternatives.py tests\test_stage_a_english_alternatives.py
+.\p scripts\validate_stage_a_english_alternatives.py
 .\p -m unittest discover -s tests
-.\p scripts\filter_stage_a_sources.py --all
-.\p scripts\verify_stage_a_filtering.py
 ```
 
-The last two commands are non-mutating dry/empty-local checks.
+Review:
 
-## Filter and verify locally
+- `data/foundation/manifests/stage_a_safe_english_alternatives_v1_candidate.json`
+- `data/foundation/manifests/stage_a_internal_english_seed_v1_plan.json`
+- `data/plans/STAGE_A_SAFE_ENGLISH_ALTERNATIVES_AND_INTERNAL_SEED_PLAN.md`
+- both review-template CSV files.
 
-```powershell
-.\p scripts\filter_stage_a_sources.py --all --execute
-.\p scripts\verify_stage_a_filtering.py --require-all
-```
+Do not download any source during this packet. Do not create internal seed content, change `training_allowed`, build a tokenizer, prepare a dataset, or train a model.
 
-Review the local output under `data/foundation/filtered/` and complete `data/reviews/stage_a_source_filtering_review_template.csv`.
-
-Do not copy survivors into `approved/`, do not alter any `training_allowed` flag, and do not run tokenizer, dataset-preparation, or training commands during this packet.
-
-GPT-NL remains deferred and must contain zero filtered text rows.
+The next packet may acquire and hash the three exact `20260601` Wikimedia dumps only after Leo approves the plan and confirms each official `articlesmultistreamdump` job reports `done`.
