@@ -1,0 +1,51 @@
+{
+  "baseline": "f378d0a",
+  "checks": {
+    "all_plan_records_training_allowed_false": true,
+    "empty_local_verification": "passed with all sources reported not_staged",
+    "full_unit_tests": "43 passed",
+    "gptnl_metadata_only_no_row_streaming": true,
+    "inventory_all_dry_run": "passed for 10 sources",
+    "python_compile": "passed",
+    "stage_a_readiness_validation": "passed",
+    "staging_all_dry_run": "passed for 10 sources",
+    "staging_plan_source_count": 10,
+    "staging_plan_unique_ids": true,
+    "synthetic_archive_integration": {
+      "archive_root_stripping": true,
+      "duplicate_logical_paths_blocked": true,
+      "exact_byte_preservation_including_crlf": true,
+      "exclusions_override_inclusions": true,
+      "metadata_only_staging_has_zero_files": true,
+      "path_traversal_rejected": true,
+      "per_file_hashes_verified": true,
+      "security_hold_blocks_staging": true,
+      "symlink_special_member_rejected": true,
+      "tamper_detection": true,
+      "unsupported_and_oversize_classification": true
+    }
+  },
+  "explicitly_not_done": [
+    "content decoding or normalization",
+    "quality filtering or deduplication",
+    "training admission",
+    "GPT-NL row download",
+    "tokenizer rebuild",
+    "dataset preparation",
+    "model training"
+  ],
+  "local_execution_required": [
+    "inventory all ten locally quarantined acquisitions",
+    "review inventory summaries",
+    "stage selected files",
+    "verify all staged hashes with --require-all",
+    "complete Leo staging review template"
+  ],
+  "packet": "Phase 3.5B Work Packet 12",
+  "real_quarantined_archives_available_to_ted": false,
+  "real_source_extraction_executed_by_ted": false,
+  "real_source_inventory_executed_by_ted": false,
+  "schema_version": "1.0",
+  "scope": "allowed-path inventory and staged extraction only",
+  "training_allowed": false
+}

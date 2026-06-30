@@ -1,0 +1,454 @@
+{
+  "baseline": "f378d0a",
+  "created_utc": "2026-06-29T00:00:00Z",
+  "manifest_id": "stage_a_sources_v1_staging_plan",
+  "policy": {
+    "exclusions_override_inclusions": true,
+    "gptnl_rows_deferred": true,
+    "inventory_before_extraction": true,
+    "no_content_normalization": true,
+    "no_quality_admission": true,
+    "no_tokenizer_or_dataset_prep": true,
+    "preserve_bytes_exactly": true,
+    "regular_files_only": true,
+    "reject_traversal_symlinks_hardlinks_devices": true,
+    "staged_output_is_local_only": true
+  },
+  "project": "NeomaV1",
+  "schema_version": "1.0",
+  "source_count": 10,
+  "sources": [
+    {
+      "allowed_names": [],
+      "allowed_paths": [],
+      "allowed_suffixes": [],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [],
+      "inventory_mode": "metadata_only",
+      "max_file_bytes": 0,
+      "max_selected_bytes": 0,
+      "name": "GPT-NL Public Corpus — selected English subsets",
+      "normalize_text": false,
+      "notes": "Inventory the pinned selected-subset stream manifest only. Do not download or stage corpus rows in Work Packet 12.",
+      "preserve_archive_bytes": true,
+      "source_id": "gptnl_english_2026",
+      "staging_mode": "none",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "Doc/tutorial/",
+        "Doc/library/",
+        "Lib/"
+      ],
+      "allowed_suffixes": [
+        ".html",
+        ".ini",
+        ".json",
+        ".md",
+        ".mdx",
+        ".py",
+        ".pyi",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "Modules/",
+        "Objects/",
+        "Parser/",
+        "Python/",
+        "PCbuild/",
+        "externals/",
+        "Lib/test/**/data/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 500000000,
+      "name": "CPython",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "cpython_3_14_6",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "src/_pytest/",
+        "testing/",
+        "doc/"
+      ],
+      "allowed_suffixes": [
+        ".html",
+        ".ini",
+        ".json",
+        ".md",
+        ".mdx",
+        ".py",
+        ".pyi",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        ".github/",
+        "build/",
+        "dist/",
+        "testing/example_scripts/issue*/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 300000000,
+      "name": "pytest",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "pytest_9_1_1",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "src/",
+        "tests/cases/"
+      ],
+      "allowed_suffixes": [
+        ".cjs",
+        ".d.ts",
+        ".html",
+        ".ini",
+        ".js",
+        ".json",
+        ".md",
+        ".mdx",
+        ".mjs",
+        ".rst",
+        ".toml",
+        ".ts",
+        ".tsx",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "tests/baselines/",
+        "Herebyfile.mjs",
+        "node_modules/",
+        "built/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 700000000,
+      "name": "TypeScript compiler and tests",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "typescript_6_0_3",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "packages/documentation/",
+        "packages/playground-examples/",
+        "packages/tsconfig-reference/"
+      ],
+      "allowed_suffixes": [
+        ".cjs",
+        ".css",
+        ".d.ts",
+        ".html",
+        ".ini",
+        ".js",
+        ".json",
+        ".md",
+        ".mdx",
+        ".mjs",
+        ".rst",
+        ".toml",
+        ".ts",
+        ".tsx",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "node_modules/",
+        "packages/typescriptlang-org/",
+        "packages/glossary/copy/",
+        "**/translations/",
+        "**/generated/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 700000000,
+      "name": "TypeScript Website and Handbook",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "typescript_website_2026",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "doc/api/",
+        "lib/",
+        "test/parallel/"
+      ],
+      "allowed_suffixes": [
+        ".cjs",
+        ".html",
+        ".ini",
+        ".js",
+        ".json",
+        ".md",
+        ".mdx",
+        ".mjs",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "deps/",
+        "tools/",
+        "benchmark/",
+        "test/fixtures/",
+        "out/",
+        "node_modules/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 600000000,
+      "name": "Node.js LTS",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "node_24_18_0",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "test/powershell/",
+        "tools/",
+        "docs/"
+      ],
+      "allowed_suffixes": [
+        ".html",
+        ".ini",
+        ".json",
+        ".md",
+        ".mdx",
+        ".ps1",
+        ".psd1",
+        ".psm1",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "src/",
+        "assets/",
+        "packages/",
+        "test/tools/Modules/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 500000000,
+      "name": "PowerShell",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "powershell_7_6_3",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "reference/7.6/",
+        "reference/docs-conceptual/",
+        "tests/",
+        "tools/"
+      ],
+      "allowed_suffixes": [
+        ".html",
+        ".ini",
+        ".json",
+        ".md",
+        ".mdx",
+        ".ps1",
+        ".psd1",
+        ".psm1",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "reference/5.1/",
+        "reference/7.4/",
+        "reference/7.5/",
+        "media/",
+        "redirects/",
+        "**/locale/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 900000000,
+      "name": "PowerShell Documentation",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "powershell_docs_2026",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "src/",
+        "tst/",
+        "docs/"
+      ],
+      "allowed_suffixes": [
+        ".html",
+        ".ini",
+        ".json",
+        ".md",
+        ".mdx",
+        ".ps1",
+        ".psd1",
+        ".psm1",
+        ".rst",
+        ".toml",
+        ".txt",
+        ".xml",
+        ".yaml",
+        ".yml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "publish/",
+        "bin/",
+        "schemas/",
+        "**/generated/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 500000000,
+      "name": "Pester",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "pester_5_7_1",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "allowed_names": [
+        "makefile",
+        "readme"
+      ],
+      "allowed_paths": [
+        "doc/src/sgml/",
+        "src/test/regress/sql/",
+        "src/test/regress/expected/",
+        "contrib/*/sql/"
+      ],
+      "allowed_suffixes": [
+        ".md",
+        ".out",
+        ".sgml",
+        ".sql",
+        ".txt",
+        ".xml"
+      ],
+      "document_family_field": "family_hint_only",
+      "excluded_paths": [
+        "src/backend/",
+        "src/include/",
+        "src/interfaces/",
+        "src/test/regress/data/",
+        "doc/src/sgml/ref/"
+      ],
+      "inventory_mode": "archive",
+      "max_file_bytes": 4000000,
+      "max_selected_bytes": 500000000,
+      "name": "PostgreSQL",
+      "normalize_text": false,
+      "notes": "Inventory and copy only explicitly allowed regular text/code members. Exclusions override inclusions. No quality admission is performed.",
+      "preserve_archive_bytes": true,
+      "source_id": "postgresql_18_4",
+      "staging_mode": "allowed_archive_members",
+      "status": "staging_planned_not_admitted",
+      "training_allowed": false
+    }
+  ],
+  "status": "allowed_path_inventory_and_staging_planned",
+  "training_allowed": false
+}

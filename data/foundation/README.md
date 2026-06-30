@@ -13,9 +13,10 @@ Local-only ignored directories:
 
 - `sources/raw/quarantine/`: immutable downloaded archives and GPT-NL stream metadata; never training data.
 - `sources/manifests/`: generated per-source acquisition manifests and verification summaries.
-- `staged/`: later allowed-path extraction and document inventory, still not approved.
+- `sources/inventory/`: Work Packet 12 member inventories and allowed-path summaries; still not approved.
+- `staged/`: byte-preserving allowed-path extraction plus per-file hashes; still unreviewed and not approved.
 - `approved/`: future reviewed Stage A records only.
 - `rejected/`: retained rejection metadata or quarantined extracts.
 - `tokenizers/`: future tokenizer candidates and reports.
 
-Work Packet 11 acquires source snapshots only. It never extracts source content into a corpus, grants training permission, prepares a dataset, trains a tokenizer, or starts a model run.
+Work Packet 11 acquires source snapshots only. Work Packet 12 inventories allowed paths and copies selected regular text/code members into local staging. Neither packet grants training permission, prepares a dataset, trains a tokenizer, or starts a model run. GPT-NL rows are not streamed in Work Packet 12.

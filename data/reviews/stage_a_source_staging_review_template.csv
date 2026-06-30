@@ -1,0 +1,11 @@
+source_id,artifact_hash_verified,security_hold_clear,archive_root_reviewed,allowed_paths_reviewed,excluded_paths_reviewed,selected_file_count,selected_bytes,unsafe_or_special_members_reviewed,staged_hashes_verified,training_allowed_confirmed_false,decision,reviewer,reviewed_utc,notes
+gptnl_english_2026,,,,,,,,,,,,,,
+cpython_3_14_6,,,,,,,,,,,,,,
+pytest_9_1_1,,,,,,,,,,,,,,
+typescript_6_0_3,,,,,,,,,,,,,,
+typescript_website_2026,,,,,,,,,,,,,,
+node_24_18_0,,,,,,,,,,,,,,
+powershell_7_6_3,,,,,,,,,,,,,,
+powershell_docs_2026,,,,,,,,,,,,,,
+pester_5_7_1,,,,,,,,,,,,,,
+postgresql_18_4,,,,,,,,,,,,,,

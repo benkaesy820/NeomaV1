@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_source_staging_results_v1",
+  "baseline": "f378d0a",
+  "scope": "Stage A allowed-path inventory and staged extraction only",
+  "inventory_all_sources_ok": true,
+  "staging_all_sources_ok": true,
+  "verify_require_all_ok": true,
+  "raw_artifacts_committed": false,
+  "inventory_files_committed": false,
+  "staged_files_committed": false,
+  "training_allowed": false,
+  "leo_corrections": [
+    {
+      "file": "scripts/stage_stage_a_sources.py",
+      "change": "Removed per-file fsync during staging; exact byte hashing and post-stage verification remain in place."
+    },
+    {
+      "file": "scripts/stage_stage_a_sources.py",
+      "change": "Changed tar extraction to stream members in archive order so compressed .tar.xz sources such as Node.js do not stall on random-access reads."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "cpython_3_14_6",
+      "inventory_records": 5100,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 2291,
+      "selected_bytes": 46150067,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 2291,
+      "staged_bytes": 46150067,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "gptnl_english_2026",
+      "inventory_records": 2796,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 0,
+      "selected_bytes": 0,
+      "selected_within_limit": true,
+      "staging_mode": "metadata_only",
+      "staged_file_count": 0,
+      "staged_bytes": 0,
+      "staging_status": "metadata_only_rows_not_downloaded_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "node_24_18_0",
+      "inventory_records": 32143,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 4624,
+      "selected_bytes": 36914795,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 4624,
+      "staged_bytes": 36914795,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "pester_5_7_1",
+      "inventory_records": 261,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 151,
+      "selected_bytes": 1832983,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 151,
+      "staged_bytes": 1832983,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "postgresql_18_4",
+      "inventory_records": 7265,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 889,
+      "selected_bytes": 25748195,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 889,
+      "staged_bytes": 25748195,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "powershell_7_6_3",
+      "inventory_records": 2653,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 558,
+      "selected_bytes": 5554615,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 558,
+      "staged_bytes": 5554615,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "powershell_docs_2026",
+      "inventory_records": 3315,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 1130,
+      "selected_bytes": 10179829,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 1130,
+      "staged_bytes": 10179829,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "pytest_9_1_1",
+      "inventory_records": 638,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 537,
+      "selected_bytes": 6363426,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 537,
+      "staged_bytes": 6363426,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "typescript_6_0_3",
+      "inventory_records": 81500,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 20314,
+      "selected_bytes": 40376931,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 20314,
+      "staged_bytes": 40376931,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    },
+    {
+      "source_id": "typescript_website_2026",
+      "inventory_records": 1026,
+      "inventory_status": "inventoried_not_staged_not_admitted",
+      "security_hold": false,
+      "selected_files": 424,
+      "selected_bytes": 2579446,
+      "selected_within_limit": true,
+      "staging_mode": "allowed_archive_members",
+      "staged_file_count": 424,
+      "staged_bytes": 2579446,
+      "staging_status": "staged_unreviewed_not_admitted",
+      "training_allowed": false
+    }
+  ],
+  "review_decision": {
+    "status": "staging_complete_unreviewed_not_admitted",
+    "reason": "All ten sources inventoried and staged according to allowlists. GPT-NL remains metadata-only with zero staged rows. Verification found no missing, extra, or tampered staged files. All records remain training_allowed=false."
+  },
+  "next_step": "Work Packet 13 should decode staged files, detect generated/vendor/template material, build document families, run quality/security filtering, and produce rejection reports without tokenizer rebuild, dataset preparation, training admission, or model training."
+}

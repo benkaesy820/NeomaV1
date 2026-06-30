@@ -12,6 +12,7 @@ runs/
 # Stage A corpora and downloaded source pools stay local.
 data/foundation/sources/raw/
 data/foundation/sources/manifests/
+data/foundation/sources/inventory/
 data/foundation/staged/
 data/foundation/approved/
 data/foundation/rejected/

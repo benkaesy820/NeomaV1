@@ -1,53 +1,45 @@
-# Apply Work Packet 11 Overlay
+# Apply Work Packet 12 Overlay
 
-Apply the overlay at repository root on baseline `8066b1f`.
+Apply this overlay at repository root on baseline `f378d0a`.
 
 ## Files added or updated
 
-- `PHASE3_5B_WORK_PACKET_11.md`
-- `scripts/acquire_stage_a_sources.py`
-- `scripts/verify_stage_a_acquisitions.py`
-- `tests/test_stage_a_source_acquisition.py`
-- `data/foundation/manifests/stage_a_sources_v1_acquisition_plan.json`
-- `data/reviews/stage_a_source_acquisition_review_template.csv`
-- `data/reviews/stage_a_work_packet_11_validation.json`
+- `PHASE3_5B_WORK_PACKET_12.md`
+- `scripts/stage_a_staging_common.py`
+- `scripts/inventory_stage_a_sources.py`
+- `scripts/stage_stage_a_sources.py`
+- `scripts/verify_stage_a_staging.py`
+- `tests/test_stage_a_source_staging.py`
+- `data/foundation/manifests/stage_a_sources_v1_staging_plan.json`
+- `data/reviews/stage_a_source_staging_review_template.csv`
+- `data/reviews/stage_a_work_packet_12_validation.json`
 - `data/foundation/README.md`
+- `.gitignore`
 
-## Before network acquisition
+## Validate before using local archives
 
 ```powershell
-.\p -m py_compile scripts\acquire_stage_a_sources.py scripts\verify_stage_a_acquisitions.py tests\test_stage_a_source_acquisition.py
+.\p -m py_compile scripts\stage_a_staging_common.py scripts\inventory_stage_a_sources.py scripts\stage_stage_a_sources.py scripts\verify_stage_a_staging.py tests\test_stage_a_source_staging.py
 .\p -m unittest discover -s tests
-.\p scripts\acquire_stage_a_sources.py --all
+.\p scripts\inventory_stage_a_sources.py --all
+.\p scripts\stage_stage_a_sources.py --all
 ```
 
-The final command is a dry run.
+The last two commands are dry runs.
 
-## Acquire and verify
-
-Start with one fixed-checksum source:
+## Inventory and stage
 
 ```powershell
-.\p scripts\acquire_stage_a_sources.py --source cpython_3_14_6 --execute
-.\p scripts\verify_stage_a_acquisitions.py
+.\p scripts\inventory_stage_a_sources.py --all --execute
 ```
 
-After reviewing that result, acquire the other sources one at a time or run:
+Review the local inventory summaries under `data/foundation/sources/inventory/`, then run:
 
 ```powershell
-.\p scripts\acquire_stage_a_sources.py --all --execute
-.\p scripts\verify_stage_a_acquisitions.py --require-all
+.\p scripts\stage_stage_a_sources.py --all --execute
+.\p scripts\verify_stage_a_staging.py --require-all
 ```
 
-Local artifacts are written under:
+Do not copy anything into `approved/`, do not alter any `training_allowed` flag, and do not run tokenizer, dataset-preparation, or training commands during this packet.
 
-```text
-data/foundation/sources/raw/quarantine/
-data/foundation/sources/manifests/
-```
-
-Both locations are ignored by Git. Do not move artifacts into `approved/`, do not set `training_allowed=true`, and do not extract them into training inputs during this packet.
-
-## Review
-
-Fill `data/reviews/stage_a_source_acquisition_review_template.csv` from the generated per-source acquisition manifests. Any security warning, checksum mismatch, missing license, unexpected version, or GPT-NL unsafe-file warning remains blocked pending explicit review.
+Raw acquisitions, inventories, and staged files remain local and ignored by Git. Commit only tooling, plans, tests, and Leo's compact review record.
