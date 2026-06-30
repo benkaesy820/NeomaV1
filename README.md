@@ -178,3 +178,8 @@ The project has filtered repository and Wikimedia source candidates but has not 
 ## First Stage A smoke training
 
 Work Packet 15 is the first packet authorized to train Neoma at all. It uses a separately approved 30K–48K-token Stage A slice and a provisional 8K tokenizer for a 100-step CPU smoke run. The run is designed to prove data preparation, loss movement, checkpointing, exact resume, and generation mechanics—not useful language capability. See `PHASE3_5B_WORK_PACKET_15.md`.
+
+## Stage A 250K probe
+
+Work Packet 16 is the first corpus-scale learning probe after the smoke pass. It derives a separately reviewed 235K–265K-token slice and runs the same 3.3M-parameter provisional-8K model for 500 bounded steps. See `PHASE3_5B_WORK_PACKET_16.md`.
+

@@ -1,0 +1,8 @@
+{"id":"probe_en_missing_empty","category":"english","prompt":"The box is empty, but it is not missing. This means","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_en_preserve","category":"english","prompt":"Do not change the original list. Instead,","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_en_sequence","category":"english","prompt":"Before the file is deleted,","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_en_condition","category":"english","prompt":"Only values greater than zero are accepted. Therefore,","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_py_add","category":"code","prompt":"def add(a, b):\n    return","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_py_first_even","category":"code","prompt":"def first_even(values):\n    for value in values:\n        if value % 2 == 0:\n            return","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_ts_double","category":"code","prompt":"const double = (value: number): number =>","max_new_tokens":32,"training_allowed":false}
+{"id":"probe_sql_select","category":"code","prompt":"SELECT name FROM users WHERE","max_new_tokens":32,"training_allowed":false}

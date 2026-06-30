@@ -143,3 +143,17 @@ Status: passed locally.
 - Verified fixed-batch loss decrease: train 9.0108 -> 6.9403 and validation 8.9711 -> 7.2472.
 - Verified checkpoint hashes, resume integrity, deterministic generation, and special-token survival.
 - Do not promote the tokenizer or expand the corpus based on pipeline success alone.
+
+## Stage A Work Packet 16 — 250K Probe
+
+- Baseline: `321f0f2`.
+- Status: passed locally.
+- Approved a separately reviewed 248,250 exact-token Stage A slice.
+- Kept frozen Stage B instructions and protected evaluations excluded.
+- Used the provisional 8K tokenizer and the 3,307,200-parameter model.
+- Ran 500 steps / 256,000 tokens seen with a verified step-150 resume boundary.
+- Fixed Windows peak-RSS recording and measured peak RSS at 439,386,112 bytes.
+- Measured effective throughput at about 2,675 tokens/second.
+- Reduced fixed-batch train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914.
+- Deterministic pre/post generation ran, but output remains repetitive and does not authorize a capability claim.
+- No 500K/1M expansion is authorized by this packet.

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_250k_probe_v0_1_review",
+  "candidate_manifest_sha256": "REPLACE_WITH_EXACT_SHA256",
+  "status": "pending",
+  "reviewer": "Leo",
+  "reviewed_utc": null,
+  "approved_for_stage_a_250k_probe": false,
+  "training_scope": "stage_a_250k_probe_v0_1_only",
+  "tokenizer_training_allowed": false,
+  "excluded_record_ids": [],
+  "notes": "Review source balance, exact token count, family concentration, leakage state, and the stratified text sample. Approve only after binding this decision to the exact candidate manifest SHA-256."
+}

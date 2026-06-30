@@ -1,19 +1,18 @@
-# Apply Work Packet 15 Overlay
+# Apply Work Packet 16 Overlay
 
-Baseline: `32d3ef4`
+Baseline required: `321f0f2`
 
-1. Extract this overlay into the root of the NeomaV1 repository.
-2. Review `PHASE3_5B_WORK_PACKET_15.md` and the new smoke-probe plan.
-3. Run:
+From the repository root, copy the overlay files into the project while preserving paths. Review the diff before committing.
+
+This packet adds the bounded Stage A 250K probe. It does not contain local corpora, tokenizer binaries, prepared datasets, checkpoints, or run outputs.
+
+After applying:
 
 ```powershell
-.\p -m py_compile scripts\stage_a_smoke_common.py scripts\build_stage_a_smoke_slice.py scripts\prepare_stage_a_smoke_dataset.py scripts\run_stage_a_smoke_probe.py scripts\verify_stage_a_smoke_probe.py scripts\train.py scripts\generate.py tests\test_stage_a_smoke_probe.py
+.\p -m py_compile scripts\stage_a_probe_common.py scripts\build_stage_a_250k_slice.py scripts\prepare_stage_a_250k_dataset.py scripts\run_stage_a_250k_probe.py scripts\verify_stage_a_250k_probe.py scripts\train.py tests\test_stage_a_250k_probe.py
 .\p -m unittest discover -s tests
 ```
 
-4. Build and review the local 30K–48K-token candidate slice.
-5. Approve it only with a Leo decision bound to the exact candidate-manifest SHA-256.
-6. Prepare and verify the family-disjoint dataset.
-7. Run the two-phase smoke probe and verify the generated report.
+Expected tracked-suite result in Ted's environment: **93 passed**.
 
-No local corpus, tokenizer binary, processed dataset, checkpoint, or run output belongs in Git.
+Then follow `PHASE3_5B_WORK_PACKET_16.md`. Do not approve or run the 250K probe until the generated candidate sample and exact manifest hash have been reviewed.

@@ -155,3 +155,8 @@ Leo's local comparison passed the hard gates for all three candidates and select
 ## Provisional 8K Stage A Smoke Gate
 
 The Work Packet 14 8K tokenizer is used in Work Packet 15 only as a provisional probe candidate. Its exact SHA-256 is bound into the smoke slice, prepared dataset, resolved config, checkpoint, and run report. Passing the smoke run proves artifact compatibility and trainability; it does not finalize the vocabulary. Final promotion requires review of loss behavior, CPU cost, memory, context fit, and later bounded capability probes.
+
+## Provisional 8K use in Work Packet 16
+
+The 8K byte-level BPE remains provisional during the 250K Stage A probe. A successful run may support continued use, but tokenizer finalization requires review of compression, parameter cost, speed, memory, real instruction lengths, loss behavior, and probe results.
+

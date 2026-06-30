@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "packet": "Work Packet 16",
+  "baseline": "321f0f2",
+  "status": "tooling_validated_real_run_not_executed",
+  "provisional_tokenizer": {
+    "vocab_size": 8000,
+    "status": "provisional_for_250k_probe_not_final"
+  },
+  "slice": {
+    "minimum_exact_tokens": 235000,
+    "target_exact_tokens": 248000,
+    "maximum_exact_tokens": 265000,
+    "stage_b_allowed": false,
+    "evaluation_leakage_allowed": false,
+    "family_disjoint_split_required": true
+  },
+  "training": {
+    "parameters": 3307200,
+    "max_steps": 500,
+    "tokens_per_step": 512,
+    "maximum_tokens_seen": 256000,
+    "resume_boundary_step": 150,
+    "actual_run_performed_by_ted": false
+  },
+  "instrumentation": {
+    "fixed_batch_losses": true,
+    "effective_speed": true,
+    "peak_rss_bytes": true,
+    "checkpoint_bytes": true,
+    "pre_post_generation": true,
+    "work_packet_15_comparison": true
+  },
+  "validation": {
+    "python_compile": "passed",
+    "new_tests_passed": 6,
+    "full_tests_passed": 93,
+    "capability_claim_authorized": false,
+    "expansion_authorized": false
+  }
+}

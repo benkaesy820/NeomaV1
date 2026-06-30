@@ -615,3 +615,7 @@ Status: passed locally.
 5. Auto-resumed the same optimizer/scheduler run to step 100.
 6. Recorded fixed-batch losses, checkpoint hashes, generation samples, and failure state.
 7. Review efficiency and correctness before any 250K expansion.
+
+### Work Packet 16 — Stage A 250K Probe
+
+Prepared, reviewed, and ran one bounded 248,250-token Stage A experiment. The run reached 500 steps, resumed from step 150, reduced train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914, recorded peak RSS and throughput, and compared against Work Packet 15. Generation remains repetitive, so this is still a probe result, not a capability claim. Stop before 500K/1M unless Leo explicitly approves expansion.

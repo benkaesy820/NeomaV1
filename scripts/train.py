@@ -87,6 +87,52 @@ def append_jsonl(path: Path, value: dict[str, Any]) -> None:
         os.fsync(handle.fileno())
 
 
+
+
+def peak_rss_bytes() -> int | None:
+    """Return peak resident memory for the current process when supported."""
+    try:
+        if os.name == "nt":
+            import ctypes
+            from ctypes import wintypes
+
+            class PROCESS_MEMORY_COUNTERS(ctypes.Structure):
+                _fields_ = [
+                    ("cb", wintypes.DWORD),
+                    ("PageFaultCount", wintypes.DWORD),
+                    ("PeakWorkingSetSize", ctypes.c_size_t),
+                    ("WorkingSetSize", ctypes.c_size_t),
+                    ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                    ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                    ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                    ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                    ("PagefileUsage", ctypes.c_size_t),
+                    ("PeakPagefileUsage", ctypes.c_size_t),
+                ]
+
+            kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+            psapi = ctypes.WinDLL("psapi", use_last_error=True)
+            kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+            psapi.GetProcessMemoryInfo.argtypes = [
+                wintypes.HANDLE,
+                ctypes.POINTER(PROCESS_MEMORY_COUNTERS),
+                wintypes.DWORD,
+            ]
+            psapi.GetProcessMemoryInfo.restype = wintypes.BOOL
+
+            counters = PROCESS_MEMORY_COUNTERS()
+            counters.cb = ctypes.sizeof(counters)
+            process = kernel32.GetCurrentProcess()
+            ok = psapi.GetProcessMemoryInfo(process, ctypes.byref(counters), counters.cb)
+            return int(counters.PeakWorkingSetSize) if ok else None
+
+        import resource
+        value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return int(value if sys.platform == "darwin" else value * 1024)
+    except (ImportError, AttributeError, OSError, ValueError):
+        return None
+
+
 def validate_bound_artifacts(cfg: dict[str, Any]) -> None:
     tokenizer_path = Path(str(cfg["tokenizer_path"]))
     if not tokenizer_path.is_file():
@@ -323,6 +369,7 @@ def record_evaluation(
         "learning_rate": lr,
         "elapsed_seconds": elapsed_seconds,
         "tokens_seen": step * tokens_per_step,
+        "peak_rss_bytes": peak_rss_bytes(),
     })
 
 
@@ -425,6 +472,7 @@ def main() -> None:
         "val_tokens": len(val_data),
         "tokens_per_step": tokens_per_step,
         "max_steps": max_steps,
+        "peak_rss_bytes_at_start": peak_rss_bytes(),
     })
 
     if completed_step == 0:

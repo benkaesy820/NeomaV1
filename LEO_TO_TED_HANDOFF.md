@@ -1,7 +1,7 @@
-# Leo to Ted — Work Packet 15 Handoff
+# Leo to Ted — Work Packet 16 Handoff
 
-Baseline `32d3ef4` has completed tokenizer-sample admission and comparison. The 8K byte-level BPE is provisional for the first real Stage A smoke probe; it is not final.
+Baseline `321f0f2` contains a passed Work Packet 15 smoke run: 42,520 exact tokens, 100 steps, verified stop/resume, decreasing train and validation loss, valid checkpoints, generation, special tokens, and zero leakage.
 
-Leo executed Work Packet 15 locally. It derived and approved a separately reviewed 42,520-token model-training slice from non-Stage-B portions of the approved tokenizer sample, prepared a family-disjoint full-loss Stage A dataset, and ran a 100-step CPU smoke test with a real stop/resume boundary at step 30.
+Leo executed Work Packet 16 locally. It approved a separately reviewed 248,250-token Stage A slice, prepared a family-disjoint dataset, ran a 500-step CPU probe, verified the step-150 resume boundary, tracked fixed-batch loss, recorded native peak RSS, measured checkpoint size and throughput, ran deterministic pre/post English/code probes, and compared against the Work Packet 15 report.
 
-The smoke probe passed: train loss moved from 9.0108 to 6.9403, validation loss moved from 8.9711 to 7.2472, phase one stopped at step 30, phase two resumed and reached step 100, checkpoints and generation were verified, special tokens survived, and evaluation leakage count was zero. This proves pipeline readiness only. Do not expand to 250K/500K or call the tokenizer final until the smoke report is reviewed for efficiency and correctness.
+The run passed mechanical and loss gates: train loss 8.9803 -> 6.0542, validation loss 9.0019 -> 6.0914, effective throughput about 2,675 tokens/second, peak RSS 439,386,112 bytes, zero Stage B records, and zero evaluation leakage. Generation remains repetitive and does not authorize a capability claim. The provisional 8K tokenizer remains non-final. No 500K/1M expansion is authorized until Leo explicitly approves it.

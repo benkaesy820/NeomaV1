@@ -1,0 +1,15 @@
+{
+    "schema_version":  "1.0",
+    "review_id":  "stage_a_250k_probe_v0_1_review",
+    "candidate_manifest_sha256":  "d2982753162d6833f154556a10175e0d4c5ae04a23ac4d2c3310f5a2518a9f39",
+    "status":  "approved",
+    "reviewer":  "Leo",
+    "reviewed_utc":  "2026-06-30T11:24:50Z",
+    "approved_for_stage_a_250k_probe":  true,
+    "training_scope":  "stage_a_250k_probe_v0_1_only",
+    "tokenizer_training_allowed":  false,
+    "excluded_record_ids":  [
+
+                            ],
+    "notes":  "Approved after local manifest, source-balance, leakage-field, Stage-B-exclusion, exact-token-count, and stratified text-sample review. Approval is only for the bounded Stage A 250K probe."
+}

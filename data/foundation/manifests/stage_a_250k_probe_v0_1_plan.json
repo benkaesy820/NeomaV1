@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "stage_a_250k_probe_v0_1",
+  "baseline": "321f0f2",
+  "status": "review_only_not_admitted",
+  "purpose": "Bounded Stage A 250K probe to test whether Neoma begins learning useful English and code structure after the Work Packet 15 pipeline smoke pass.",
+  "source_sample": {
+    "path": "data/foundation/approved/stage_a_tokenizer_sample_v0_1",
+    "expected_manifest_sha256": "a79b3d72b701ddd93c7eb15131dd22f2eb0abda3e6151e353c229c55148c0652",
+    "expected_records_sha256": "f16ab43f100c2879d21c5a35de9d8588eeca2acbfb282d9999e0f58a0c406663",
+    "permission_note": "The source remains tokenizer-only. This separately copied 250K subset requires its own hash-bound model-training review."
+  },
+  "tokenizer": {
+    "path": "data/foundation/tokenizers/stage_a_v0_1/stage_a_bpe_8000.json",
+    "vocab_size": 8000,
+    "sha256": "bc59d3d00ced96c19c65c89ba901ed35b0d3c65423145d1d1f6e30051dfeee0f",
+    "status": "provisional_for_250k_probe_not_final"
+  },
+  "token_budget": {
+    "minimum_actual_tokens": 235000,
+    "target_actual_tokens": 248000,
+    "maximum_actual_tokens": 265000,
+    "counting_rule": "Exact provisional-8K tokenizer IDs plus one EOS token per record."
+  },
+  "selection_seed": 1616,
+  "groups": [
+    {
+      "group_id": "repository_sources",
+      "minimum_actual_tokens": 140000,
+      "target_actual_tokens": 150000,
+      "maximum_actual_tokens": 160000,
+      "minimum_record_tokens": 24,
+      "maximum_record_tokens": 1400,
+      "family_cap": 3,
+      "source_targets": {
+        "cpython_3_14_6": 32000,
+        "pytest_9_1_1": 12000,
+        "typescript_6_0_3": 26000,
+        "typescript_website_2026": 8000,
+        "node_24_18_0": 26000,
+        "powershell_7_6_3": 14000,
+        "powershell_docs_2026": 9000,
+        "pester_5_7_1": 9000,
+        "postgresql_18_4": 14000
+      }
+    },
+    {
+      "group_id": "wikimedia_english",
+      "minimum_actual_tokens": 85000,
+      "target_actual_tokens": 95000,
+      "maximum_actual_tokens": 105000,
+      "minimum_record_tokens": 32,
+      "maximum_record_tokens": 1000,
+      "family_cap": 2,
+      "source_targets": {
+        "simplewiki_20260601": 42000,
+        "enwikibooks_20260601": 30000,
+        "enwikiversity_20260601": 23000
+      }
+    },
+    {
+      "group_id": "neoma_self_knowledge",
+      "minimum_actual_tokens": 300,
+      "target_actual_tokens": 3000,
+      "maximum_actual_tokens": 4000,
+      "minimum_record_tokens": 4,
+      "maximum_record_tokens": 256,
+      "family_cap": 50,
+      "source_targets": {
+        "neoma_model_card_v0_1": 3000
+      }
+    }
+  ],
+  "diversity": {
+    "minimum_distinct_sources": 10,
+    "exclude_groups": ["frozen_stage_b"],
+    "split_unit": "family_id",
+    "reason": "The probe must cover English, code, documentation, tests, and stable self-knowledge while preventing related documents from crossing train/validation."
+  },
+  "review": {
+    "reviewer": "Leo",
+    "stratified_review_rows": 72,
+    "approval_must_bind_candidate_manifest_sha256": true,
+    "allowed_exclusions": true
+  },
+  "permissions": {
+    "training_allowed_before_review": false,
+    "model_training_allowed_before_review": false,
+    "tokenizer_training_allowed": false,
+    "allowed_after_review": "stage_a_250k_probe_v0_1_only"
+  },
+  "training_probe": {
+    "config_template": "configs/stage_a_250k_probe_8k_cpu.json",
+    "architecture": "4 layers, d_model 192, 4 query heads, 2 KV heads, d_ff 576",
+    "sequence_length": 128,
+    "max_steps": 500,
+    "planned_resume_boundary_step": 150,
+    "tokens_per_step": 512,
+    "maximum_training_tokens_seen": 256000,
+    "objective": "normal next-token loss; no answer-only mask",
+    "expansion_gate": "No 500K/1M expansion unless this probe passes loss, integrity, efficiency, and generation-mechanics checks."
+  },
+  "comparison": {
+    "work_packet_15_report": "runs/stage_a_smoke_probe_8k/smoke_probe_report.json",
+    "compare": ["loss_curve", "effective_tokens_per_second", "peak_rss_bytes", "checkpoint_bytes", "generation_mechanics"],
+    "legacy_note": "Work Packet 15 did not record native peak RSS. That baseline field may be unavailable and must be reported as null rather than invented."
+  },
+  "hard_gates": [
+    "zero critical/review evaluation leakage",
+    "zero frozen Stage B instruction records",
+    "provisional tokenizer hash and vocabulary match",
+    "235K-265K exact tokens",
+    "family-disjoint train/validation split",
+    "fixed-batch training and validation loss recorded from step 0",
+    "later fixed-batch training loss below step 0",
+    "final validation loss below step 0",
+    "latest and best checkpoints save",
+    "resume continues the same config and optimizer state",
+    "deterministic pre/post generation probes execute",
+    "all required protocol/special tokens remain atomic",
+    "speed, peak RAM, and checkpoint size are recorded"
+  ],
+  "prohibitions": [
+    "Do not use frozen Stage B instruction records as Stage A model data.",
+    "Do not expand to 500K or 1M model training in this packet.",
+    "Do not call the 8K tokenizer final.",
+    "Do not interpret free-generation samples as proof of capability.",
+    "Do not silently substitute a different tokenizer, source sample, or evaluation set."
+  ]
+}

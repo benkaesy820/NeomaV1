@@ -630,3 +630,9 @@ Leo's local run adjusted the representative sample quotas to account for the int
 Added the first bounded Stage A model-training probe. The packet creates a separately reviewed 30K–48K-token slice, family-disjoint dataset preparation, fixed-batch loss logging, artifact hash binding, clean stop/resume testing, deterministic generation checks, and a machine-verifiable smoke report. The provisional 8K tokenizer remains non-final and no broad corpus expansion is authorized.
 
 Leo's local smoke run passed. The approved slice contained 42,520 exact 8K-token IDs. The dataset had 35,720 train tokens and 6,800 validation tokens with no family overlap. Training ran from random weights to step 30, resumed to step 100, and reduced fixed-batch train loss from 9.0108 to 6.9403 and validation loss from 8.9711 to 7.2472. Generation and special-token checks passed, but this is still only a pipeline smoke pass.
+
+## Work Packet 16
+
+Added the bounded Stage A 250K probe: separate hash-bound admission, strict evaluation and Stage B exclusion, family-disjoint preparation, a 500-step CPU configuration, step-150 resume verification, deterministic pre/post English/code probes, native peak-RSS instrumentation, checkpoint-size and throughput reporting, and a structured comparison with Work Packet 15. The provisional 8K tokenizer remains non-final and no 500K/1M expansion is automatic.
+
+Leo's local 250K probe passed after fixing Windows peak-RSS reporting in `scripts/train.py`. The approved slice contained 248,250 exact 8K-token IDs. The dataset had 219,731 train tokens and 28,519 validation tokens with no family overlap. Training ran from random weights to step 150, resumed to step 500, and reduced train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914. Peak RSS was 439,386,112 bytes and effective throughput was about 2,675 tokens/second. Generation probes ran but remain repetitive, so no capability claim is authorized.
