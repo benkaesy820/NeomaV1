@@ -130,3 +130,16 @@ The Wikimedia English filtering pass produced 33,110 clean candidates, 2,625 rev
 The corpus was approved for tokenizer comparison only. Generic and model-training permission remain false. The completed comparison covered 2K versus 4K versus 8K byte-level BPE, with real context-length measurement for all 331 frozen instruction records.
 
 The 8K tokenizer is the provisional next-probe candidate because it gave the best Stage B context fit. No processed model dataset or model training run has been completed by this packet.
+
+## Stage A Work Packet 15 — Smoke Training Probe
+
+Status: passed locally.
+
+- Baseline: `32d3ef4`.
+- Derived and approved a separate 42,520 exact-token Stage A slice from non-Stage-B approved sample records.
+- Rechecked protected-evaluation leakage and preserved source/family provenance.
+- Prepared a family-disjoint full-loss dataset with 35,720 train tokens and 6,800 validation tokens.
+- Ran a 100-step, 3,307,200-parameter CPU smoke probe with a stop/resume boundary at step 30.
+- Verified fixed-batch loss decrease: train 9.0108 -> 6.9403 and validation 8.9711 -> 7.2472.
+- Verified checkpoint hashes, resume integrity, deterministic generation, and special-token survival.
+- Do not promote the tokenizer or expand the corpus based on pipeline success alone.

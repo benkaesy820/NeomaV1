@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "packet": "Work Packet 15",
+  "baseline": "32d3ef4",
+  "scope": "Stage A bounded smoke-slice admission, dataset preparation, checkpoint/resume probe, and verification",
+  "checks": {
+    "python_compile": "passed",
+    "full_project_tests": "87 passed",
+    "new_smoke_tests": "5 passed",
+    "synthetic_stop_resume_training": "passed: step 0 metrics, clean stop at step 2, auto-resume to step 4",
+    "tracked_config_parameter_count": 3307200,
+    "tracked_config_max_tokens_seen": 51200,
+    "real_local_slice_built": false,
+    "real_dataset_prepared": false,
+    "real_model_training_run": false,
+    "reason_real_run_not_executed_in_ted_sandbox": "The approved tokenizer sample, provisional tokenizer binary, filtered source pools, and local training artifacts are intentionally ignored and were not included in the uploaded repository ZIP.",
+    "synthetic_full_smoke_runner": "passed: bound dataset, phase-1 stop, auto-resume, fixed-batch loss decrease, checkpoint hashes, special-token verification, deterministic generation, structured report"
+  },
+  "permission_state": {
+    "candidate_training_allowed": false,
+    "candidate_model_training_allowed": false,
+    "approval_required": true,
+    "approved_scope": "stage_a_smoke_probe_v0_1_only"
+  },
+  "status": "tooling_validated_ready_for_leo_local_admission_and_smoke_run"
+}

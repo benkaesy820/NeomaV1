@@ -174,3 +174,7 @@ on increasing the step count over a tiny corpus.
 ## Current Stage A transition
 
 The project has filtered repository and Wikimedia source candidates but has not trained Neoma on them. Work Packet 14 approved a reviewable approximately 500K-token sample for tokenizer selection only, compared 2K, 4K, and 8K byte-level BPE candidates, and measured the real context length of all frozen instruction records before any Stage A dataset was prepared.
+
+## First Stage A smoke training
+
+Work Packet 15 is the first packet authorized to train Neoma at all. It uses a separately approved 30K–48K-token Stage A slice and a provisional 8K tokenizer for a 100-step CPU smoke run. The run is designed to prove data preparation, loss movement, checkpointing, exact resume, and generation mechanics—not useful language capability. See `PHASE3_5B_WORK_PACKET_15.md`.

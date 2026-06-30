@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import sys
 from pathlib import Path
 
@@ -11,6 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from tinyllm.model import TinyConfig, TinyLanguageModel
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def main() -> None:
@@ -32,7 +41,17 @@ def main() -> None:
     model = TinyLanguageModel(model_cfg)
     model.load_state_dict(checkpoint["model_state"])
 
+    if not args.tokenizer.is_file():
+        raise SystemExit(f"Missing tokenizer: {args.tokenizer}")
+    expected_hash = cfg.get("tokenizer_sha256")
+    if expected_hash and sha256_file(args.tokenizer) != expected_hash:
+        raise SystemExit("Tokenizer SHA-256 does not match the checkpoint config")
     tokenizer = Tokenizer.from_file(str(args.tokenizer))
+    if tokenizer.get_vocab_size() != model_cfg.vocab_size:
+        raise SystemExit(
+            f"Tokenizer vocabulary {tokenizer.get_vocab_size()} does not match model vocabulary {model_cfg.vocab_size}"
+        )
+
     prompt_ids = tokenizer.encode(args.prompt).ids
     if not prompt_ids:
         bos_id = tokenizer.token_to_id("<bos>")
@@ -47,7 +66,7 @@ def main() -> None:
         top_k=args.top_k,
         eos_id=eos_id,
     )[0].tolist()
-    print(tokenizer.decode(output_ids))
+    print(tokenizer.decode(output_ids, skip_special_tokens=False))
 
 
 if __name__ == "__main__":

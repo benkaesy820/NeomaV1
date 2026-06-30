@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "stage_a_smoke_probe_v0_1",
+  "baseline": "32d3ef4",
+  "status": "review_only_not_admitted",
+  "purpose": "First bounded Stage A model-training smoke probe using the provisional 8K tokenizer. This validates the pipeline, not final capability.",
+  "source_sample": {
+    "path": "data/foundation/approved/stage_a_tokenizer_sample_v0_1",
+    "expected_manifest_sha256": "a79b3d72b701ddd93c7eb15131dd22f2eb0abda3e6151e353c229c55148c0652",
+    "expected_records_sha256": "f16ab43f100c2879d21c5a35de9d8588eeca2acbfb282d9999e0f58a0c406663",
+    "permission_note": "The source remains tokenizer-only. A separately copied subset requires its own hash-bound model-training review."
+  },
+  "tokenizer": {
+    "path": "data/foundation/tokenizers/stage_a_v0_1/stage_a_bpe_8000.json",
+    "vocab_size": 8000,
+    "sha256": "bc59d3d00ced96c19c65c89ba901ed35b0d3c65423145d1d1f6e30051dfeee0f",
+    "status": "provisional_for_smoke_probe_not_final"
+  },
+  "token_budget": {
+    "minimum_actual_tokens": 30000,
+    "target_actual_tokens": 40000,
+    "maximum_actual_tokens": 48000,
+    "counting_rule": "Exact provisional-8K tokenizer IDs plus one EOS token per record."
+  },
+  "selection_seed": 1515,
+  "groups": [
+    {
+      "group_id": "repository_sources",
+      "minimum_actual_tokens": 16000,
+      "target_actual_tokens": 22000,
+      "maximum_actual_tokens": 28000,
+      "minimum_record_tokens": 24,
+      "maximum_record_tokens": 1200,
+      "family_cap": 1,
+      "source_targets": {
+        "cpython_3_14_6": 4500,
+        "pytest_9_1_1": 1800,
+        "typescript_6_0_3": 3300,
+        "typescript_website_2026": 800,
+        "node_24_18_0": 3500,
+        "powershell_7_6_3": 2300,
+        "powershell_docs_2026": 1500,
+        "pester_5_7_1": 1500,
+        "postgresql_18_4": 2800
+      }
+    },
+    {
+      "group_id": "wikimedia_english",
+      "minimum_actual_tokens": 12000,
+      "target_actual_tokens": 16000,
+      "maximum_actual_tokens": 21000,
+      "minimum_record_tokens": 32,
+      "maximum_record_tokens": 900,
+      "family_cap": 1,
+      "source_targets": {
+        "simplewiki_20260601": 7000,
+        "enwikibooks_20260601": 5000,
+        "enwikiversity_20260601": 4000
+      }
+    },
+    {
+      "group_id": "neoma_self_knowledge",
+      "minimum_actual_tokens": 300,
+      "target_actual_tokens": 2000,
+      "maximum_actual_tokens": 4000,
+      "minimum_record_tokens": 4,
+      "maximum_record_tokens": 256,
+      "family_cap": 50,
+      "source_targets": {
+        "neoma_model_card_v0_1": 2000
+      }
+    }
+  ],
+  "diversity": {
+    "minimum_distinct_sources": 10,
+    "exclude_groups": [
+      "frozen_stage_b"
+    ],
+    "split_unit": "family_id",
+    "reason": "The smoke slice should exercise English, code, documentation, tests, and stable self-knowledge without allowing one family to leak across train and validation."
+  },
+  "review": {
+    "reviewer": "Leo",
+    "stratified_review_rows": 36,
+    "approval_must_bind_candidate_manifest_sha256": true,
+    "allowed_exclusions": true
+  },
+  "permissions": {
+    "training_allowed_before_review": false,
+    "model_training_allowed_before_review": false,
+    "tokenizer_training_allowed": false,
+    "allowed_after_review": "stage_a_smoke_probe_v0_1_only"
+  },
+  "training_probe": {
+    "config_template": "configs/stage_a_smoke_probe_8k_cpu.json",
+    "architecture": "4 layers, d_model 192, 4 query heads, 2 KV heads, d_ff 576",
+    "sequence_length": 128,
+    "max_steps": 100,
+    "planned_resume_boundary_step": 30,
+    "tokens_per_step": 512,
+    "maximum_training_tokens_seen": 51200,
+    "objective": "normal next-token loss; no answer-only mask"
+  },
+  "hard_gates": [
+    "zero critical/review evaluation leakage",
+    "provisional tokenizer hash and vocabulary match",
+    "30K-48K exact tokens",
+    "family-disjoint train/validation split",
+    "fixed-batch comparable evaluation loss",
+    "latest and best checkpoints save",
+    "resume continues the same config and optimizer state",
+    "deterministic generation executes",
+    "all required protocol/special tokens remain atomic"
+  ],
+  "prohibitions": [
+    "Do not use frozen Stage B instruction records as Stage A smoke model data.",
+    "Do not expand to 250K or 500K model training in this packet.",
+    "Do not call the 8K tokenizer final.",
+    "Do not treat smoke-generation quality as a capability result."
+  ]
+}

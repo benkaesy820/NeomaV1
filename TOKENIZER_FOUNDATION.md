@@ -151,3 +151,7 @@ For the `code_phase3_cpu` architecture, approximate total parameter counts are:
 Hard gates are zero round-trip failures, zero unknown tokens, and atomic protocol tags. The decision must also consider code and English compression, vocabulary utilization, Stage B fit at 256 tokens, and the parameter cost. A provisional static comparison is not enough to finalize the tokenizer; the selected candidate must also survive the planned small Stage A probe.
 
 Leo's local comparison passed the hard gates for all three candidates and selected 8K as the provisional next-probe tokenizer because it gave the strongest frozen Stage B context fit. The choice remains provisional until the small Stage A probe confirms the capability and parameter trade-off.
+
+## Provisional 8K Stage A Smoke Gate
+
+The Work Packet 14 8K tokenizer is used in Work Packet 15 only as a provisional probe candidate. Its exact SHA-256 is bound into the smoke slice, prepared dataset, resolved config, checkpoint, and run report. Passing the smoke run proves artifact compatibility and trainability; it does not finalize the vocabulary. Final promotion requires review of loss behavior, CPU cost, memory, context fit, and later bounded capability probes.

@@ -603,3 +603,15 @@ Status: tokenizer-only sample approved; tokenizer comparison completed.
 - keep 8K as the provisional next-probe tokenizer, pending the small Stage A training probe.
 
 The following packet should admit the Stage A model-training corpus and run the small training ladder only after a tokenizer is selected.
+
+### Work Packet 15 — First Stage A Model Smoke
+
+Status: passed locally.
+
+1. Built a deterministic 42,520-token candidate slice.
+2. Reviewed and approved only the exact manifest hash.
+3. Split by document family and prepared uint16 train/validation data.
+4. Trained from random weights to step 30, saved, and stopped cleanly.
+5. Auto-resumed the same optimizer/scheduler run to step 100.
+6. Recorded fixed-batch losses, checkpoint hashes, generation samples, and failure state.
+7. Review efficiency and correctness before any 250K expansion.

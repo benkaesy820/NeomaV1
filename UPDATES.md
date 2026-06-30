@@ -624,3 +624,9 @@ Added deterministic Stage A tokenizer-sample selection, hash-bound human approva
 Tokenizer-sample leakage handling excludes four frozen Stage B records from tokenizer training because they partially overlap protected evaluation wording. All 331 records remain in the post-training context-length benchmark.
 
 Leo's local run adjusted the representative sample quotas to account for the intentionally small filtered TypeScript Website pool and the small stable self-knowledge allowlist. The approved tokenizer-only sample has 1,818 records and 500,104 proxy tokens. The tokenizer comparison passed hard gates for 2K, 4K, and 8K candidates, with 8K recorded as the provisional next-probe candidate.
+
+## Work Packet 15
+
+Added the first bounded Stage A model-training probe. The packet creates a separately reviewed 30K–48K-token slice, family-disjoint dataset preparation, fixed-batch loss logging, artifact hash binding, clean stop/resume testing, deterministic generation checks, and a machine-verifiable smoke report. The provisional 8K tokenizer remains non-final and no broad corpus expansion is authorized.
+
+Leo's local smoke run passed. The approved slice contained 42,520 exact 8K-token IDs. The dataset had 35,720 train tokens and 6,800 validation tokens with no family overlap. Training ran from random weights to step 30, resumed to step 100, and reduced fixed-batch train loss from 9.0108 to 6.9403 and validation loss from 8.9711 to 7.2472. Generation and special-token checks passed, but this is still only a pipeline smoke pass.

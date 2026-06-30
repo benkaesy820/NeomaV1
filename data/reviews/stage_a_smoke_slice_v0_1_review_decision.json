@@ -1,0 +1,15 @@
+{
+    "schema_version":  "1.0",
+    "review_id":  "stage_a_smoke_probe_v0_1_review",
+    "candidate_manifest_sha256":  "709100c76dc67833da04a5405e662c2a91ea71ae5b6806fb66a02c096ac4be59",
+    "status":  "approved",
+    "reviewer":  "Leo",
+    "reviewed_utc":  "2026-06-30T10:58:36Z",
+    "approved_for_stage_a_smoke_probe":  true,
+    "training_scope":  "stage_a_smoke_probe_v0_1_only",
+    "tokenizer_training_allowed":  false,
+    "excluded_record_ids":  [
+
+                            ],
+    "notes":  "Approved after local manifest, source-balance, leakage-field, Stage-B-exclusion, exact-token-count, and stratified text-sample review. Approval is only for the bounded Stage A smoke probe."
+}

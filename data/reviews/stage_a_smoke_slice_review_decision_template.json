@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_smoke_probe_v0_1_review",
+  "candidate_manifest_sha256": "REPLACE_WITH_EXACT_SHA256",
+  "status": "pending",
+  "reviewer": "Leo",
+  "reviewed_utc": null,
+  "approved_for_stage_a_smoke_probe": false,
+  "training_scope": "stage_a_smoke_probe_v0_1_only",
+  "tokenizer_training_allowed": false,
+  "excluded_record_ids": [],
+  "notes": "Review the manifest, source balance, leakage state, exact token count, and stratified text sample. Change status and approval only after review."
+}
