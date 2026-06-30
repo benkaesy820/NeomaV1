@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "manifest_id": "stage_a_gptnl_streaming_plan",
+  "baseline": "f319c02",
+  "source_id": "gptnl_english_2026",
+  "repository_id": "GPT-NL/GPT-NL_Public_Corpus",
+  "required_security_status": "safe",
+  "allow_queued_security_by_default": false,
+  "selected_subsets": [
+    "cc_english-pd",
+    "cc_openalex"
+  ],
+  "inspection": {
+    "max_shards_per_subset": 50,
+    "require_lfs_sha256": true,
+    "record_last_commit": true
+  },
+  "streaming_budget": {
+    "max_rows": 5000,
+    "max_candidate_rows": 1200,
+    "max_download_bytes": 600000000,
+    "min_chars": 240,
+    "max_chars": 12000,
+    "target_tokens_proxy": 250000
+  },
+  "text_columns": [
+    "text",
+    "content",
+    "document",
+    "body",
+    "page_text",
+    "raw_text"
+  ],
+  "quality_policy": {
+    "reject_private_or_secret_patterns": true,
+    "reject_eval_leakage": true,
+    "review_instruction_overlap": true,
+    "reject_repeated_template_rows": true,
+    "reject_low_information_rows": true,
+    "deduplicate_with_repository_candidates": true
+  },
+  "output_policy": {
+    "local_only": true,
+    "training_allowed": false,
+    "status": "quarantine_until_reviewed"
+  },
+  "training_allowed": false
+}

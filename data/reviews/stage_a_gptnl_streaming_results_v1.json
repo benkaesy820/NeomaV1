@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_gptnl_streaming_results_v1",
+  "baseline": "f319c02",
+  "source_id": "gptnl_english_2026",
+  "status": "blocked_security_queued",
+  "resolved_revision": "1e17d21afa6518939523fbdcc1fbb3167b671725",
+  "shards_inspected": 100,
+  "security": {
+    "all_safe": false,
+    "blocked_count": 100,
+    "safe_count": 0,
+    "status_counts": {
+      "queued": 100
+    }
+  },
+  "training_allowed": false,
+  "actual_corpus_rows_downloaded": 0,
+  "candidate_count": 0,
+  "review_count": 0,
+  "rejected_count": 0,
+  "english_text_filtered": 0,
+  "local_outputs_committed": false,
+  "decision": {
+    "status": "blocked_until_huggingface_security_safe_or_explicit_override",
+    "reason": "The inspected selected GPT-NL parquet shards report security_status=queued and security_safe=false. Under the project quarantine rule, row streaming must not proceed by default."
+  },
+  "next_step": "Either wait/recheck until selected GPT-NL shards report security_status=safe, explicitly approve a queued-security private-review override, or choose a different approved English source with safe immutable metadata."
+}

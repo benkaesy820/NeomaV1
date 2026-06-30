@@ -15,6 +15,7 @@ data/foundation/sources/manifests/
 data/foundation/sources/inventory/
 data/foundation/staged/
 data/foundation/filtered/
+data/foundation/gptnl_streaming/
 data/foundation/approved/
 data/foundation/rejected/
 data/foundation/tokenizers/
