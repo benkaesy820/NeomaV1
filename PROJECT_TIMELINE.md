@@ -619,3 +619,11 @@ Status: passed locally.
 ### Work Packet 16 — Stage A 250K Probe
 
 Prepared, reviewed, and ran one bounded 248,250-token Stage A experiment. The run reached 500 steps, resumed from step 150, reduced train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914, recorded peak RSS and throughput, and compared against Work Packet 15. Generation remains repetitive, so this is still a probe result, not a capability claim. Stop before 500K/1M unless Leo explicitly approves expansion.
+
+### Work Packet 17 - 250K Extended Diagnostic
+
+Prepared and ran a separate 2,000-step diagnostic on the same approved 248,250-token Stage A slice. The run saved checkpoints and deterministic generation samples at steps 500, 1000, 1500, and 2000.
+
+The extended run reduced train loss from 8.9803 to 4.8433 and validation loss from 9.0019 to 5.1575. Best validation loss was 5.1336 at step 1900. Peak RSS was 439,472,128 bytes and effective throughput was about 2,886 tokens/second.
+
+The result supports moving toward a 500K Stage A corpus, but only with review. Free generation still repeats phrases and mixes structures, so this remains a foundation-training diagnostic rather than a usable-model release.

@@ -157,3 +157,16 @@ Status: passed locally.
 - Reduced fixed-batch train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914.
 - Deterministic pre/post generation ran, but output remains repetitive and does not authorize a capability claim.
 - No 500K/1M expansion is authorized by this packet.
+
+## Stage A Work Packet 17 - 250K Extended Diagnostic
+
+- Baseline: `22ad99c`.
+- Status: passed locally.
+- Kept the same approved 248,250-token Stage A slice and the same provisional 8K tokenizer.
+- Ran a separate 2,000-step diagnostic in `runs/stage_a_250k_extended_8k`.
+- Saved milestone checkpoints and deterministic generation samples at steps 500, 1000, 1500, and 2000.
+- Processed 1,024,000 tokens with peak RSS at 439,472,128 bytes and throughput around 2,886 tokens/second.
+- Reduced train loss from 8.9803 to 4.8433 and validation loss from 9.0019 to 5.1575.
+- Best validation loss was 5.1336 at step 1900; the simple overfit gate did not trigger.
+- Free generation is still repetitive and malformed in places, especially English continuation and mixed-language code.
+- No capability claim or automatic 500K/1M expansion is authorized by this packet.

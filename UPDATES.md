@@ -636,3 +636,11 @@ Leo's local smoke run passed. The approved slice contained 42,520 exact 8K-token
 Added the bounded Stage A 250K probe: separate hash-bound admission, strict evaluation and Stage B exclusion, family-disjoint preparation, a 500-step CPU configuration, step-150 resume verification, deterministic pre/post English/code probes, native peak-RSS instrumentation, checkpoint-size and throughput reporting, and a structured comparison with Work Packet 15. The provisional 8K tokenizer remains non-final and no 500K/1M expansion is automatic.
 
 Leo's local 250K probe passed after fixing Windows peak-RSS reporting in `scripts/train.py`. The approved slice contained 248,250 exact 8K-token IDs. The dataset had 219,731 train tokens and 28,519 validation tokens with no family overlap. Training ran from random weights to step 150, resumed to step 500, and reduced train loss from 8.9803 to 6.0542 and validation loss from 9.0019 to 6.0914. Peak RSS was 439,386,112 bytes and effective throughput was about 2,675 tokens/second. Generation probes ran but remain repetitive, so no capability claim is authorized.
+
+## Work Packet 17
+
+Added and executed the 250K extended diagnostic locally. The run kept the same approved 248,250-token Stage A slice, same provisional 8K tokenizer, and same 3,307,200-parameter model, then trained a separate run to 2,000 steps.
+
+The diagnostic passed: train loss 8.9803 -> 4.8433, validation loss 9.0019 -> 5.1575, best validation loss 5.1336 at step 1900, peak RSS 439,472,128 bytes, throughput about 2,886 tokens/second, zero Stage B records, zero protected-evaluation leakage, and milestone checkpoints/generation at 500, 1000, 1500, and 2000.
+
+Generation remains shallow and repetitive, so the run supports better Stage A scaling but not a capability claim. The next data move should be a reviewed 500K Stage A corpus with stronger English/developer-language balance and the same diagnostic gates.
