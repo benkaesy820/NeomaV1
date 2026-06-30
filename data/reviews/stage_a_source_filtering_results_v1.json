@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_source_filtering_results_v1",
+  "baseline": "2c74c34",
+  "scope": "Stage A repository-source decoding, filtering, family construction, deduplication, and leakage analysis only",
+  "filtering_all_sources_ok": true,
+  "verify_require_all_ok": true,
+  "raw_artifacts_committed": false,
+  "staged_files_committed": false,
+  "filtered_files_committed": false,
+  "training_allowed": false,
+  "gptnl_status": {
+    "metadata_acquired": true,
+    "actual_corpus_rows_downloaded": 0,
+    "english_text_filtered": 0,
+    "status": "deferred_until_dedicated_streaming_packet",
+    "reason": "GPT-NL is a large remote streaming dataset, not an archive source. Work Packet 13 filtered only locally staged repository sources."
+  },
+  "counts": {
+    "candidate_count": 8598,
+    "family_count": 13574,
+    "rejected_count": 10393,
+    "review_count": 11927
+  },
+  "protected_item_count": 1440,
+  "deferred_source_ids": [
+    "gptnl_english_2026"
+  ],
+  "sources": [
+    {
+      "source_id": "gptnl_english_2026",
+      "status": "deferred_not_filtered_not_admitted",
+      "candidate_count": 0,
+      "review_count": 0,
+      "rejected_count": 0,
+      "family_count": 0,
+      "filtered_bytes": 0,
+      "training_allowed": false
+    },
+    {
+      "source_id": "cpython_3_14_6",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 865,
+      "review_count": 1065,
+      "rejected_count": 361,
+      "family_count": 520,
+      "filtered_bytes": 39043979,
+      "training_allowed": false
+    },
+    {
+      "source_id": "pytest_9_1_1",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 191,
+      "review_count": 225,
+      "rejected_count": 121,
+      "family_count": 153,
+      "filtered_bytes": 4382057,
+      "training_allowed": false
+    },
+    {
+      "source_id": "typescript_6_0_3",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 6144,
+      "review_count": 5241,
+      "rejected_count": 8929,
+      "family_count": 11373,
+      "filtered_bytes": 19382204,
+      "training_allowed": false
+    },
+    {
+      "source_id": "typescript_website_2026",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 6,
+      "review_count": 7,
+      "rejected_count": 411,
+      "family_count": 13,
+      "filtered_bytes": 42970,
+      "training_allowed": false
+    },
+    {
+      "source_id": "node_24_18_0",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 284,
+      "review_count": 4086,
+      "rejected_count": 254,
+      "family_count": 258,
+      "filtered_bytes": 26867755,
+      "training_allowed": false
+    },
+    {
+      "source_id": "powershell_7_6_3",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 297,
+      "review_count": 195,
+      "rejected_count": 66,
+      "family_count": 118,
+      "filtered_bytes": 5089686,
+      "training_allowed": false
+    },
+    {
+      "source_id": "powershell_docs_2026",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 418,
+      "review_count": 603,
+      "rejected_count": 109,
+      "family_count": 487,
+      "filtered_bytes": 9507362,
+      "training_allowed": false
+    },
+    {
+      "source_id": "pester_5_7_1",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 64,
+      "review_count": 78,
+      "rejected_count": 9,
+      "family_count": 103,
+      "filtered_bytes": 1627345,
+      "training_allowed": false
+    },
+    {
+      "source_id": "postgresql_18_4",
+      "status": "filtered_candidates_not_admitted",
+      "candidate_count": 329,
+      "review_count": 427,
+      "rejected_count": 133,
+      "family_count": 549,
+      "filtered_bytes": 19088499,
+      "training_allowed": false
+    }
+  ],
+  "review_decision": {
+    "status": "repository_source_filtering_complete_not_admitted",
+    "reason": "Nine repository/documentation sources were decoded and filtered into non-training candidates/review/rejection reports. GPT-NL remains zero-content and deferred. No tokenizer corpus, dataset, or training data has been approved."
+  },
+  "next_step": "Work Packet 13E should implement bounded GPT-NL English streaming and quarantine with row-level provenance, quality filtering, deduplication, and eval-leakage protection before any 500K representative sample or tokenizer work."
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "packet": "Phase 3.5B Work Packet 13",
+  "baseline": "2c74c34",
+  "scope": "Stage A decoding, quality filtering, document families, deduplication, leakage analysis, and rejection reporting only",
+  "training_allowed": false,
+  "real_staged_sources_available_to_ted": false,
+  "real_source_filtering_executed_by_ted": false,
+  "checks": {
+    "filtering_plan_source_count": 10,
+    "filtering_plan_unique_ids": true,
+    "all_plan_records_training_allowed_false": true,
+    "gptnl_deferred_zero_content_design": true,
+    "python_compile": "passed",
+    "filter_all_dry_run": "passed for 10 sources",
+    "empty_local_verification": "passed with all sources reported not_filtered",
+    "full_unit_tests": "55 passed",
+    "synthetic_filtering_integration": {
+      "utf8_bom_decode": true,
+      "utf16_bom_decode": true,
+      "guarded_cp1252_decode": true,
+      "binary_control_rejection": true,
+      "path_generated_vendor_rejection": true,
+      "generated_header_rejection": true,
+      "repeated_template_rejection": true,
+      "exact_duplicate_rejection": true,
+      "near_duplicate_analysis": true,
+      "critical_evaluation_leakage_rejection": true,
+      "instruction_overlap_human_review": true,
+      "cpython_family_pairing": true,
+      "node_family_pairing": true,
+      "postgresql_sql_expected_pairing": true,
+      "gptnl_deferred_no_rows": true,
+      "all_outputs_training_allowed_false": true,
+      "filtered_hash_tamper_detection": true,
+      "extra_filtered_file_detection": true,
+      "dry_run_without_local_staged_data": true
+    }
+  },
+  "explicitly_not_done": [
+    "real repository-source filtering in Ted's environment",
+    "GPT-NL row streaming or content extraction",
+    "training admission",
+    "500K representative sample selection",
+    "tokenizer candidate construction",
+    "dataset preparation",
+    "model training"
+  ],
+  "local_execution_required": [
+    "run filtering across all locally staged sources",
+    "verify all filtered candidate hashes and manifests with --require-all",
+    "review rejection and human-review samples by reason",
+    "review document-family grouping quality",
+    "complete Leo filtering review template"
+  ]
+}

@@ -1,45 +1,40 @@
-# Apply Work Packet 12 Overlay
+# Apply Work Packet 13 Overlay
 
-Apply this overlay at repository root on baseline `f378d0a`.
+Apply this overlay at repository root on baseline `2c74c34`.
 
 ## Files added or updated
 
-- `PHASE3_5B_WORK_PACKET_12.md`
-- `scripts/stage_a_staging_common.py`
-- `scripts/inventory_stage_a_sources.py`
-- `scripts/stage_stage_a_sources.py`
-- `scripts/verify_stage_a_staging.py`
-- `tests/test_stage_a_source_staging.py`
-- `data/foundation/manifests/stage_a_sources_v1_staging_plan.json`
-- `data/reviews/stage_a_source_staging_review_template.csv`
-- `data/reviews/stage_a_work_packet_12_validation.json`
+- `PHASE3_5B_WORK_PACKET_13.md`
+- `scripts/stage_a_filtering_common.py`
+- `scripts/filter_stage_a_sources.py`
+- `scripts/verify_stage_a_filtering.py`
+- `tests/test_stage_a_source_filtering.py`
+- `data/foundation/manifests/stage_a_sources_v1_filtering_plan.json`
+- `data/reviews/stage_a_source_filtering_review_template.csv`
+- `data/reviews/stage_a_work_packet_13_validation.json`
 - `data/foundation/README.md`
 - `.gitignore`
 
-## Validate before using local archives
+## Validate before using local staged sources
 
 ```powershell
-.\p -m py_compile scripts\stage_a_staging_common.py scripts\inventory_stage_a_sources.py scripts\stage_stage_a_sources.py scripts\verify_stage_a_staging.py tests\test_stage_a_source_staging.py
+.\p -m py_compile scripts\stage_a_filtering_common.py scripts\filter_stage_a_sources.py scripts\verify_stage_a_filtering.py tests\test_stage_a_source_filtering.py
 .\p -m unittest discover -s tests
-.\p scripts\inventory_stage_a_sources.py --all
-.\p scripts\stage_stage_a_sources.py --all
+.\p scripts\filter_stage_a_sources.py --all
+.\p scripts\verify_stage_a_filtering.py
 ```
 
-The last two commands are dry runs.
+The last two commands are non-mutating dry/empty-local checks.
 
-## Inventory and stage
+## Filter and verify locally
 
 ```powershell
-.\p scripts\inventory_stage_a_sources.py --all --execute
+.\p scripts\filter_stage_a_sources.py --all --execute
+.\p scripts\verify_stage_a_filtering.py --require-all
 ```
 
-Review the local inventory summaries under `data/foundation/sources/inventory/`, then run:
+Review the local output under `data/foundation/filtered/` and complete `data/reviews/stage_a_source_filtering_review_template.csv`.
 
-```powershell
-.\p scripts\stage_stage_a_sources.py --all --execute
-.\p scripts\verify_stage_a_staging.py --require-all
-```
+Do not copy survivors into `approved/`, do not alter any `training_allowed` flag, and do not run tokenizer, dataset-preparation, or training commands during this packet.
 
-Do not copy anything into `approved/`, do not alter any `training_allowed` flag, and do not run tokenizer, dataset-preparation, or training commands during this packet.
-
-Raw acquisitions, inventories, and staged files remain local and ignored by Git. Commit only tooling, plans, tests, and Leo's compact review record.
+GPT-NL remains deferred and must contain zero filtered text rows.

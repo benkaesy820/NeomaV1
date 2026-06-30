@@ -1,0 +1,11 @@
+source_id,filtering_manifest_sha256,input_files,candidates,human_review,rejected,families,decode_rejections,path_generated_vendor_rejections,template_duplicate_rejections,critical_eval_leakage_rejections,instruction_overlap_reviews,family_grouping_reviewed,rejection_sample_reviewed,ready_for_packet14_sample_selection,reviewer,reviewed_utc,notes
+gptnl_english_2026,,,,,,,,,,,,,,,,,
+cpython_3_14_6,,,,,,,,,,,,,,,,,
+pytest_9_1_1,,,,,,,,,,,,,,,,,
+typescript_6_0_3,,,,,,,,,,,,,,,,,
+typescript_website_2026,,,,,,,,,,,,,,,,,
+node_24_18_0,,,,,,,,,,,,,,,,,
+powershell_7_6_3,,,,,,,,,,,,,,,,,
+powershell_docs_2026,,,,,,,,,,,,,,,,,
+pester_5_7_1,,,,,,,,,,,,,,,,,
+postgresql_18_4,,,,,,,,,,,,,,,,,
