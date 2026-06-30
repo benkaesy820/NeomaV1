@@ -1,0 +1,57 @@
+{
+  "all_sources_acquired": true,
+  "baseline": "82b994f",
+  "generated_local_manifests_committed": false,
+  "generated_utc": "2026-06-30T04:55:48Z",
+  "next_step": "Parse and filter bounded review samples from the three Wikimedia dumps; keep every page training_allowed=false until a later admission packet.",
+  "raw_artifacts_committed": false,
+  "review_decision": {
+    "reason": "Exact 20260601 Wikimedia XML dumps and multistream indexes were acquired, official SHA-1 values verified, local SHA-256 values recorded, and no content was extracted or admitted.",
+    "status": "acquisition_complete_quarantined_pending_filtering"
+  },
+  "review_id": "stage_a_safe_english_acquisition_results_v1",
+  "schema_version": "1.0",
+  "scope": "Wikimedia safe-English source acquisition and immutable hashing only",
+  "sources": [
+    {
+      "archive_sha1": "409d23715ce26d444f65f313f3d634f05b4551dd",
+      "archive_sha256": "8de32134c00e3607666d1c90b3c0388b0dfe2bd25de1f922a1b960b43b74f625",
+      "archive_size_bytes": 379167673,
+      "articles_multistream_status": "done",
+      "index_sha1": "9c5e151b9d20064200f758b02d9b12c3dbb2a1ab",
+      "index_sha256": "2326607ef365c62b8b7a0f027770045bb7cd3477a54310fc8f1d41bed5866c04",
+      "index_size_bytes": 5181286,
+      "snapshot": "20260601",
+      "source_id": "simplewiki_20260601",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false
+    },
+    {
+      "archive_sha1": "7a27c2b10acc617136ac6b00017207b41eeb4ccf",
+      "archive_sha256": "c63ace3321e823f56c2b6c5a696364021b007c7eb4655e1a701492a760916c78",
+      "archive_size_bytes": 206851669,
+      "articles_multistream_status": "done",
+      "index_sha1": "a491c3e0267efbb0460ea62df43eee3dcc4c5fb3",
+      "index_sha256": "839dd431814e4e735a5eb4cb47174017127dff5ec6969d2d3527cabab1454889",
+      "index_size_bytes": 1595169,
+      "snapshot": "20260601",
+      "source_id": "enwikibooks_20260601",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false
+    },
+    {
+      "archive_sha1": "e1128a8658828ffb54ae23cf25e2cb1388000334",
+      "archive_sha256": "937f52049a238a2080882f892954f367f0e7323b35f98324b0a8662aebafdaf3",
+      "archive_size_bytes": 119531511,
+      "articles_multistream_status": "done",
+      "index_sha1": "f83a9af5950e163108fc7e8c538bd7ba9a57c108",
+      "index_sha256": "f8d935a37512285817ce1f2b8f4d45011219f549aedd6f794d4da66cba335972",
+      "index_size_bytes": 1368387,
+      "snapshot": "20260601",
+      "source_id": "enwikiversity_20260601",
+      "status": "acquired_quarantined_pending_review",
+      "training_allowed": false
+    }
+  ],
+  "training_allowed": false
+}

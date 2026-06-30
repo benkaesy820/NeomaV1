@@ -34,3 +34,4 @@ Packet boundaries:
 None of these packets grants training permission, prepares a dataset, trains a tokenizer, or starts a model run. GPT-NL rows remain deferred while shard security is not `safe`; Work Packet 13F keeps manual download and override paths blocked for Stage A v1.
 
 - Work Packet 13F keeps GPT-NL blocked, proposes exact official Wikimedia English alternatives, and defines a 60K-token internal-authored seed plan. It performs no source download or content generation and grants no training permission.
+- Work Packet 13G acquires the exact Wikimedia `20260601` XML dumps and multistream indexes into local quarantine, verifies official SHA-1 values, records local SHA-256 values, and grants no training permission.

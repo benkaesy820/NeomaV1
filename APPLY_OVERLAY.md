@@ -1,22 +1,26 @@
-# Apply Work Packet 13F Overlay
+# Apply Work Packet 13G Overlay
 
-Apply this overlay at repository root on baseline `bf70cfb`.
+Apply this overlay at repository root on baseline `82b994f`.
 
 ## Validate
 
 ```powershell
-.\p -m py_compile scripts\validate_stage_a_english_alternatives.py tests\test_stage_a_english_alternatives.py
-.\p scripts\validate_stage_a_english_alternatives.py
+.\p -m py_compile scripts\acquire_wikimedia_english_sources.py scripts\verify_wikimedia_english_acquisitions.py tests\test_wikimedia_english_acquisition.py
+.\p scripts\acquire_wikimedia_english_sources.py --all
 .\p -m unittest discover -s tests
+```
+
+## Acquire Locally
+
+```powershell
+.\p scripts\acquire_wikimedia_english_sources.py --all --execute
+.\p scripts\verify_wikimedia_english_acquisitions.py --require-all
 ```
 
 Review:
 
-- `data/foundation/manifests/stage_a_safe_english_alternatives_v1_candidate.json`
-- `data/foundation/manifests/stage_a_internal_english_seed_v1_plan.json`
-- `data/plans/STAGE_A_SAFE_ENGLISH_ALTERNATIVES_AND_INTERNAL_SEED_PLAN.md`
-- both review-template CSV files.
+- `data/reviews/stage_a_safe_english_acquisition_results_v1.json`
+- local ignored manifests under `data/foundation/sources/manifests/`
+- local ignored artifacts under `data/foundation/sources/raw/quarantine/`
 
-Do not download any source during this packet. Do not create internal seed content, change `training_allowed`, build a tokenizer, prepare a dataset, or train a model.
-
-The next packet may acquire and hash the three exact `20260601` Wikimedia dumps only after Leo approves the plan and confirms each official `articlesmultistreamdump` job reports `done`.
+Do not parse XML, extract pages, change `training_allowed`, build a tokenizer, prepare a dataset, or train a model during this packet.
