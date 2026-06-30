@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "packet": "Phase 3.5B Work Packet 13H",
+  "baseline": "59afb7c",
+  "scope": "Wikimedia filtering and Neoma self-knowledge seed candidates only",
+  "checks": {
+    "python_compile": "passed",
+    "wikimedia_filtering_verifier": "passed",
+    "neoma_self_knowledge_generation": "50 records",
+    "full_project_tests": "77 passed",
+    "wikimedia_candidate_count": 33110,
+    "wikimedia_review_count": 2625,
+    "wikimedia_candidate_token_count_proxy": 11999804,
+    "wikimedia_family_count": 17495,
+    "self_knowledge_records": 50,
+    "training_allowed_false": true
+  },
+  "explicitly_not_done": [
+    "training admission",
+    "tokenizer comparison or rebuild",
+    "dataset preparation",
+    "model training"
+  ],
+  "training_allowed": false
+}

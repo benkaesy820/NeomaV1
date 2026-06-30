@@ -35,3 +35,4 @@ None of these packets grants training permission, prepares a dataset, trains a t
 
 - Work Packet 13F keeps GPT-NL blocked, proposes exact official Wikimedia English alternatives, and defines a 60K-token internal-authored seed plan. It performs no source download or content generation and grants no training permission.
 - Work Packet 13G acquires the exact Wikimedia `20260601` XML dumps and multistream indexes into local quarantine, verifies official SHA-1 values, records local SHA-256 values, and grants no training permission.
+- Work Packet 13H filters Wikimedia English dumps into local review candidates and creates a 50-record Neoma self-knowledge seed from a versioned model card. It grants no training permission.

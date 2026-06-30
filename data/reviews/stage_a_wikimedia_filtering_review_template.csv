@@ -1,0 +1,4 @@
+source_id,snapshot,candidate_count,review_count,token_count_proxy,quality_sample_reviewed,rejection_sample_reviewed,leakage_reviewed,family_balance_reviewed,decision,reviewer,notes
+simplewiki_20260601,20260601,15050,0,4999986,,,,,,,
+enwikibooks_20260601,20260601,11101,882,3999900,,,,,,,
+enwikiversity_20260601,20260601,6959,1743,2999918,,,,,,,

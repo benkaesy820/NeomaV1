@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_neoma_self_knowledge_results_v1",
+  "baseline": "59afb7c",
+  "generated_utc": "2026-06-30T00:00:00Z",
+  "scope": "Neoma self-knowledge seed candidate generation from versioned model card",
+  "model_card": "data/foundation/manifests/neoma_model_card_v0_1_candidate.json",
+  "candidate_file": "data/foundation/internal_seed/neoma_self_knowledge_v0_1_candidates.jsonl",
+  "record_count": 50,
+  "component_id": "neoma_self_knowledge",
+  "status": "candidate_not_admitted_pending_review",
+  "training_allowed": false,
+  "review_decision": {
+    "status": "candidate_seed_ready_for_human_review",
+    "reason": "Records are deterministically rendered from model-card facts, retain factual_basis fields, and do not grant training permission."
+  },
+  "next_step": "Review factual boundaries before any internal seed admission packet."
+}
