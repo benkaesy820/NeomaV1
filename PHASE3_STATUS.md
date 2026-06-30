@@ -120,3 +120,13 @@ Recommended next work:
 2. Keep the data quality gate mandatory.
 3. Add category-balanced eval scoring.
 4. Train a larger CPU-friendly model only after eval quality improves.
+
+## Stage A Work Packet 14 — Tokenizer Sample Admission
+
+Baseline: `35e6d17`.
+
+The Wikimedia English filtering pass produced 33,110 clean candidates, 2,625 review rows, about 12M proxy tokens, and 17,495 families. Packet 14 adds deterministic selection and review tooling for an approximately 500K-token representative tokenizer corpus.
+
+The corpus was approved for tokenizer comparison only. Generic and model-training permission remain false. The completed comparison covered 2K versus 4K versus 8K byte-level BPE, with real context-length measurement for all 331 frozen instruction records.
+
+The 8K tokenizer is the provisional next-probe candidate because it gave the best Stage B context fit. No processed model dataset or model training run has been completed by this packet.

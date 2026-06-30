@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "plan_id": "stage_a_tokenizer_sample_v0_1_plan",
+  "baseline": "35e6d17",
+  "status": "candidate_plan_not_executed",
+  "purpose": "Build a deterministic representative corpus for tokenizer comparison only. This is not Stage A model-training admission.",
+  "output_policy": {
+    "training_allowed": false,
+    "model_training_allowed": false,
+    "tokenizer_training_allowed_before_review": false,
+    "tokenizer_training_allowed_after_approved_review": true,
+    "approval_scope": "tokenizer_comparison_only"
+  },
+  "sample_budget": {
+    "target_proxy_tokens": 500000,
+    "minimum_proxy_tokens_after_review": 485000,
+    "maximum_proxy_tokens_after_review": 505000,
+    "proxy_definition": "stage_a_filtering_common.lexical_tokens",
+    "document_separator": "<eos>"
+  },
+  "protected_data_policy": {
+    "exclude_all_eval_fields": true,
+    "reject_critical_or_review_leakage": true,
+    "include_frozen_stage_b_instruction_corpus_for_tokenizer_vocabulary": true,
+    "stage_b_expected_record_count": 331,
+    "stage_b_model_training_status": "already_frozen_separately",
+    "stage_b_minimum_tokenizer_records": 320,
+    "stage_b_tokenizer_policy": "Exclude any frozen Stage B record with critical or review-level overlap against protected evaluation fields. Measure all 331 records after tokenizer training."
+  },
+  "selection_groups": [
+    {
+      "group_id": "frozen_stage_b",
+      "target_proxy_tokens": 74800,
+      "selection_mode": "include_all_frozen_records_except_protected_eval_overlap",
+      "family_cap": 0,
+      "input_paths": [
+        "data/raw/code_instruction_direct.txt",
+        "data/raw/code_instruction_phase3.txt",
+        "data/raw/code_instruction_seed.txt",
+        "data/raw/code_quality_seed.txt",
+        "data/raw/phase3_5b_batch01_accepted.txt",
+        "data/raw/phase3_5b_batch02_accepted.txt",
+        "data/raw/phase3_5b_batch03_accepted.txt",
+        "data/raw/phase3_5b_batch04_accepted.txt",
+        "data/raw/phase3_5b_batch05_accepted.txt",
+        "data/raw/phase3_5b_batch06_accepted.txt",
+        "data/raw/phase3_5b_batch07_accepted.txt"
+      ]
+    },
+    {
+      "group_id": "repository_sources",
+      "target_proxy_tokens": 218700,
+      "selection_mode": "clean_candidates_ranked_with_family_caps",
+      "family_cap": 2,
+      "source_quotas": {
+        "cpython_3_14_6": 45000,
+        "pytest_9_1_1": 20000,
+        "typescript_6_0_3": 35000,
+        "typescript_website_2026": 5000,
+        "node_24_18_0": 35000,
+        "powershell_7_6_3": 22000,
+        "powershell_docs_2026": 18000,
+        "pester_5_7_1": 15000,
+        "postgresql_18_4": 25000
+      },
+      "minimum_record_tokens": 24,
+      "maximum_record_tokens": 2200
+    },
+    {
+      "group_id": "wikimedia_english",
+      "target_proxy_tokens": 206000,
+      "selection_mode": "highest_quality_clean_candidates_with_topic_diversity",
+      "family_cap": 1,
+      "source_quotas": {
+        "simplewiki_20260601": 92000,
+        "enwikibooks_20260601": 63000,
+        "enwikiversity_20260601": 51000
+      },
+      "minimum_quality_score": 20
+    },
+    {
+      "group_id": "neoma_self_knowledge",
+      "target_proxy_tokens": 4000,
+      "selection_mode": "explicit_stable_id_allowlist",
+      "family_cap": 0,
+      "input_path": "data/foundation/internal_seed/neoma_self_knowledge_v0_1_candidates.jsonl",
+      "admitted_ids": [
+        "nsk_v0_1_001",
+        "nsk_v0_1_003",
+        "nsk_v0_1_004",
+        "nsk_v0_1_005",
+        "nsk_v0_1_006",
+        "nsk_v0_1_007",
+        "nsk_v0_1_008",
+        "nsk_v0_1_009",
+        "nsk_v0_1_010",
+        "nsk_v0_1_012",
+        "nsk_v0_1_013",
+        "nsk_v0_1_016",
+        "nsk_v0_1_017",
+        "nsk_v0_1_018",
+        "nsk_v0_1_019",
+        "nsk_v0_1_020",
+        "nsk_v0_1_021",
+        "nsk_v0_1_022",
+        "nsk_v0_1_028",
+        "nsk_v0_1_029",
+        "nsk_v0_1_030",
+        "nsk_v0_1_031",
+        "nsk_v0_1_032",
+        "nsk_v0_1_033",
+        "nsk_v0_1_034",
+        "nsk_v0_1_035",
+        "nsk_v0_1_036",
+        "nsk_v0_1_037",
+        "nsk_v0_1_038",
+        "nsk_v0_1_039",
+        "nsk_v0_1_040",
+        "nsk_v0_1_041",
+        "nsk_v0_1_042",
+        "nsk_v0_1_043",
+        "nsk_v0_1_044",
+        "nsk_v0_1_045",
+        "nsk_v0_1_046",
+        "nsk_v0_1_047",
+        "nsk_v0_1_048",
+        "nsk_v0_1_049",
+        "nsk_v0_1_050"
+      ],
+      "deferred_ids": {
+        "nsk_v0_1_002": "project-process identity is not useful stable model knowledge",
+        "nsk_v0_1_011": "evaluation governance policy belongs in project controls, not self-description",
+        "nsk_v0_1_014": "parameter-size expectation is provisional",
+        "nsk_v0_1_015": "successor-size expectation is provisional",
+        "nsk_v0_1_023": "Wikimedia filtering state is already stale",
+        "nsk_v0_1_024": "repository-source admission state is transient",
+        "nsk_v0_1_025": "corpus governance detail is not stable user-facing self-knowledge",
+        "nsk_v0_1_026": "tokenizer state will change after this packet",
+        "nsk_v0_1_027": "training state will change after Stage A begins"
+      }
+    }
+  ],
+  "tokenizer_candidates": [
+    {
+      "vocab_size": 2000,
+      "preset": "code",
+      "min_frequency": 2,
+      "max_token_length": 32
+    },
+    {
+      "vocab_size": 4000,
+      "preset": "code",
+      "min_frequency": 2,
+      "max_token_length": 32
+    },
+    {
+      "vocab_size": 8000,
+      "preset": "code",
+      "min_frequency": 2,
+      "max_token_length": 32
+    }
+  ],
+  "comparison_architecture": {
+    "config_reference": "configs/code_phase3_cpu.json",
+    "n_layers": 4,
+    "d_model": 192,
+    "n_heads": 4,
+    "n_kv_heads": 2,
+    "d_ff": 576,
+    "seq_len": 256
+  },
+  "selection_gates": [
+    "Only filtered_candidate_not_admitted records may be selected from external sources.",
+    "Human-review queues and rejected records are excluded unless a later packet records explicit per-record approval.",
+    "Critical or review-level protected overlap blocks selection.",
+    "Input hashes, selected text hashes, source IDs, family IDs, and token counts are preserved.",
+    "The approved sample may train tokenizers only; generic model-training permission remains false.",
+    "Tokenizer choice requires zero round-trip failures, zero unknown tokens, atomic protocol tags, context-fit reporting, and a documented size/compression trade-off."
+  ],
+  "training_allowed": false
+}

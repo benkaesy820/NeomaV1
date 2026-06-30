@@ -1,0 +1,14 @@
+{
+    "schema_version":  "1.0",
+    "review_id":  "stage_a_tokenizer_sample_v0_1_review",
+    "candidate_manifest_sha256":  "5aa723be714fbb9c2bf1d750a402c0c566d4c063e1a7795402bedf161099efad",
+    "status":  "approved",
+    "reviewer":  "Leo",
+    "reviewed_utc":  "2026-06-30T10:22:49Z",
+    "approved_for_tokenizer_comparison":  true,
+    "model_training_allowed":  false,
+    "excluded_record_ids":  [
+
+                            ],
+    "notes":  "Approved after local manifest, permission, leakage-field, source-balance, and stratified review-sample checks. Approval is tokenizer-comparison only; model training remains forbidden."
+}

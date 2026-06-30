@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "review_id": "stage_a_tokenizer_sample_v0_1_review",
+  "candidate_manifest_sha256": "REPLACE_WITH_CANDIDATE_MANIFEST_SHA256",
+  "status": "pending",
+  "reviewer": "Leo",
+  "reviewed_utc": null,
+  "approved_for_tokenizer_comparison": false,
+  "model_training_allowed": false,
+  "excluded_record_ids": [],
+  "notes": "Review source totals, stratified samples, self-knowledge facts, leakage status, and family concentration before approval."
+}

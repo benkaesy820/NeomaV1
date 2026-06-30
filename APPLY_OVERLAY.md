@@ -1,27 +1,64 @@
-# Apply Work Packet 13H Overlay
+# Apply Work Packet 14 Overlay
 
-Apply this overlay at repository root on baseline `59afb7c`.
+Apply this overlay at repository root on baseline `35e6d17`.
 
-## Validate
+## Validate tooling
 
 ```powershell
-.\p -m py_compile scripts\filter_wikimedia_english_sources.py scripts\verify_wikimedia_english_filtering.py scripts\build_neoma_self_knowledge_seed.py tests\test_wikimedia_english_filtering.py tests\test_neoma_self_knowledge_seed.py
-.\p scripts\filter_wikimedia_english_sources.py --all
-.\p scripts\build_neoma_self_knowledge_seed.py
+.\p -m py_compile scripts\build_stage_a_tokenizer_sample.py scripts\verify_stage_a_tokenizer_sample.py scripts\run_stage_a_tokenizer_comparison.py tests\test_stage_a_tokenizer_admission.py
+.\p scripts\build_stage_a_tokenizer_sample.py build
 .\p -m unittest discover -s tests
 ```
 
-## Filter Locally
+The normal Neoma environment should have the `tokenizers` package and should run the expected 82 tests. Ted’s sandbox passed 79 available tests; the existing `test_prepare_dataset` module could not import because `tokenizers` is unavailable there.
+
+## Build the local candidate sample
 
 ```powershell
-.\p scripts\filter_wikimedia_english_sources.py --all --execute --force
-.\p scripts\verify_wikimedia_english_filtering.py --require-all
+.\p scripts\build_stage_a_tokenizer_sample.py build --execute
+.\p scripts\verify_stage_a_tokenizer_sample.py
 ```
 
 Review:
 
-- `data/reviews/stage_a_wikimedia_filtering_results_v1.json`
-- `data/foundation/internal_seed/neoma_self_knowledge_v0_1_candidates.jsonl`
-- local ignored filtered candidates under `data/foundation/filtered/wikimedia_english_20260601/`
+```text
+data/foundation/approved/stage_a_tokenizer_sample_v0_1_candidate/manifest.json
+data/foundation/approved/stage_a_tokenizer_sample_v0_1_candidate/review_sample.csv
+```
 
-Do not admit candidates to training, change `training_allowed`, build a tokenizer, prepare a dataset, or train a model during this packet.
+Copy the committed review-decision template to a local decision file. Set:
+
+```text
+candidate_manifest_sha256=<SHA-256 of candidate manifest.json>
+status=approved
+approved_for_tokenizer_comparison=true
+reviewed_utc=<actual UTC timestamp>
+```
+
+Keep `model_training_allowed=false`.
+
+## Approve tokenizer use only
+
+```powershell
+.\p scripts\build_stage_a_tokenizer_sample.py approve `
+  --review-decision path\to\completed_review_decision.json
+
+.\p scripts\verify_stage_a_tokenizer_sample.py `
+  --root data\foundation\approved\stage_a_tokenizer_sample_v0_1 `
+  --require-approved
+```
+
+## Train and compare tokenizer candidates
+
+```powershell
+.\p scripts\run_stage_a_tokenizer_comparison.py all
+```
+
+Review:
+
+```text
+data/foundation/tokenizers/stage_a_v0_1/training_manifest.json
+data/foundation/tokenizers/stage_a_v0_1/comparison_report.json
+```
+
+Do not pass the tokenizer sample to `prepare_dataset.py`. Do not prepare model tokens or start model training in this packet.

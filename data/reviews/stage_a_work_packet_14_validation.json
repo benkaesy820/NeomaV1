@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "packet": "Work Packet 14",
+  "baseline": "35e6d17",
+  "scope": "Stage A representative tokenizer-sample admission and tokenizer comparison preparation",
+  "checks": {
+    "python_compile": "passed",
+    "new_unit_tests": "5 passed",
+    "available_project_tests": "79 passed",
+    "expected_project_tests_with_tokenizers_installed": 82,
+    "unavailable_dependency_in_ted_sandbox": "tokenizers",
+    "candidate_build_dry_run": "passed",
+    "real_candidate_sample_built": false,
+    "tokenizer_trained": false,
+    "dataset_prepared": false,
+    "model_training_run": false
+  },
+  "permission_state": {
+    "training_allowed": false,
+    "model_training_allowed": false,
+    "tokenizer_training_allowed": false
+  },
+  "status": "tooling_ready_for_local_execution_and_review"
+}

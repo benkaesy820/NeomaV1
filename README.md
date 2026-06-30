@@ -170,3 +170,7 @@ A 2M–7M parameter model trained on a laptop can learn syntax, style, local
 patterns, and narrow tasks. It will not become a general ChatGPT replacement.
 Capability will depend more on clean, diverse data and repeated evaluation than
 on increasing the step count over a tiny corpus.
+
+## Current Stage A transition
+
+The project has filtered repository and Wikimedia source candidates but has not trained Neoma on them. Work Packet 14 approved a reviewable approximately 500K-token sample for tokenizer selection only, compared 2K, 4K, and 8K byte-level BPE candidates, and measured the real context length of all frozen instruction records before any Stage A dataset was prepared.

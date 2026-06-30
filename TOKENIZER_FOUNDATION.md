@@ -125,3 +125,29 @@ Pick the smallest tokenizer that:
 
 If ordinary byte-level BPE fails these checks, then we can consider a custom
 source-aware BPE later.
+
+## 2026 Stage A Production Comparison
+
+This section supersedes earlier provisional 4K/8K/12K/16K guidance written for the tiny seed corpus.
+
+The production comparison is:
+
+```text
+2K byte-level BPE
+4K byte-level BPE
+8K byte-level BPE
+```
+
+All candidates use the complete code-protocol special-token set, `min_frequency=2`, and `max_token_length=32` over a reviewed approximately 500K-token representative corpus. Evaluation text is excluded from tokenizer training.
+
+For the `code_phase3_cpu` architecture, approximate total parameter counts are:
+
+```text
+2K vocab: 2,155,200
+4K vocab: 2,539,200
+8K vocab: 3,307,200
+```
+
+Hard gates are zero round-trip failures, zero unknown tokens, and atomic protocol tags. The decision must also consider code and English compression, vocabulary utilization, Stage B fit at 256 tokens, and the parameter cost. A provisional static comparison is not enough to finalize the tokenizer; the selected candidate must also survive the planned small Stage A probe.
+
+Leo's local comparison passed the hard gates for all three candidates and selected 8K as the provisional next-probe tokenizer because it gave the strongest frozen Stage B context fit. The choice remains provisional until the small Stage A probe confirms the capability and parameter trade-off.

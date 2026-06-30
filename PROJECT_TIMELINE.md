@@ -587,3 +587,19 @@ The long-term version should become a small personal coding engine:
 Codex remains the main engineer. This model becomes the small local apprentice:
 fast to run, easy to inspect, and trained to handle simpler coding work with the
 user's preferred style.
+
+### Work Packet 14 — Representative Tokenizer Corpus
+
+Status: tokenizer-only sample approved; tokenizer comparison completed.
+
+- deterministically select about 500K representative proxy tokens;
+- include 327 non-leaking frozen Stage B records for protocol and developer vocabulary, while measuring all 331;
+- include balanced repository code/docs/tests and Wikimedia English;
+- admit only stable self-knowledge facts;
+- exclude all review queues, rejected rows, leakage, and cross-source duplicates;
+- approve the exact sample for tokenizer use only;
+- compare 2K, 4K, and 8K BPE candidates;
+- remeasure Stage B fit at 128/192/256/384/512 tokens;
+- keep 8K as the provisional next-probe tokenizer, pending the small Stage A training probe.
+
+The following packet should admit the Stage A model-training corpus and run the small training ladder only after a tokenizer is selected.

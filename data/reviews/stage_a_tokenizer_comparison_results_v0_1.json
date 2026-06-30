@@ -1,0 +1,71 @@
+{
+  "baseline": "35e6d17",
+  "generated_utc": "2026-06-30T10:24:07Z",
+  "hard_gate_summary": "All compared tokenizers had zero round-trip failures, zero unknown tokens, atomic protocol tags, and zero overlong tokens.",
+  "leo_decision": "Use 8K as the provisional tokenizer candidate for the next small Stage A probe; do not treat it as final until probe loss/context results confirm the parameter trade-off.",
+  "model_dataset_prepared": false,
+  "model_training_run": false,
+  "notes": "The tokenizer artifacts and approved sample remain local ignored files. This tracked report records the reproducible comparison outcome without committing tokenizer binaries or corpus text.",
+  "provisional_recommendation": {
+    "reason": "Best hard-gate-passing balance in order: Stage B 256-token fit, smaller model size, then compression. Final selection still requires the planned small training probe.",
+    "recommended_vocab_size": 8000,
+    "status": "provisional_recommendation_requires_leo_review_and_500k_probe_confirmation"
+  },
+  "results": [
+    {
+      "embedding_parameters": 384000,
+      "model_parameters": 2155200,
+      "roundtrip_failure_count": 0,
+      "stage_b_exceeds_256": 231,
+      "stage_b_fit_256": 100,
+      "stage_b_fit_512": 310,
+      "stage_b_max_tokens": 770,
+      "stage_b_median_tokens": 319,
+      "stage_b_p90_tokens": 461.0,
+      "tokenizer_sha256": "420dbba19964affb59ea5e248397feeb9c4b1f84c6193d874d5e6204d4147286",
+      "tokens_longer_than_32_characters": 0,
+      "total_sample_tokens": 813496,
+      "unknown_token_count": 0,
+      "vocab_size": 2000,
+      "vocab_utilization": 0.9615
+    },
+    {
+      "embedding_parameters": 768000,
+      "model_parameters": 2539200,
+      "roundtrip_failure_count": 0,
+      "stage_b_exceeds_256": 192,
+      "stage_b_fit_256": 139,
+      "stage_b_fit_512": 325,
+      "stage_b_max_tokens": 633,
+      "stage_b_median_tokens": 273,
+      "stage_b_p90_tokens": 396.0,
+      "tokenizer_sha256": "e729c1817d8a3936a0ff75c48cd4e7650c6644941c86ac09284bbb421f497477",
+      "tokens_longer_than_32_characters": 0,
+      "total_sample_tokens": 701276,
+      "unknown_token_count": 0,
+      "vocab_size": 4000,
+      "vocab_utilization": 0.97575
+    },
+    {
+      "embedding_parameters": 1536000,
+      "model_parameters": 3307200,
+      "roundtrip_failure_count": 0,
+      "stage_b_exceeds_256": 151,
+      "stage_b_fit_256": 180,
+      "stage_b_fit_512": 328,
+      "stage_b_max_tokens": 558,
+      "stage_b_median_tokens": 247,
+      "stage_b_p90_tokens": 358.0,
+      "tokenizer_sha256": "bc59d3d00ced96c19c65c89ba901ed35b0d3c65423145d1d1f6e30051dfeee0f",
+      "tokens_longer_than_32_characters": 0,
+      "total_sample_tokens": 620390,
+      "unknown_token_count": 0,
+      "vocab_size": 8000,
+      "vocab_utilization": 0.970375
+    }
+  ],
+  "review_id": "stage_a_tokenizer_comparison_results_v0_1",
+  "sample_manifest_sha256": "a79b3d72b701ddd93c7eb15131dd22f2eb0abda3e6151e353c229c55148c0652",
+  "sample_records_sha256": "f16ab43f100c2879d21c5a35de9d8588eeca2acbfb282d9999e0f58a0c406663",
+  "schema_version": "1.0"
+}

@@ -616,3 +616,11 @@ provenance, balance targets, deduplication, held-out evaluation, and acceptance
 checks. Run the smoke and probe configurations first; promote a model/data
 combination only when fixed evaluation demonstrates real generalization rather
 than memorization.
+
+## Work Packet 14
+
+Added deterministic Stage A tokenizer-sample selection, hash-bound human approval, integrity verification, and 2K/4K/8K tokenizer comparison tooling. The representative sample remains blocked from model dataset preparation. Stable self-knowledge is explicitly separated from transient project-state statements.
+
+Tokenizer-sample leakage handling excludes four frozen Stage B records from tokenizer training because they partially overlap protected evaluation wording. All 331 records remain in the post-training context-length benchmark.
+
+Leo's local run adjusted the representative sample quotas to account for the intentionally small filtered TypeScript Website pool and the small stable self-knowledge allowlist. The approved tokenizer-only sample has 1,818 records and 500,104 proxy tokens. The tokenizer comparison passed hard gates for 2K, 4K, and 8K candidates, with 8K recorded as the provisional next-probe candidate.
